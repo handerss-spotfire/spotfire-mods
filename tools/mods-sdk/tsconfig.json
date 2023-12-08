@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "incremental": true,
+        "target": "ES6",
+        "module": "ES2020",
+        "outDir": "dist",
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "strict": true
+    },
+    "include": ["src"],
+    "exclude": ["templates", "tests"]
+}
