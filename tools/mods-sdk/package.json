@@ -9,7 +9,6 @@
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
         "format": "prettier -w src/**/*.ts tests/**/*.ts"
     },
-    "main": "dist/index.js",
     "bin": "./dist/index.js",
     "files": [
         "dist/*.js",
