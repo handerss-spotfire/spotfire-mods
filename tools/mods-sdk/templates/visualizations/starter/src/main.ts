@@ -1,12 +1,3 @@
-/*
- * Copyright © 2023. Cloud Software Group, Inc.
- * This file is subject to the license terms contained
- * in the license file that is distributed with this file.
- */
-
-/**
- * Get access to the Spotfire Mod API by providing a callback to the initialize method.
- */
 Spotfire.initialize(async (mod: Spotfire.Mod) => {
     /**
      * Create the read function.
