@@ -2,8 +2,8 @@
     "compilerOptions": {
         "rootDir": "src",
         "outDir": "build",
-        "lib": ["DOM", "ES2021"],
-        "target": "ES6",
+        "lib": ["DOM", "ES2022"],
+        "target": "ES2022",
         "skipLibCheck": true,
         "strict": true,
         "noEmit": true,

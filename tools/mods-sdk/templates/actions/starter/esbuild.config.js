@@ -2,5 +2,5 @@
  * @type {import('esbuild').BuildOptions}
  */
 export default {
-    target: "es6",
+    target: "es2022",
 };

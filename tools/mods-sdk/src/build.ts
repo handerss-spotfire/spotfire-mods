@@ -547,7 +547,6 @@ async function buildVisualizationMod({
         bundle: true,
         format: "iife",
         platform: "browser",
-        target: "es6",
         minify: !debug,
         sourcemap: debug,
         entryPoints: [entryPoint],
