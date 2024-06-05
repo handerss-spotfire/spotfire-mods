@@ -1,5 +1,5 @@
-/*
- * Copyright © 2021. TIBCO Software Inc.
+﻿/*
+ * Copyright © 2023. Cloud Software Group, Inc.
  * This file is subject to the license terms contained
  * in the license file that is distributed with this file.
  */
@@ -241,12 +241,6 @@ export declare interface DataTableValues {
      * Gets the number of columns in this instance.
      */
     columnCount: number;
-    /**
-     * Gets the unique id for this instance.
-     * The id is stable during the data table life cycle, thus it can be used to store as a reference to this data table in a {@link ModProperty} or {@link AnalysisProperty}.
-     * @version 1.1
-     */
-    id: string;
 }
 
 /**
@@ -305,7 +299,7 @@ export declare interface DataView {
      * @param rows - The rows to be selected.
      * @param operation - Optional {@link MarkingOperation}. Default value is `Replace`.
      */
-    mark(rows: DataViewRow[], markingOperation?: MarkingOperation): void;
+    mark(rows: DataViewRow[], operation?: MarkingOperation): void;
     /**
      * Clears the current marking
      */
@@ -643,40 +637,18 @@ export declare interface DataViewRow {
     isMarked(): boolean;
     /**
      * Gets a {@link DataViewCategoricalValue} representing the value of the axis with the specified `axisName`.
-     * This method will throw an error if there is no categorical axis by that name or if the expression is empty.
+     * This method will throw an error if there is no categorical axis by that name.
      * Use {@link DataView.categoricalAxis} to check the current existence of a categorical value.
      * @param axisName - The name of the axis to get the value for.
      */
     categorical(axisName: string): DataViewCategoricalValue;
     /**
      * Gets a {@link DataViewContinuousValue} representing the value of the axis with the specified `axisName`.
-     * This method will throw an error if there is no continuous axis by that name or if the expression is empty.
+     * This method will throw an error if there is no continuous axis by that name.
      * Use {@link DataView.continuousAxis} to check the current existence of a continuous value.
      * @param axisName - The name of the axis to get the value for.
      */
     continuous<T extends DataViewValueType>(axisName: string): DataViewContinuousValue<T>;
-    /**
-     * Gets the leaf {@link DataViewHierarchyNode} for the specified axis,
-     * or null for dual mode axes with continuous axis expression.
-     * This method will throw an error for continuous mode axes
-     * or if there is no axis by that name.
-     * @param axisName - The name of the axis
-     * @version 1.1
-     */
-    leafNode(axisName: string): DataViewHierarchyNode | null;
-    /**
-     * Calculates an element id for this row, suitable for identifying rows between data views.
-     * When stable identifiers is not used, only rows in immediately following data view are guaranteed to re-use previous id.
-     * If a row is filtered out in a new data view, this row is thus not guaranteed to yield the same id when it re-appears.
-     *
-     * @note A stable element id is only stable in the current session, thus it should not be stored in the document,
-     * e.g. as a {@link ModProperty} or {@link AnalysisProperty}.
-     * @version 1.1
-     *
-     * @param useStableId - When true, the id will be a (longer) stable id guaranteed to be the same over time.
-     * @param omitAxisNames - Axis names to omit when creating the identifier. Can be used to group multiple elements split by these axes, for example to create animation effects in one data view.
-     */
-    elementId(useStableId?: boolean, omitAxisNames?: string[]): string;
     /**
      * Gets the {@link DataViewColorInfo} for the row, if a color axis is defined in the mod manifest.
      * The underlying data value can be retrieved by using {@link DataViewRow.categorical}("Color") or {@link DataViewRow.continuous}("Color"), depending on the mode of the color axis.
@@ -713,7 +685,7 @@ export declare interface ErrorOverlay {
     show(messages: string[], category?: string): void;
     /**
      * Show error message. Showing any error message will hide the Mods UI.
-     * @param messages - The error message.
+     * @param message - The error message.
      * @param category - Optional error categorization. Useful if multiple error message are to be shown. Error messages will be sorted based on the category.
      */
     show(message: string, category?: string): void;
@@ -991,7 +963,7 @@ export declare interface ModVisualization {
     mainTable(): ReadableProxy<DataTable>;
     /**
      * Sets the main {@link DataTable} in the Mod visualization.
-     * @param tableName - The name or id of the {@link DataTable} to be used as main table.
+     * @param tableName - The name of the {@link DataTable} to be used as main table.
      */
     setMainTable(tableName: string): void;
     /**
@@ -1047,12 +1019,6 @@ export declare interface PageValues {
      * Gets the zero-based index in this instance in the page collection in the Spotfire document.
      */
     index: number;
-    /**
-     * Gets the unique id for this instance.
-     * The id is stable during the page life cycle, thus it can be used to store as a reference to this page in a {@link ModProperty} or {@link AnalysisProperty}.
-     * @version 1.1
-     */
-    id: string;
 }
 
 /**
@@ -1242,11 +1208,6 @@ export declare interface PopoutRadioButtonOptions {
      */
     checked: boolean;
     /**
-     * Specifies whether the radio button is enabled.
-     * @version 1.1
-     */
-    enabled?: boolean;
-    /**
      * Specifies the value represented by the radio button.
      */
     value: any;
@@ -1335,7 +1296,8 @@ export declare type ReadableProxy<Node> = Readable<Node> &
 export declare interface Reader<T extends ReadonlyArray<any>> {
     /**
      * Subscribe to changes in the content for the specified readables when the reader was created.
-     * @example Subscribe to changes in the {@link DataView}.
+     * @example
+     * Subscribe to changes in the {@link DataView}.
      *
      * ```
      * let reader = mod.createReader(mod.visualization.data());
@@ -1348,11 +1310,12 @@ export declare interface Reader<T extends ReadonlyArray<any>> {
      * The callback function will not be called until the previous callback function has returned.
      * @param onReadError - Optional callback function that will be called if there are errors reading the readables.
      */
-    subscribe(callback: (...values: T) => void, onReadError?: (error: string) => void): ReaderSubscription;
+    subscribe(callback: (...values: T) => void, onReadError?: (error: string) => void): void;
     /**
      * Read the content once for the readables specified when the reader was created.
      * Any current subscription for this reader will be cancelled.
-     * @example Read content of a mod property once.
+     * @example
+     * Read content of a mod property once.
      *
      * ```
      * let reader = mod.createReader(mod.property("CreatedBy"));
@@ -1364,7 +1327,7 @@ export declare interface Reader<T extends ReadonlyArray<any>> {
      * @param callback - The callback function that is called once when there is at least one new value to read.
      * @param onReadError - Optional callback function that will be called if there are errors reading the readables.
      */
-    once(callback: (...values: T) => void, onReadError?: (error: string) => void): ReaderSubscription;
+    once(callback: (...values: T) => void, onReadError?: (error: string) => void): void;
     /**
      * Checks if any of the readables have a new value available. If this function returns true,
      * the callback in the current subscription, or a new call to {@link Reader.once} is guaranteed
@@ -1373,37 +1336,6 @@ export declare interface Reader<T extends ReadonlyArray<any>> {
      * readables specified when the reader was created.
      */
     hasExpired(): Promise<boolean>;
-    /**
-     * Check whether one or more passed arguments are new since the last time the subscribe loop was called.
-     *
-     * @example Check if the data view has changed in the subscribe loop.
-     *
-     * ```
-     * let reader = mod.createReader(mod.visualization.data(), mod.windowSize());
-     * reader.subscribe((dataView, size) => {
-     *    console.log(reader.hasValueChanged(dataView));
-     * });
-     * ```
-     *
-     * @param value - Value from `subscribe` or `once` arguments.
-     * @param values - Additional values from `subscribe` or `once` arguments.
-     * @returns true if any of the values are new, otherwise false.
-     * @version 1.3
-     */
-    hasValueChanged(value: UnionFromTupleTypes<T>, ...values: UnionFromTupleTypes<T>[]): boolean;
-}
-
-/**
- * Represents a {@link Reader} subscription.
- * @version 1.1
- * @public
- */
-export declare interface ReaderSubscription {
-    /**
-     * Immediately cancel the current subscription.
-     * Neither the callback or the error callback will be invoked afterwards.
-     */
-    cancel(): void;
 }
 
 /**
@@ -1422,14 +1354,6 @@ export declare interface RenderContext {
      * Gets the image pixel ratio that shall be used when rendering rasterized images and/or using a canvas element.
      */
     imagePixelRatio: number;
-    /**
-     * Gets a value indicating whether the Spotfire UI is in editing mode.
-     *
-     * When this value is true the Spotfire UI displays authoring UI elements, such as axis selectors.
-     * This property can be used to hide controls not meant for consumers of the analysis.
-     * @version 1.2
-     */
-    isEditing: boolean;
     /**
      * Gets information about the currently used theme.
      */
@@ -1513,7 +1437,7 @@ export declare interface SpotfireDocument {
     activePage(): ReadableProxy<Page>;
     /**
      * Sets the specified {@link Page} as the active page.
-     * @param name - The name/title or id of the page to set as active.
+     * @param name - The name/title of the page to set as active.
      */
     setActivePage(name: string): void;
     /**
@@ -1612,34 +1536,14 @@ export declare interface Tooltip {
      * The tooltip is shown using the same style and initial delay as native Spotfire visualizations.
      * Once shown, the tooltip will follow the mouse around until {@link Tooltip.hide} is called.
      *
-     * Subsequent calls to `show` can be made to update the tooltip text.
+     * Subsequent calls to `show`can be made to update the tooltip text.
      * @param content - The text to show in the tooltip.
      */
     show(content: string): void;
-    /**
-     * Shows a tooltip for the specified `row` as it has been configured in the properties panel.
-     *
-     * The tooltip is shown using the same style and initial delay as native Spotfire visualizations.
-     * Once shown, the tooltip will follow the mouse around until {@link Tooltip.hide} is called.
-     *
-     * Subsequent calls to `show` can be made to update the tooltip text.
-     *
-     * @note For this feature to work, the dataViewDefinition.tooltip.enabled in the mod-manifest.json needs to be set to true.
-     *
-     * @param row - The row to show text for in the tooltip.
-     * @version 1.3
-     */
-    show(row: DataViewRow): void;
     /**
      * Hides the tooltip that is currently being showed, if any.
      */
     hide(): void;
 }
 
-/**
- * Extract all possible types in a Tuple type.
- * @public
- */
-export declare type UnionFromTupleTypes<T extends readonly any[], U = never> = T[number] | U;
-
-export { }
+export {};
