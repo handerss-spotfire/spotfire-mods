@@ -156,8 +156,8 @@
             "type": "string",
             "title": "Mod API version.",
             "description": "Specifies the version of the Mod JavaScript API used by the code of this Mod. Set the lowest possible version number that the Mod requires to ensure best possible backward compatibility with older Spotfire systems. Using a newer API version than specified will result in runtime errors, even if the current Spotfire system includes that API.",
-            "default": "1.2",
-            "examples": ["1.0", "1.1", "1.2"],
+            "default": "1.3",
+            "examples": ["1.0", "1.1", "1.2", "1.3"],
             "pattern": "^(.*)$"
         },
         "name": {
@@ -340,6 +340,21 @@
                                 }
                             }
                         ]
+                    }
+                },
+                "tooltip": {
+                    "type": "object",
+                    "title": "Use configurable tooltips",
+                    "description": "Specifies how the Mod uses Spotfire native style configurable tooltips. Added in API version 1.3",
+                    "default": {},
+                    "additionalProperties": false,
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "title": "Enabled",
+                            "default": true,
+                            "description": "Specifies whether to enable configurable tooltips, both in the API and in the properties dialog."
+                        }
                     }
                 }
             }
