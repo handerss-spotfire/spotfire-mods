@@ -33,7 +33,7 @@
         "fs-extra": "^11.2.0"
     },
     "peerDependencies": {
-        "@spotfire/mods-api": ">=2.0.0",
+        "@spotfire/mods-api": ">=1.0.0",
         "esbuild": "^0.21.4"
     },
     "engines": {
