@@ -2,7 +2,7 @@
 Spotfire Mods SDK (@spotfire/mods-sdk)
 <br>
 <a href="https://spotfiresoftware.github.io/spotfire-mods/">Documentation</a> |
-<a href="http://dashboard.emea.tibco.com:1313/spotfire-mods/docs/getting-started/">Getting started</a>
+<a href="https://spotfiresoftware.github.io/spotfire-mods/docs/getting-started/">Getting started</a>
 </p>
 
 [![NPM version][npm-image]][npm-url]
