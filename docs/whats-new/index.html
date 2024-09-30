@@ -12,10 +12,10 @@
 
 <title>What&#39;s new | Spotfire® Mods</title>
   <meta itemprop="name" content="What&#39;s new">
-  <meta itemprop="description" content="This page describes the latest addition to the mods API and SDK.">
+  <meta itemprop="description" content="This page describes some of the latest additions to the mods API and SDK.">
   <meta itemprop="datePublished" content="2024-06-05T00:00:00+00:00">
   <meta itemprop="dateModified" content="2024-06-05T00:00:00+00:00">
-  <meta itemprop="wordCount" content="754">
+  <meta itemprop="wordCount" content="841">
 
 
 
@@ -633,9 +633,9 @@
 	
 	
 	
-	<p class="-text-secondary pt-3 h6" >Reading time: 3 minutes and 45 seconds.</p>
+	<p class="-text-secondary pt-3 h6" >Reading time: 3 minutes and 49 seconds.</p>
 	<h1>What&#39;s new</h1>
-	<div class="lead">This page describes the latest addition to the mods API and SDK.</div>
+	<div class="lead">This page describes some of the latest additions to the mods API and SDK.</div>
 	
 	<p>No matter which mods API version you want to target you should always be using the latest compatible version of the NPM packges:</p>
 <ul>
@@ -660,6 +660,8 @@ These include:</p>
 <li>Adding image layers to map charts via <a href="/spotfire-mods/api-docs/action-mods/classes/Spotfire.Dxp.Application.Visuals.Maps.MapChartLayerCollection.html#AddNewImageLayer">MapChartLayerCollection.AddNewImageLayer</a>.
 This API can be used in combination with a mod resource, see <a href="/spotfire-mods/docs/whats-new/#add-resources-to-your-action-mod">&ldquo;Add resources to your action mod&rdquo;</a> below.</li>
 <li>Loading STDF data via the <a href="/spotfire-mods/api-docs/action-mods/modules/Spotfire.Dxp.Data.Formats.Stdf.html">Data.Format.Stdf</a> APIs, see snippet <a href="/spotfire-mods/docs/action-mods/snippets/#create-a-table-using-the-stdf-apis">&ldquo;Create a table using the STDF APIs&rdquo;</a>.</li>
+<li>Looping through each descendant of a document node with a specified type via <a href="/spotfire-mods/api-docs/action-mods/classes/Spotfire.Dxp.Framework.DocumentModel.DocumentNode.html#ForEachNodeInSubTree">DocumentNode.ForEachNodeInSubTree</a>.
+This is a very powerful API for making large updates to the document, see for instance the <a href="/spotfire-mods/docs/action-mods/snippets/#modify-all-expressions-in-every-visuliazation">&ldquo;Modify all expressions in every visuliazation&rdquo;</a> snippet.</li>
 </ul>
 <h2 id="add-resources-to-your-action-mod">Add resources to your action mod</h2>
 <p>File resources, specified using the <code>files</code> property in the manifest, can now be accessed as <a href="/spotfire-mods/api-docs/action-mods/classes/System.IO.Stream.html">Streams</a> inside a script.
@@ -702,7 +704,9 @@ The script should look like this:</p>
 </span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#000">RegisterEntryPoint</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">addImageToTextArea</span><span style="color:#000;font-weight:bold">);</span>
-</span></span></code></pre></div><h2 id="unique-icon-per-script">Unique icon per script</h2>
+</span></span></code></pre></div><p>Spotfire previously used to re-fetch the entire mod on any file update which would cause performance to slow down when developing mods with large resource files.
+Make sure you are using version 1.2 or above of <a href="https://www.npmjs.com/package/@spotfire/mods-dev-server">mods-dev-server</a> to allow Spotfire to only fetch the files which have actually changed.</p>
+<h2 id="unique-icon-per-script">Unique icon per script</h2>
 <p>Each script can now specify its own unique SVG icon which will show up in various parts of the UI such as floating buttons and title bar buttons.
 Scripts which do not specify an icon will fallback to the icon of the action mod.
 To specify an icon add an <code>&quot;icon&quot;: &quot;path/to/icon.svg&quot;</code> property to the script in the manifest.</p>
