@@ -17,6 +17,9 @@
     <loc>/spotfire-mods/docs/getting-started/</loc>
     <lastmod>2024-06-05T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>/spotfire-mods/docs/whats-new/</loc>
+    <lastmod>2024-06-05T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>/spotfire-mods/examples/area-chart/</loc>
     <lastmod>2020-12-08T00:00:00+00:00</lastmod>
   </url><url>
@@ -25,9 +28,6 @@
   </url><url>
     <loc>/spotfire-mods/examples/gauge/</loc>
     <lastmod>2020-12-08T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/spotfire-mods/docs/action-mods/</loc>
-    <lastmod>2024-06-05T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/spotfire-mods/docs/action-mods/using-the-api/api-docs/</loc>
     <lastmod>2024-06-05T00:00:00+00:00</lastmod>
@@ -41,13 +41,13 @@
     <loc>/spotfire-mods/docs/visualization-mods/using-the-api/api-docs/</loc>
     <lastmod>2024-06-05T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>/spotfire-mods/docs/action-mods/</loc>
+    <lastmod>2024-06-05T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>/spotfire-mods/docs/action-mods/snippets/</loc>
     <lastmod>2024-06-05T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/spotfire-mods/docs/visualization-mods/using-the-api/</loc>
-    <lastmod>2024-06-05T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/spotfire-mods/docs/visualization-mods/</loc>
     <lastmod>2024-06-05T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/spotfire-mods/docs/visualization-mods/using-the-api/mod-data-views/</loc>
@@ -60,6 +60,9 @@
     <lastmod>2024-06-05T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/spotfire-mods/docs/action-mods/using-the-api/</loc>
+    <lastmod>2024-06-05T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/spotfire-mods/docs/visualization-mods/</loc>
     <lastmod>2024-06-05T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/spotfire-mods/docs/visualization-mods/tutorials/mod-icons/</loc>
