@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.128.1"><META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<meta name="generator" content="Hugo 0.135.0"><META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
 
 
 <link rel="shortcut icon"  href="/spotfire-mods/favicons/favicon.ico" >
@@ -18,8 +18,8 @@
 
 
 
-<link rel="preload" href="/spotfire-mods/scss/main.min.b0e45692b242d6dff0bb1c57e0fa258091aef4e06f53aa9cab666f62cc2a1489.css" as="style">
-<link href="/spotfire-mods/scss/main.min.b0e45692b242d6dff0bb1c57e0fa258091aef4e06f53aa9cab666f62cc2a1489.css" rel="stylesheet" integrity="">
+<link rel="preload" href="/spotfire-mods/scss/main.min.ad160dba126c9cb901c3fc62884a5b64d4aca47e4b0090f44b063d3c287c5f51.css" as="style">
+<link href="/spotfire-mods/scss/main.min.ad160dba126c9cb901c3fc62884a5b64d4aca47e4b0090f44b063d3c287c5f51.css" rel="stylesheet" integrity="">
 
 
 <script
@@ -190,6 +190,31 @@
           
           
           <a class="td-sidebar-link td-sidebar-link__page " id="m-spotfire-modsdocsgetting-started" href="/spotfire-mods/docs/getting-started/">Getting started</a>
+        
+      
+      
+      
+        
+          
+
+
+
+
+
+
+<ul class="td-sidebar-nav__section pr-md-3">
+  <li class="td-sidebar-nav__section-title">
+    <a  href="/spotfire-mods/docs/whats-new/" class="align-left pl-0 pr-2 collapsed td-sidebar-link td-sidebar-link__section">What&#39;s new</a>
+  </li>
+  <ul>
+    <li class="collapse " id="spotfire-modsdocswhats-new">
+      
+      
+      
+    </li>
+  </ul>
+</ul>
+
         
       
       
@@ -747,62 +772,62 @@ Oranges &gt;&gt; USA,19000
 </code></pre><h3 id="data-type-mapping">Data type mapping</h3>
 <p>Columns and expressions in Spotfire can have a number of different data types. When reading data in JavaScript these types are mapped to corresponding JavaScript types as follows:</p>
 <table>
-<thead>
-<tr>
-<th>Spotfire data type</th>
-<th>JavaScript data type</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Integer</td>
-<td>number</td>
-</tr>
-<tr>
-<td>LongInteger</td>
-<td>number</td>
-</tr>
-<tr>
-<td>Real</td>
-<td>number</td>
-</tr>
-<tr>
-<td>SingleReal</td>
-<td>number</td>
-</tr>
-<tr>
-<td>Currency</td>
-<td>number</td>
-</tr>
-<tr>
-<td>Date</td>
-<td>Date</td>
-</tr>
-<tr>
-<td>DateTime</td>
-<td>Date</td>
-</tr>
-<tr>
-<td>Time</td>
-<td>Custom object <a href="/spotfire-mods/api-docs/visualization-mods/interfaces/Time.html">Time</a></td>
-</tr>
-<tr>
-<td>TimeSpan</td>
-<td>Custom objecet <a href="/spotfire-mods/api-docs/visualization-mods/interfaces/TimeSpan.html">TimeSpan</a></td>
-</tr>
-<tr>
-<td>Boolean</td>
-<td>boolean</td>
-</tr>
-<tr>
-<td>String</td>
-<td>string</td>
-</tr>
-<tr>
-<td>Binary</td>
-<td>Not supported</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">Spotfire data type</th>
+          <th style="text-align: left">JavaScript data type</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">Integer</td>
+          <td style="text-align: left">number</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">LongInteger</td>
+          <td style="text-align: left">number</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Real</td>
+          <td style="text-align: left">number</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">SingleReal</td>
+          <td style="text-align: left">number</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Currency</td>
+          <td style="text-align: left">number</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Date</td>
+          <td style="text-align: left">Date</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">DateTime</td>
+          <td style="text-align: left">Date</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Time</td>
+          <td style="text-align: left">Custom object <a href="/spotfire-mods/api-docs/visualization-mods/interfaces/Time.html">Time</a></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">TimeSpan</td>
+          <td style="text-align: left">Custom objecet <a href="/spotfire-mods/api-docs/visualization-mods/interfaces/TimeSpan.html">TimeSpan</a></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Boolean</td>
+          <td style="text-align: left">boolean</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">String</td>
+          <td style="text-align: left">string</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Binary</td>
+          <td style="text-align: left">Not supported</td>
+      </tr>
+  </tbody>
 </table>
 <p>Note that some types may have a higher precision in Spotfire than can be represented by the native JavaScript types. For instance the JavaScript Date type has a precision of 1 millisecond, while Spotfire internally has a precision of 100 nanoseconds. The numeric data types LongInteger and Currency, as well as the TimeSpan data type, may also suffer from precision loss.</p>
 <h2 id="specifying-data-types-for-continuous-axes">Specifying data types for continuous axes</h2>
