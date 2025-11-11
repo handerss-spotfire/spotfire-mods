@@ -326,6 +326,11 @@ export declare interface DataType {
  */
 declare interface DataView_2 {
     /**
+     * Gets the name of the dataview.
+     * @since 2.3
+     */
+    name(): string | null;
+    /**
      * Mark a set of rows.
      * The full set will be the union of all mark operations performed within one transaction (see {@link Mod.transaction}).
      * All mark operations must have the same marking operation.
@@ -840,6 +845,12 @@ export declare interface GeneralStylingInfo {
 }
 
 /**
+ * Guid type used as global identifier of instances.
+ * @public
+ */
+export declare type Guid = string | null;
+
+/**
  * Initializes the Mod API. The specified `onLoaded` callback is called when the initialization is complete.
  * @example
  * ```
@@ -984,6 +995,48 @@ export declare interface Mod {
 }
 
 /**
+ * Represents an instance of a dynamic layer in a mod visualization.
+ * @public
+ */
+export declare interface ModLayer {
+    /** The name of the layer, show in the UI. */
+    name: string;
+    /** The type of the layer, as defined in the manifest. */
+    type: string;
+    /** The id of the layer instance. */
+    id: Guid;
+    /** Retrieve the main data view. */
+    data(): DataView_2;
+    /** Retrieve the main data view. */
+    data(name: string): DataView_2;
+}
+
+/**
+ * Represents the collection of dynamic {@link ModLayer}s;
+ * @public
+ */
+export declare interface ModLayers {
+    items: ModLayer[];
+}
+
+/**
+ * Represents an object that provides access to the dynamic {@link ModLayer}s.
+ * @public
+ */
+declare type ModLayersProxy = ModLayersProxyMethods & Readable<ModLayers>;
+
+/**
+ * Represents the methods available on a {@link ModLayersProxy}.
+ * @public
+ */
+declare interface ModLayersProxyMethods {
+    moveUp: (id: Guid) => void;
+    moveDown: (id: Guid) => void;
+    remove: (id: Guid) => void;
+    add: (type: string) => void;
+}
+
+/**
  * Represents that metadata of the Mod Visualization, as defined in the mod-manifest-json.
  * @public
  */
@@ -1055,10 +1108,27 @@ export declare interface ModVisualization {
      */
     data(): DataViewProxy;
     /**
+     * Provides access to the {@link DataView} that the Mod Visualization is to render.
+     * @param name - The name of the view.
+     * @since 2.3
+     */
+    data(name?: string): DataViewProxy;
+    /**
+     * Provides access to all {@link ModLayer}s in the mod.
+     */
+    layers(): ModLayersProxy;
+    /**
      * Provides access to the {@link DataTable} in the Spotfire document that the Mod Visualization
      * uses as its main table.
      */
     mainTable(): ReadableProxy<DataTable>;
+    /**
+     * Provides access to the {@link DataTable} in the Spotfire document that the Mod Visualization
+     * uses as its main table.
+     * @param dataViewName - The name of the {@link DataView}.
+     * @since 2.3
+     */
+    mainTable(dataViewName?: string): ReadableProxy<DataTable>;
     /**
      * Sets the main {@link DataTable} in the Mod visualization.
      * @param tableName - The name or id of the {@link DataTable} to be used as main table.
@@ -1066,15 +1136,46 @@ export declare interface ModVisualization {
     setMainTable(tableName: string): void;
     /**
      * Sets the main {@link DataTable} in the Mod visualization.
+     * @param tableName - The name or id of the {@link DataTable} to be used as main table.
+     * @param dataViewName - The name of the {@link DataView}.
+     * @since 2.3
+     */
+    setMainTable(tableName: string, dataViewName?: string): void;
+    /**
+     * Sets the main {@link DataTable} in the Mod visualization.
      * @param table - The {@link DataTable} object to be used as main table.
      */
     setMainTable(table: DataTable): void;
+    /**
+     * Sets the main {@link DataTable} in the Mod visualization.
+     * @param table - The {@link DataTable} object to be used as main table.
+     * @param dataViewName - The name of the {@link DataView}.
+     * @since 2.3
+     */
+    setMainTable(table: DataTable, dataViewName?: string): void;
     /**
      * Provides access to the {@link Axis} in the Mod Visualization with the specified `name`. All axes
      * must be declared in the mod-manifest.json.
      * @param name - The name of the {@link Axis}.
      */
     axis(name: string): ReadableProxy<Axis>;
+    /**
+     * Provides access to the {@link Axis} in the Mod Visualization with the specified `axisName` in the dataview with name `dataViewName`.
+     * All axes must be declared in the mod-manifest.json.
+     * @since 2.3
+     * @param axisName - The name of the {@link Axis}.
+     * @param dataViewName - The name of the {@link DataView}.
+     */
+    axis(name: string, dataViewName: string): ReadableProxy<Axis>;
+    /**
+     * Provides access to the {@link Axis} in the Mod Visualization with the specified `axisName` in the dataview with name `dataViewName`.
+     * All axes must be declared in the mod-manifest.json.
+     * @since 2.3
+     * @param axisName - The name of the {@link Axis}.
+     * @param dataViewName - The name of the {@link DataView}.
+     * @param layerId - The id if the {@link ModLayer} instance.
+     */
+    axis(name: string, dataViewName: string, layerId: Guid): ReadableProxy<Axis>;
 }
 
 /**
