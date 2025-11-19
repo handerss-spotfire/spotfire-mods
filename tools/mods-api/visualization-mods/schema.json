@@ -351,6 +351,42 @@
                     }
                 ]
             }
+        },
+        "modProperty": {
+            "type": "object",
+            "title": "The Items Schema",
+            "required": ["name", "type", "defaultValue"],
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "title": "Property name",
+                    "description": "Specifies the unique name used to refer to this property from the code.",
+                    "default": "",
+                    "examples": ["width"],
+                    "pattern": "^[a-zA-Z0-9]+[a-zA-Z0-9-._]*(?<=[a-zA-Z0-9])$",
+                    "additionalProperties": false
+                },
+                "type": {
+                    "type": "string",
+                    "enum": ["integer", "double", "string", "boolean"],
+                    "title": "Value type",
+                    "description": "Specifies the type of values stored by this property.",
+                    "default": "string",
+                    "examples": ["integer"],
+                    "pattern": "^(.*)$",
+                    "additionalProperties": false
+                },
+                "defaultValue": {
+                    "type": ["string", "number", "boolean"],
+                    "title": "Default value",
+                    "description": "Specifies the value that this property will have when an instance of the Mod is created.",
+                    "default": "",
+                    "examples": ["3"],
+                    "pattern": "^(.*)$",
+                    "additionalProperties": false
+                }
+            }
         }
     },
     "title": "The Spotfire mod manifest schema",
@@ -422,42 +458,9 @@
             "type": "array",
             "title": "Mod Properties",
             "description": "Specifies the properties that are stored in this Mods part of the Spotfire document. Use properties to store settings values.",
-            "default": null,
+            "default": [],
             "items": {
-                "type": "object",
-                "title": "The Items Schema",
-                "required": ["name", "type", "defaultValue"],
-                "additionalProperties": false,
-                "properties": {
-                    "name": {
-                        "type": "string",
-                        "title": "Property name",
-                        "description": "Specifies the unique name used to refer to this property from the code.",
-                        "default": "",
-                        "examples": ["width"],
-                        "pattern": "^(.*)$",
-                        "additionalProperties": false
-                    },
-                    "type": {
-                        "type": "string",
-                        "enum": ["integer", "double", "string", "boolean"],
-                        "title": "Value type",
-                        "description": "Specifies the type of values stored by this property.",
-                        "default": "string",
-                        "examples": ["integer"],
-                        "pattern": "^(.*)$",
-                        "additionalProperties": false
-                    },
-                    "defaultValue": {
-                        "type": ["string", "number", "boolean"],
-                        "title": "Default value",
-                        "description": "Specifies the value that this property will have when an instance of the Mod is created.",
-                        "default": "",
-                        "examples": ["3"],
-                        "pattern": "^(.*)$",
-                        "additionalProperties": false
-                    }
-                }
+                "$ref": "#/definitions/modProperty"
             }
         },
         "dataViewDefinition": { "additionalProperties": false, "$ref": "#/definitions/dataViewDefinition" },
@@ -487,6 +490,15 @@
                     "namedDataViewDefinitions": {
                         "additionalProperties": false,
                         "$ref": "#/definitions/namedDataViewDefinitions"
+                    },
+                    "properties": {
+                        "type": "array",
+                        "title": "Layer Properties",
+                        "description": "Specifies the properties that are stored in the instance of this layer. Use properties to store settings values for this layer instance.",
+                        "default": [],
+                        "items": {
+                            "$ref": "#/definitions/modProperty"
+                        }
                     }
                 }
             }

@@ -999,16 +999,16 @@ export declare interface Mod {
  * @public
  */
 export declare interface ModLayer {
-    /** The name of the layer, show in the UI. */
-    name: string;
     /** The type of the layer, as defined in the manifest. */
     type: string;
     /** The id of the layer instance. */
     id: Guid;
     /** Retrieve the main data view. */
     data(): DataView_2;
-    /** Retrieve the main data view. */
+    /** Retrieve the data view with specified name. */
     data(name: string): DataView_2;
+    /** Gets the mod property with the specified name. */
+    property(name: string): ModProperty;
 }
 
 /**
