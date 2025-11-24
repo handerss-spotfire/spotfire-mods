@@ -483,6 +483,12 @@
                         "default": "",
                         "pattern": "^\\S.*\\S$"
                     },
+                    "icon": {
+                        "type": "string",
+                        "title": "Specifies the name of the file containing the svg icon to be used for this layer.",
+                        "default": "layer-icon.svg",
+                        "pattern": "^.*\\.svg$"
+                    },
                     "dataViewDefinition": {
                         "additionalProperties": false,
                         "$ref": "#/definitions/dataViewDefinition"
