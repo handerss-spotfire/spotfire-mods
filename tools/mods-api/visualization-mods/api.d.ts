@@ -1004,22 +1004,7 @@ export declare interface ModLayer {
     id: Guid;
     /** The type of the layer, as defined in the manifest. */
     type: string;
-    /** The title of the layer. */
-    title: string;
-}
-
-/**
- * Represents an object that provides access to the dynamic {@link ModLayer}s.
- * @public
- */
-export declare type ModLayerProxy = ModLayerProxyMethods & Readable<ModLayer>;
-
-/**
- * Represents the methods available on a {@link ModLayerProxy}.
- * @since 2.4
- * @public
- */
-export declare interface ModLayerProxyMethods {
+    title(): Readable<string>;
     /**
      * Sets the title of the layer.
      * @param title - The title expression of the layer.
@@ -1045,9 +1030,41 @@ export declare interface ModLayerProxyMethods {
     /**
      * Provides access to a {@link DataView} of the layer with the specified `name`.
      * @param name - The name of the view.
-     * @since 2.3
      */
     data(name?: string): DataViewProxy;
+    /**
+     * Provides access to the {@link DataTable} in the Spotfire document that the layer
+     * uses as its main table.
+     */
+    mainTable(): ReadableProxy<DataTable>;
+    /**
+     * Provides access to the {@link DataTable} in the Spotfire document that the layer
+     * uses as the main table of the named data view.
+     * @param dataViewName - The name of the {@link DataView}.
+     */
+    mainTable(dataViewName?: string): ReadableProxy<DataTable>;
+    /**
+     * Sets the main {@link DataTable} in the layer.
+     * @param tableName - The name or id of the {@link DataTable} to be used as main table.
+     */
+    setMainTable(tableName: string): void;
+    /**
+     * Sets the main {@link DataTable} of the named data view in the layer.
+     * @param tableName - The name or id of the {@link DataTable} to be used as main table.
+     * @param dataViewName - The name of the {@link DataView}.
+     */
+    setMainTable(tableName: string, dataViewName?: string): void;
+    /**
+     * Sets the main {@link DataTable} in the layer.
+     * @param table - The {@link DataTable} object to be used as main table.
+     */
+    setMainTable(table: DataTable): void;
+    /**
+     * Sets the main {@link DataTable} of the named data view in the layer.
+     * @param table - The {@link DataTable} object to be used as main table.
+     * @param dataViewName - The name of the {@link DataView}.
+     */
+    setMainTable(table: DataTable, dataViewName?: string): void;
     /**
      * Provides access to the {@link ModProperty} with the specified `name`.
      */
@@ -1055,25 +1072,12 @@ export declare interface ModLayerProxyMethods {
 }
 
 /**
- * Represents the collection of dynamic {@link ModLayer}s;
+ * Represents the collection of {@link ModLayer}s.
  * @public
  */
 export declare interface ModLayers {
-    items: (ModLayerProxyMethods & ModLayer)[];
-}
-
-/**
- * Represents an object that provides access to the dynamic {@link ModLayer}s.
- * @public
- */
-declare type ModLayersProxy = ModLayersProxyMethods & Readable<ModLayers>;
-
-/**
- * Represents the methods available on a {@link ModLayersProxy}.
- * @public
- */
-declare interface ModLayersProxyMethods {
-    add(type: string): ModLayerProxy;
+    items: ModLayer[];
+    add(type: string): ModLayer;
     remove(layerId: string): void;
     move(layerId: string, to: number): void;
     move(from: number, to: number): void;
@@ -1159,11 +1163,13 @@ export declare interface ModVisualization {
     /**
      * Provides access to a {@link ModLayer} instance in the mod.
      */
-    layer(layerId: string): ModLayerProxy;
+    layer(layerId: string): ReadableProxy<ModLayer>;
     /**
      * Provides access to all {@link ModLayer}s in the mod.
+     * @param lazy - When true, the {@link DataView}s in the current {@link ModLayer}s will not begin materialization until their content is awaited.
+     * Use this to increase overall performance when not all {@link DataView}s are expected to be consumed.
      */
-    layers(): ModLayersProxy;
+    layers(lazy?: boolean): ReadableProxy<ModLayers>;
     /**
      * Provides access to the {@link DataTable} in the Spotfire document that the Mod Visualization
      * uses as its main table.
@@ -1633,6 +1639,18 @@ export declare interface ReaderSubscription {
      * Neither the callback or the error callback will be invoked afterwards.
      */
     cancel(): void;
+    /**
+     * Temporarily pause the current subscription.
+     * Pausing a subscription will prevent any invokations to the render function, while for example allowing the user to perform an area marking operation while holding off streaming data updates.
+     * @version 2.4
+     */
+    pause(): void;
+    /**
+     * Resume the current subscription.
+     * Any number of changes to one or more subscribed readable that occured when the subscription was paused will yield one invokation to the render callback.
+     * @version 2.4
+     */
+    resume(): void;
 }
 
 /**
