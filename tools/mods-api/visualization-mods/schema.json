@@ -505,6 +505,12 @@
                         "items": {
                             "$ref": "#/definitions/modProperty"
                         }
+                    },
+                    "disableAddRemove": {
+                        "type": "boolean",
+                        "title": "Disable add/remove/move UI elements.",
+                        "description": "Disables UI elements in Spotfire which allow the user to manipulate the collection of layers of this type. By setting this property to true it is entirely up to the mod itself to provide add/remove/move functionality for layers of this type.",
+                        "default": true
                     }
                 }
             }
