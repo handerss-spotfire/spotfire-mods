@@ -1,5 +1,5 @@
 /*
-* Copyright © 2025. Cloud Software Group, Inc.
+* Copyright © 2026. Cloud Software Group, Inc.
 * This file is subject to the license terms contained
 * in the license file that is distributed with this file.
 */
@@ -1004,12 +1004,11 @@ export declare interface ModLayer {
     id: Guid;
     /** The type of the layer, as defined in the manifest. */
     type: string;
-    title(): Readable<string>;
     /**
-     * Sets the title of the layer.
-     * @param title - The title expression of the layer.
+     * Provides access to the {@link Title} of the layer or named {@link DataView}.
+     * @param dataViewName - The name of the named {@link DataView} as specified in the mod-manifest.json.
      */
-    setTitle(title: string): void;
+    title(dataViewName?: string): ReadableProxy<Title>;
     /**
      * Provides access to the {@link Axis} in the layer with the specified `name`. All axes
      * must be declared in the mod-manifest.json.
@@ -1161,10 +1160,6 @@ export declare interface ModVisualization {
      */
     data(name?: string): DataViewProxy;
     /**
-     * Provides access to a {@link ModLayer} instance in the mod.
-     */
-    layer(layerId: string): ReadableProxy<ModLayer>;
-    /**
      * Provides access to all {@link ModLayer}s in the mod.
      * @param lazy - When true, the {@link DataView}s in the current {@link ModLayer}s will not begin materialization until their content is awaited.
      * Use this to increase overall performance when not all {@link DataView}s are expected to be consumed.
@@ -1220,6 +1215,12 @@ export declare interface ModVisualization {
      * @param dataViewName - The name of the {@link DataView}.
      */
     axis(name: string, dataViewName: string): ReadableProxy<Axis>;
+    /**
+     * Provides access to the {@link Title} of the mod visualization or named {@link DataView}.
+     * @since 2.4
+     * @param dataViewName - The name of the named {@link DataView} as specified in the mod-manifest.json.
+     */
+    title(dataViewName?: string): ReadableProxy<Title>;
 }
 
 /**
@@ -1905,6 +1906,29 @@ export declare interface TimeSpan {
     hours: number;
     /** The day part of the instance. */
     days: number;
+}
+
+/**
+ * Represents a title in the Spotfire document.
+ * @since 2.4
+ * @public
+ */
+export declare interface Title extends TitleValues {
+    /**
+     * Sets the title of the entity.
+     * @param value - The new title.
+     */
+    set: (value: string) => void;
+}
+
+/**
+ * Represents the values held by a {@link Title}.
+ * @since 2.4
+ * @public
+ */
+export declare interface TitleValues {
+    /** Gets the title. */
+    value: string;
 }
 
 /**
