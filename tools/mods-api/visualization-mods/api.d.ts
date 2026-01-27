@@ -1071,14 +1071,59 @@ export declare interface ModLayer {
 }
 
 /**
+ * Enumeration for controlling the behavior of the {@link ModVisualization.layers} readable.
+ * @since 2.4
+ * @public
+ */
+export declare enum ModLayerMode {
+    /**
+     * Eager data materilization mode (default). Data views in all layers are fetched immediately when the layers collection is fetched.
+     * Use this mode when all {@link DataView}s are required to render the visualization.
+     */
+    EagerData = 0,
+    /**
+     * Lazy data materilization mode. Data views in all layers are fetched when the promise for data is awaited.
+     * Use this mode to increase overall performance when not all {@link DataView}s are expected to be consumed, as this mode allows the mod to avoid fetching unnecessary data, or to control the order in which dataview to fetched.
+     */
+    LazyData = 1,
+    /**
+     * Like LazyData, but the readers created with this mode will only be invalidated when the {@link ModLayers.items} collection changes, i.e. layers are added, removed or reordered.
+     * Use this mode only when separate readers are created per layer.
+     */
+    CollectionOnly = 2
+}
+
+/**
  * Represents the collection of {@link ModLayer}s.
+ * @since 2.4
  * @public
  */
 export declare interface ModLayers {
+    /**
+     * The layer items in the mod.
+     */
     items: ModLayer[];
+    /**
+     * Add a new layer instance to the mod..
+     * @param type - The type of layer to add, as defined in the manifest.
+     */
     add(type: string): ModLayer;
+    /**
+     * Remove a layer from the mod.
+     * @param layerId - The id of the layer to remove.
+     */
     remove(layerId: string): void;
+    /**
+     * Move a layer to a new position.
+     * @param layerId - The id of the layer to move.
+     * @param to - The position to move the layer to.
+     */
     move(layerId: string, to: number): void;
+    /**
+     * Move a layer to a new position.
+     * @param from - The current position of the layer to move.
+     * @param to - The new position to move the layer to.
+     */
     move(from: number, to: number): void;
 }
 
@@ -1161,10 +1206,10 @@ export declare interface ModVisualization {
     data(name?: string): DataViewProxy;
     /**
      * Provides access to all {@link ModLayer}s in the mod.
-     * @param lazy - When true, the {@link DataView}s in the current {@link ModLayer}s will not begin materialization until their content is awaited.
-     * Use this to increase overall performance when not all {@link DataView}s are expected to be consumed.
+     * @param mode - Optional argument to control the materialization and trigger behavior of the {@link ModLayer}s.
+     * @since 2.4
      */
-    layers(lazy?: boolean): ReadableProxy<ModLayers>;
+    layers(mode?: ModLayerMode): ReadableProxy<ModLayers>;
     /**
      * Provides access to the {@link DataTable} in the Spotfire document that the Mod Visualization
      * uses as its main table.
@@ -1627,6 +1672,26 @@ export declare interface Reader<T extends ReadonlyArray<any>> {
      * @version 1.3
      */
     hasValueChanged(value: UnionFromTupleTypes<T>, ...values: UnionFromTupleTypes<T>[]): boolean;
+    /**
+     * Check whether one or more passed readable arguments has changed since the last query time within this reader.
+     *
+     * @example
+     * Check if any of the main data views in any dynamic layer has changed in the subscribe loop.
+     *
+     * ```
+     * let reader = mod.createReader(mod.visualization.layers(), mod.windowSize());
+     * reader.subscribe((layers, size) => {
+     *    console.log(reader.hasReadableChanged(...layers.items.map(layer => layer.data())));
+     * });
+     * ```
+     *
+     * @param readables - Readables retrieved from the API.
+     * Note that is is not strictly required that the specifed readables where specified when creating the reader,
+     * but it is recommended to only query for readables that derivies from a dynamic layer or similar.
+     * @returns true if any of the values are new, otherwise false.
+     * @version 2.4
+     */
+    hasReadableChanged(...readables: Readable[]): boolean;
 }
 
 /**
