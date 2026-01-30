@@ -1741,13 +1741,13 @@ export declare interface ReaderSubscription {
     cancel(): void;
     /**
      * Temporarily pause the current subscription.
-     * Pausing a subscription will prevent any invokations to the render function, while for example allowing the user to perform an area marking operation while holding off streaming data updates.
+     * Pausing a subscription will prevent any invocations to the render function, while for example allowing the user to perform an area marking operation while holding off streaming data updates.
      * @version 2.4
      */
     pause(): void;
     /**
      * Resume the current subscription.
-     * Any number of changes to one or more subscribed readable that occured when the subscription was paused will yield one invokation to the render callback.
+     * Any number of changes to one or more subscribed readable that occurred when the subscription was paused will yield one invocation to the render callback.
      * @version 2.4
      */
     resume(): void;

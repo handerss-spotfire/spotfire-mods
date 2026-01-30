@@ -6663,6 +6663,14 @@ declare namespace Spotfire.Dxp {
              */
             class ModVisualization extends ModVisualizationBase implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext> {
                 /**
+                 * Gets the layer collection.
+                 * 
+                 * @since 2.4
+                 * 
+                 * @group Default capability
+                 */
+                get Layers(): ModLayerCollection;
+                /**
                  * Gets the static mod identifier, as specified in the mod manifest, or null.
                  * 
                  * @since 2.1
@@ -25625,6 +25633,54 @@ declare namespace Spotfire.Dxp {
             
             namespace Maps {
                 /**
+                 * Represents a copyright notice, including descriptive text and an associated hyperlink.
+                 * 
+                 * @since 2.4
+                 * 
+                 * @group Default capability
+                 */
+                class CopyrightInfo extends Framework.DocumentModel.DocumentNode implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext> {
+                    /**
+                     * Gets or sets the copyright hyperlink.
+                     * 
+                     * @since 2.4
+                     * 
+                     * @group Default capability
+                     */
+                    get Link(): JsType<System.String>;
+                    set Link(value: JsType<System.String>);
+                    /**
+                     * Gets or sets the copyright text.
+                     * 
+                     * @since 2.4
+                     * 
+                     * @group Default capability
+                     */
+                    get Text(): JsType<System.String>;
+                    set Text(value: JsType<System.String>);
+                    /**
+                     * Initializes a new instance of the {@link Spotfire.Dxp.Application.Visuals.Maps.CopyrightInfo} class.
+                     * @param text The copyright text.
+                     * @param link The copyright hyperlink.
+                     * 
+                     * @since 2.4
+                     * 
+                     * @group Default capability
+                     */
+                    constructor(text: (JsType<System.String> | System.String), link: (JsType<System.String> | System.String));
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                     */
+                    _interfaces: {
+                        System_IServiceProvider: Implementation<System.IServiceProvider>,
+                        Spotfire_Dxp_Framework_DocumentModel_ITransactions: Implementation<Framework.DocumentModel.ITransactions>,
+                        Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
+                    };
+                    private __type_3580410791: null;
+                }
+                
+                /**
                  * The visualization for map chart feature layers (see {@link Spotfire.Dxp.Application.Visuals.Maps.MapChartDataLayer}).
                  * A feature in this context typically means a polygon, line, or point specified by a shape file.
                  * 
@@ -27430,6 +27486,14 @@ declare namespace Spotfire.Dxp {
                  */
                 class TmsLayer extends TileLayer implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext> {
                     /**
+                     * Gets the list of copyright information items for this layer.
+                     * 
+                     * @since 2.4
+                     * 
+                     * @group Default capability
+                     */
+                    get CopyrightInfoItems(): System.Collections.Generic.IList<CopyrightInfo>;
+                    /**
                      * Gets or sets the TMS layer copyright link.
                      * @deprecated Use the CopyrightInfoItems collection property instead. This property now accesses the Link of the first item in the collection.
                      * 
@@ -27492,6 +27556,15 @@ declare namespace Spotfire.Dxp {
                      */
                     get CacheImages(): JsType<System.Boolean>;
                     set CacheImages(value: JsType<System.Boolean>);
+                    /**
+                     * Gets the list of copyright information items for this layer.
+                     * This list is undoable and can be modified directly.
+                     * 
+                     * @since 2.4
+                     * 
+                     * @group Default capability
+                     */
+                    get CopyrightInfoItems(): System.Collections.Generic.IList<CopyrightInfo>;
                     /**
                      * Gets the legend object for this layer.
                      * 

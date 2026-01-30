@@ -500,7 +500,7 @@
                 "$ref": "#/definitions/modProperty"
             }
         },
-        "dataViewDefinition": { "additionalProperties": false, "$ref": "#/definitions/mainDataViewDefinition" },
+        "dataViewDefinition": { "unevaluatedProperties": false, "$ref": "#/definitions/mainDataViewDefinition" },
         "namedDataViewDefinitions": {
             "$ref": "#/definitions/namedDataViewDefinitions"
         },
@@ -527,11 +527,11 @@
                         "pattern": "^.*\\.svg$"
                     },
                     "dataViewDefinition": {
-                        "additionalProperties": false,
+                        "unevaluatedProperties": false,
                         "$ref": "#/definitions/extendableDataViewDefinition"
                     },
                     "namedDataViewDefinitions": {
-                        "additionalProperties": false,
+                        "unevaluatedProperties": false,
                         "$ref": "#/definitions/namedDataViewDefinitions"
                     },
                     "properties": {
