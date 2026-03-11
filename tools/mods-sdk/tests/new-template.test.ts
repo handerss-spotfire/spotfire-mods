@@ -52,45 +52,7 @@ describe("new-template", () => {
         expect(manifestJson["apiVersion"]).toEqual("2.5");
         expect(manifestJson["name"]).toEqual("New Package Mod");
         expect(manifestJson["id"]).toEqual("new-package-mod");
-        expect(manifestJson["mods"]).toEqual([
-            "actions/mod-manifest.json",
-            "visualizations/mod-manifest.json",
-        ]);
-
-        // Sub-mod manifests exist and have matching apiVersion
-        const actionManifest = path.join(
-            projectFolder,
-            "actions",
-            "mod-manifest.json"
-        );
-        const actionManifestJson = JSON.parse(
-            readFileSync(actionManifest, "utf-8")
-        );
-        expect(actionManifestJson["apiVersion"]).toEqual("2.5");
-        expect(actionManifestJson["type"]).toEqual("action");
-
-        const vizManifest = path.join(
-            projectFolder,
-            "visualizations",
-            "mod-manifest.json"
-        );
-        const vizManifestJson = JSON.parse(
-            readFileSync(vizManifest, "utf-8")
-        );
-        expect(vizManifestJson["apiVersion"]).toEqual("2.5");
-        expect(vizManifestJson["type"]).toEqual("visualization");
-
-        // Sub-mod source files exist
-        expect(
-            existsSync(
-                path.join(projectFolder, "actions", "src", "scripts", "my-script.ts")
-            )
-        ).toBeTruthy();
-        expect(
-            existsSync(
-                path.join(projectFolder, "visualizations", "src", "main.ts")
-            )
-        ).toBeTruthy();
+        expect(manifestJson["mods"]).toEqual([]);
     });
 
     test("package mod rejects apiVersion below 2.5", async () => {
@@ -115,16 +77,6 @@ describe("new-template", () => {
         const manifest = path.join(projectFolder, "mod-manifest.json");
         const manifestJson = JSON.parse(readFileSync(manifest, "utf-8"));
         expect(manifestJson["apiVersion"]).toEqual("3.0");
-
-        const actionManifest = path.join(
-            projectFolder,
-            "actions",
-            "mod-manifest.json"
-        );
-        const actionManifestJson = JSON.parse(
-            readFileSync(actionManifest, "utf-8")
-        );
-        expect(actionManifestJson["apiVersion"]).toEqual("3.0");
     });
 });
 

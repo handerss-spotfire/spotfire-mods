@@ -6,8 +6,5 @@
     "id": "$MOD-ID",
     "description": "A package mod containing actions and visualizations.",
     "icon": "icon.svg",
-    "mods": [
-        "actions/mod-manifest.json",
-        "visualizations/mod-manifest.json"
-    ]
+    "mods": []
 }
