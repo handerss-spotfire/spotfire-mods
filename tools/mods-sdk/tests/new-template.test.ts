@@ -166,6 +166,43 @@ describe("can create project with different api version", () => {
     });
 });
 
+describe("--name flag", () => {
+    test("uses provided name instead of folder name", async () => {
+        const projectFolder = "tests/testprojects/new-action-mod";
+        if (existsSync(projectFolder)) {
+            rmSync(projectFolder, { force: true, recursive: true });
+        }
+
+        await createTemplate(ModType.Action, {
+            outDir: projectFolder,
+            name: "My Custom Action",
+            quiet: true,
+        });
+
+        const manifest = path.join(projectFolder, "mod-manifest.json");
+        const manifestJson = JSON.parse(readFileSync(manifest, "utf-8"));
+        expect(manifestJson["name"]).toEqual("My Custom Action");
+        expect(manifestJson["id"]).toEqual("my-custom-action");
+    });
+
+    test("falls back to folder name when --name is not provided", async () => {
+        const projectFolder = "tests/testprojects/new-action-mod";
+        if (existsSync(projectFolder)) {
+            rmSync(projectFolder, { force: true, recursive: true });
+        }
+
+        await createTemplate(ModType.Action, {
+            outDir: projectFolder,
+            quiet: true,
+        });
+
+        const manifest = path.join(projectFolder, "mod-manifest.json");
+        const manifestJson = JSON.parse(readFileSync(manifest, "utf-8"));
+        expect(manifestJson["name"]).toEqual("New Action Mod");
+        expect(manifestJson["id"]).toEqual("new-action-mod");
+    });
+});
+
 describe("toModId", () => {
     const tests = [
         [

@@ -21,6 +21,7 @@ interface CreateTemplateOptions {
     outDir: string;
     apiVersion?: string;
     gitignore?: boolean;
+    name?: string;
 }
 
 export type TemplateType = ModType | "gitignore";
@@ -51,6 +52,7 @@ export async function createTemplate(
         outDir,
         apiVersion,
         gitignore,
+        name,
         ...quiet
     }: CreateTemplateOptions & QuietOtions
 ) {
@@ -69,6 +71,7 @@ export async function createTemplate(
             targetFolder,
             apiVersion,
             gitignore,
+            name,
             ...quiet,
         });
     } else {
@@ -96,6 +99,7 @@ async function createModTemplate({
     template,
     targetFolder,
     gitignore,
+    name: _name,
     ...quiet
 }: {
     apiVersion?: string;
@@ -103,6 +107,7 @@ async function createModTemplate({
     modType: ModType;
     template: string;
     targetFolder: string;
+    name?: string;
 } & QuietOtions) {
     const stdout = mkStdout(quiet);
     const rl = readline.createInterface({
@@ -174,7 +179,7 @@ async function createModTemplate({
         );
 
         const modFolderName = path.basename(targetFolder);
-        const modId = toModId(modFolderName);
+        const modId = toModId(_name ?? modFolderName);
         const modName = modIdToName(modId);
         const manifestPath = path.join(targetFolder, "mod-manifest.json");
         await replaceInFile(manifestPath, (manifestTemplate) => {
