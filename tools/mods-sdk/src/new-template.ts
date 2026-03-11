@@ -24,7 +24,7 @@ interface CreateTemplateOptions {
 export type TemplateType = ModType | "gitignore";
 async function getTemplateFolder(type: TemplateType) {
     const dirname = await getDirname();
-    let typeFolder;
+    let typeFolder: string;
     switch (type) {
         case ModType.Action:
             typeFolder = "actions";
@@ -32,6 +32,10 @@ async function getTemplateFolder(type: TemplateType) {
         case ModType.Visualization:
             typeFolder = "visualizations";
             break;
+        case ModType.Package:
+            throw new Error(
+                "Package mod templates are not yet supported."
+            );
         case "gitignore":
             typeFolder = "gitignore";
             break;

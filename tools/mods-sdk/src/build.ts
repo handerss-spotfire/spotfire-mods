@@ -17,6 +17,7 @@ import {
     isParameterType,
     mkStdout,
     readApiVersion,
+    readManifest,
     toTypeName,
     typeFeature,
 } from "./utils.js";
@@ -401,6 +402,13 @@ export async function build({
     const modType = await getTypeFromManifest(manifestPath);
     if (!modType) {
         return;
+    } else if (modType === ModType.Package) {
+        await buildPackageMod({
+            manifestPath,
+            debug,
+            watch,
+            ...quiet,
+        });
     } else if (modType === ModType.Action) {
         await buildActionMod({
             absOutDir,
@@ -447,9 +455,11 @@ async function getTypeFromManifest(manifestPath: string) {
             return ModType.Action;
         } else if (type === "visualization") {
             return ModType.Visualization;
+        } else if (type === "package") {
+            return ModType.Package;
         } else {
             console.error(
-                `Unknown mod type: ${type}. Valid types are: 'action' and 'visualization'.`
+                `Unknown mod type: ${type}. Valid types are: 'action', 'visualization', and 'package'.`
             );
         }
     } catch (e) {
@@ -691,4 +701,69 @@ async function buildVisualizationMod({
         await ctx.rebuild();
         await ctx.dispose();
     }
+}
+
+/**
+ * Builds a package mod by building all sub-mods declared in the manifest's "mods" field in parallel.
+ */
+async function buildPackageMod({
+    manifestPath,
+    debug,
+    watch,
+    ...quiet
+}: {
+    manifestPath: string;
+    debug: boolean;
+    watch: boolean;
+} & QuietOtions) {
+    const stdout = mkStdout(quiet);
+    const manifest = await readManifest(manifestPath);
+    const packageDir = path.dirname(path.resolve(manifestPath));
+
+    if (!manifest.mods || manifest.mods.length === 0) {
+        throw new Error(
+            "Package mod manifest must declare a non-empty 'mods' array."
+        );
+    }
+
+    stdout(`Building package mod with ${manifest.mods.length} sub-mod(s)`);
+
+    const buildPromises = manifest.mods.map(async (modManifestPath) => {
+        const absModManifestPath = path.resolve(packageDir, modManifestPath);
+        if (!existsSync(absModManifestPath)) {
+            throw new Error(
+                `Sub-mod manifest not found: '${absModManifestPath}'`
+            );
+        }
+
+        const modDir = path.dirname(absModManifestPath);
+        stdout(`Building sub-mod at '${modDir}'`);
+
+        await build({
+            outdir: path.join(modDir, "build"),
+            src: path.join(modDir, "src"),
+            watch,
+            debug,
+            manifestPath: absModManifestPath,
+            envPath: path.join(modDir, "env.d.ts"),
+            esbuildConfig: path.join(modDir, "esbuild.config.js"),
+            ...quiet,
+        });
+    });
+
+    const results = await Promise.allSettled(buildPromises);
+    const failures = results.filter(
+        (r): r is PromiseRejectedResult => r.status === "rejected"
+    );
+
+    if (failures.length > 0) {
+        for (const failure of failures) {
+            console.error(`Sub-mod build failed: ${failure.reason}`);
+        }
+        throw new Error(
+            `${failures.length} of ${manifest.mods.length} sub-mod build(s) failed.`
+        );
+    }
+
+    stdout("All sub-mod builds succeeded!");
 }

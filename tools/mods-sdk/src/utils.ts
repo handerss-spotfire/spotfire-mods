@@ -22,12 +22,15 @@ export function isError<TSuccess, TErr>(
 export enum ModType {
     Visualization = "Visualization",
     Action = "Action",
+    Package = "Package",
 }
 
 export function isModType(str: string): str is ModType {
     if (str === ModType.Action) {
         return true;
     } else if (str === ModType.Visualization) {
+        return true;
+    } else if (str === ModType.Package) {
         return true;
     }
 
@@ -108,6 +111,8 @@ export interface Manifest {
         parameters?: ManifestParameter[];
     }[];
     files?: string[];
+    /** Paths to mod-manifest.json files of sub-mods (only for package mods). */
+    mods?: string[];
 }
 
 export function deepCopy<T>(t: T) {
