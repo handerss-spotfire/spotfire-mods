@@ -203,6 +203,107 @@ describe("--name flag", () => {
     });
 });
 
+describe("--package-manifest flag", () => {
+    const packageProject = "tests/testprojects/package-for-new";
+
+    async function setupPackageProject() {
+        if (existsSync(packageProject)) {
+            rmSync(packageProject, { force: true, recursive: true });
+        }
+        await createTemplate(ModType.Package, {
+            outDir: packageProject,
+            quiet: true,
+        });
+    }
+
+    test("creates action mod inside package actions folder", async () => {
+        await setupPackageProject();
+        const pkgManifestPath = path.join(packageProject, "mod-manifest.json");
+
+        await createTemplate(ModType.Action, {
+            outDir: ".",
+            name: "My New Action",
+            packageManifest: pkgManifestPath,
+            quiet: true,
+        });
+
+        const newModDir = path.join(packageProject, "actions", "my-new-action");
+        expect(existsSync(newModDir)).toBeTruthy();
+
+        const modManifest = path.join(newModDir, "mod-manifest.json");
+        const modManifestJson = JSON.parse(readFileSync(modManifest, "utf-8"));
+        expect(modManifestJson["type"]).toEqual("action");
+        expect(modManifestJson["name"]).toEqual("My New Action");
+        expect(modManifestJson["id"]).toEqual("my-new-action");
+
+        // Should not have its own package.json
+        expect(existsSync(path.join(newModDir, "package.json"))).toBeFalsy();
+
+        // Source files should exist
+        expect(
+            existsSync(path.join(newModDir, "src", "scripts", "my-script.ts"))
+        ).toBeTruthy();
+    });
+
+    test("creates visualization mod inside package visualizations folder", async () => {
+        await setupPackageProject();
+        const pkgManifestPath = path.join(packageProject, "mod-manifest.json");
+
+        await createTemplate(ModType.Visualization, {
+            outDir: ".",
+            name: "My New Viz",
+            packageManifest: pkgManifestPath,
+            quiet: true,
+        });
+
+        const newModDir = path.join(
+            packageProject,
+            "visualizations",
+            "my-new-viz"
+        );
+        expect(existsSync(newModDir)).toBeTruthy();
+
+        const modManifest = path.join(newModDir, "mod-manifest.json");
+        const modManifestJson = JSON.parse(readFileSync(modManifest, "utf-8"));
+        expect(modManifestJson["type"]).toEqual("visualization");
+
+        // Should not have its own package.json
+        expect(existsSync(path.join(newModDir, "package.json"))).toBeFalsy();
+    });
+
+    test("registers new mod in package manifest mods array", async () => {
+        await setupPackageProject();
+        const pkgManifestPath = path.join(packageProject, "mod-manifest.json");
+
+        await createTemplate(ModType.Action, {
+            outDir: ".",
+            name: "Extra Action",
+            packageManifest: pkgManifestPath,
+            quiet: true,
+        });
+
+        const pkgManifest = JSON.parse(
+            readFileSync(pkgManifestPath, "utf-8")
+        );
+        expect(pkgManifest["mods"]).toContain(
+            "actions/extra-action/mod-manifest.json"
+        );
+    });
+
+    test("requires --name when creating inside a package in quiet mode", async () => {
+        await setupPackageProject();
+        const pkgManifestPath = path.join(packageProject, "mod-manifest.json");
+
+        await expect(
+            createTemplate(ModType.Action, {
+                outDir: ".",
+                packageManifest: pkgManifestPath,
+                quiet: true,
+            })
+        ).rejects.toThrow("--name is required");
+    });
+});
+
 describe("toModId", () => {
     const tests = [
         [

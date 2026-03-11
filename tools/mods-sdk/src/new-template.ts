@@ -1,9 +1,10 @@
 import colors from "colors/safe.js";
 import { existsSync } from "fs";
-import { mkdir, readdir, cp, readFile, writeFile } from "fs/promises";
+import { mkdir, readdir, cp, readFile, rm, writeFile } from "fs/promises";
 import path from "path";
 import readline from "readline/promises";
 import {
+    Manifest,
     ModType,
     QuietOtions,
     capitalize,
@@ -15,6 +16,8 @@ import {
     isModType,
     mkStdout,
     parseApiVersion,
+    readManifest,
+    writeManifest,
 } from "./utils.js";
 
 interface CreateTemplateOptions {
@@ -22,6 +25,7 @@ interface CreateTemplateOptions {
     apiVersion?: string;
     gitignore?: boolean;
     name?: string;
+    packageManifest?: string;
 }
 
 export type TemplateType = ModType | "gitignore";
@@ -53,9 +57,25 @@ export async function createTemplate(
         apiVersion,
         gitignore,
         name,
+        packageManifest,
         ...quiet
     }: CreateTemplateOptions & QuietOtions
 ) {
+    // Auto-detect package manifest in cwd if not explicitly provided.
+    if (!packageManifest && type !== "gitignore" && type !== ModType.Package) {
+        const cwdManifestPath = path.resolve("mod-manifest.json");
+        if (existsSync(cwdManifestPath)) {
+            try {
+                const cwdManifest = await readManifest(cwdManifestPath);
+                if (cwdManifest.type === "package") {
+                    packageManifest = cwdManifestPath;
+                }
+            } catch {
+                // Ignore parse errors — not a valid manifest.
+            }
+        }
+    }
+
     const targetFolder = path.resolve(outDir);
 
     const targetFolderExists = existsSync(targetFolder);
@@ -72,6 +92,7 @@ export async function createTemplate(
             apiVersion,
             gitignore,
             name,
+            packageManifest,
             ...quiet,
         });
     } else {
@@ -97,9 +118,10 @@ async function createModTemplate({
     apiVersion: _apiVersion,
     modType,
     template,
-    targetFolder,
+    targetFolder: _targetFolder,
     gitignore,
     name: _name,
+    packageManifest,
     ...quiet
 }: {
     apiVersion?: string;
@@ -108,6 +130,7 @@ async function createModTemplate({
     template: string;
     targetFolder: string;
     name?: string;
+    packageManifest?: string;
 } & QuietOtions) {
     const stdout = mkStdout(quiet);
     const rl = readline.createInterface({
@@ -117,6 +140,30 @@ async function createModTemplate({
     const templatesFolder = await getTemplateFolder(modType);
 
     try {
+        // When creating inside a package mod, prompt for name if not provided
+        // and compute the target folder inside the package.
+        let targetFolder = _targetFolder;
+        if (packageManifest && modType !== ModType.Package) {
+            if (!_name && !quiet.quiet) {
+                _name = await rl.question("Enter a name for the mod: ");
+                if (!_name || _name.trim().length === 0) {
+                    throw new Error("A name is required when creating a mod inside a package.");
+                }
+            } else if (!_name) {
+                throw new Error("A --name is required when creating a mod inside a package.");
+            }
+
+            const packageDir = path.dirname(path.resolve(packageManifest));
+            const typeFolder =
+                modType === ModType.Action ? "actions" : "visualizations";
+            const modId = toModId(_name);
+            targetFolder = path.join(packageDir, typeFolder, modId);
+
+            if (!existsSync(targetFolder)) {
+                await mkdir(targetFolder, { recursive: true });
+            }
+        }
+
         const starterTemplate = path.resolve(templatesFolder, template);
         const cwd = path.resolve(".");
 
@@ -143,12 +190,17 @@ async function createModTemplate({
             );
         }
 
-        const defaultApiVersion =
-            modType === ModType.Package
-                ? formatVersion(features.PackageMods)
-                : modType === ModType.Action
-                  ? "2.0"
-                  : "1.3";
+        let defaultApiVersion: string;
+        if (packageManifest && modType !== ModType.Package && !_apiVersion) {
+            const pkgManifest = await readManifest(path.resolve(packageManifest));
+            defaultApiVersion = pkgManifest.apiVersion ?? formatVersion(features.PackageMods);
+        } else if (modType === ModType.Package) {
+            defaultApiVersion = formatVersion(features.PackageMods);
+        } else if (modType === ModType.Action) {
+            defaultApiVersion = "2.0";
+        } else {
+            defaultApiVersion = "1.3";
+        }
         const apiVersion = parseApiVersion(_apiVersion ?? defaultApiVersion);
         if (apiVersion.status === "error") {
             throw new Error(
@@ -167,16 +219,28 @@ async function createModTemplate({
 
         const version = await getVersion();
         const packageJsonpath = path.resolve(targetFolder, "package.json");
-        const packageJson = await readFile(packageJsonpath, {
-            encoding: "utf8",
-        });
-        await writeFile(
-            packageJsonpath,
-            packageJson
-                .replace("MODS-SDK-VERSION", version)
-                .replace("MODS-API-VERSION", apiVersion.result.toPackage()),
-            { encoding: "utf-8" }
-        );
+
+        // When creating inside a package, remove files that belong at the package root.
+        if (packageManifest && modType !== ModType.Package) {
+            if (existsSync(packageJsonpath)) {
+                await rm(packageJsonpath);
+            }
+            const vscodeDir = path.join(targetFolder, ".vscode");
+            if (existsSync(vscodeDir)) {
+                await rm(vscodeDir, { recursive: true });
+            }
+        } else {
+            const packageJson = await readFile(packageJsonpath, {
+                encoding: "utf8",
+            });
+            await writeFile(
+                packageJsonpath,
+                packageJson
+                    .replace("MODS-SDK-VERSION", version)
+                    .replace("MODS-API-VERSION", apiVersion.result.toPackage()),
+                { encoding: "utf-8" }
+            );
+        }
 
         const modFolderName = path.basename(targetFolder);
         const modId = toModId(_name ?? modFolderName);
@@ -211,6 +275,28 @@ async function createModTemplate({
                         "$MOD-API-VERSION",
                         apiVersion.result.toManifest()
                     )
+                );
+            }
+        }
+
+        // Register the new mod in the package manifest's "mods" array.
+        if (packageManifest && modType !== ModType.Package) {
+            const absPackageManifest = path.resolve(packageManifest);
+            const pkgManifest = await readManifest(absPackageManifest);
+            const packageDir = path.dirname(absPackageManifest);
+            const newModManifestRel = path
+                .relative(packageDir, manifestPath)
+                .replace(/\\/g, "/");
+
+            if (!pkgManifest.mods) {
+                pkgManifest.mods = [];
+            }
+
+            if (!pkgManifest.mods.includes(newModManifestRel)) {
+                pkgManifest.mods.push(newModManifestRel);
+                await writeManifest(absPackageManifest, pkgManifest, quiet.quiet);
+                stdout(
+                    `📦 Registered '${newModManifestRel}' in package manifest.`
                 );
             }
         }
