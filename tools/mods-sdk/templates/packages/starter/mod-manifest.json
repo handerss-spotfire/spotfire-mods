@@ -1,0 +1,13 @@
+{
+    "apiVersion": "$MOD-API-VERSION",
+    "version": "1.0",
+    "type": "package",
+    "name": "$MOD-NAME",
+    "id": "$MOD-ID",
+    "description": "A package mod containing actions and visualizations.",
+    "icon": "icon.svg",
+    "mods": [
+        "actions/mod-manifest.json",
+        "visualizations/mod-manifest.json"
+    ]
+}

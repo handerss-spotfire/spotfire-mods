@@ -8,6 +8,8 @@ import {
     QuietOtions,
     capitalize,
     capitalizeBeforeSeparators,
+    features,
+    formatVersion,
     getDirname,
     getVersion,
     isModType,
@@ -33,9 +35,8 @@ async function getTemplateFolder(type: TemplateType) {
             typeFolder = "visualizations";
             break;
         case ModType.Package:
-            throw new Error(
-                "Package mod templates are not yet supported."
-            );
+            typeFolder = "packages";
+            break;
         case "gitignore":
             typeFolder = "gitignore";
             break;
@@ -137,12 +138,25 @@ async function createModTemplate({
             );
         }
 
-        const apiVersion = parseApiVersion(
-            _apiVersion ?? (modType === ModType.Action ? "2.0" : "1.3")
-        );
+        const defaultApiVersion =
+            modType === ModType.Package
+                ? formatVersion(features.PackageMods)
+                : modType === ModType.Action
+                  ? "2.0"
+                  : "1.3";
+        const apiVersion = parseApiVersion(_apiVersion ?? defaultApiVersion);
         if (apiVersion.status === "error") {
             throw new Error(
                 `Unregonized API version, error: ${apiVersion.error}`
+            );
+        }
+
+        if (
+            modType === ModType.Package &&
+            !apiVersion.result.supportsFeature("PackageMods")
+        ) {
+            throw new Error(
+                `Package mods require apiVersion ${formatVersion(features.PackageMods)} or later, was '${apiVersion.result.toManifest()}'.`
             );
         }
 
@@ -177,6 +191,24 @@ async function createModTemplate({
                 .replace("$MOD-ID", modId)
                 .replace("$MOD-API-VERSION", apiVersion.result.toManifest());
         });
+
+        if (modType === ModType.Package) {
+            const manifest = JSON.parse(
+                await readFile(manifestPath, "utf-8")
+            );
+            for (const subManifestRelPath of manifest.mods ?? []) {
+                const subManifestPath = path.join(
+                    targetFolder,
+                    subManifestRelPath
+                );
+                await replaceInFile(subManifestPath, (content) =>
+                    content.replace(
+                        "$MOD-API-VERSION",
+                        apiVersion.result.toManifest()
+                    )
+                );
+            }
+        }
 
         if (gitignore) {
             await createGitIgnore({ targetFolder, ...quiet });

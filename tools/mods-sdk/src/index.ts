@@ -28,7 +28,7 @@ Command.prototype.quiet = function () {
         .command("new")
         .argument(
             "<mod-type>",
-            "what you want to create: action, visualization, or gitignore",
+            "what you want to create: action, visualization, package, or gitignore",
             (arg) => assertTemplateType(arg)
         )
         .description("Create a new Mods project based on a template")
@@ -123,11 +123,13 @@ Command.prototype.quiet = function () {
             return ModType.Action;
         } else if (arg === "visualization") {
             return ModType.Visualization;
+        } else if (arg === "package") {
+            return ModType.Package;
         } else if (arg === "gitignore") {
             return "gitignore";
         } else {
             program.error(
-                `Invalid template type '${arg}'. Possible values are: action, visualization, or gitignore.`
+                `Invalid template type '${arg}'. Possible values are: action, visualization, package, or gitignore.`
             );
         }
     }

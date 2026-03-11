@@ -156,6 +156,7 @@ export const features = {
     OptionalParameter: { major: 2, minor: 1 },
     EnumParameter: { major: 2, minor: 1 },
     DataViews: { major: 2, minor: 1 },
+    PackageMods: { major: 2, minor: 5 },
 };
 type Feature = keyof typeof features;
 
