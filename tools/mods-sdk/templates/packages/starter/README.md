@@ -9,6 +9,12 @@ This is a package mod that bundles multiple mods together.
 
 ## Getting started
 
+Install dependencies:
+
+```bash
+npm install
+```
+
 Add mods to this package:
 
 ```bash
@@ -16,7 +22,7 @@ npx @spotfire/mods-sdk new action
 npx @spotfire/mods-sdk new visualization
 ```
 
-Install dependencies and build all sub-mods:
+Build all sub-mods:
 
 ```bash
 npm install

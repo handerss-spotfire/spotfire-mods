@@ -6,6 +6,7 @@ import { existsSync } from "fs";
 import { ApiVersion, Manifest, ManifestParameter, ModType } from "../src/utils";
 import { assertError, assertSuccess, setupProject } from "./test-utils";
 import { addParameter } from "../src/add-parameter";
+import { createTemplate } from "../src/new-template";
 import { readFile } from "fs/promises";
 
 describe("build.ts", () => {
@@ -131,6 +132,83 @@ describe("build.ts", () => {
 
             const sourceMapPath = path.join(buildDir, "main.js.map");
             expect(existsSync(sourceMapPath)).toBeTruthy();
+        });
+    });
+
+    describe("package mods", () => {
+        const project = "tests/testprojects/starter-package-mod";
+        const manifestPath = path.join(project, "mod-manifest.json");
+
+        test("builds all sub-mods", async () => {
+            await setupProject(project, ModType.Package);
+
+            // Add an action and a visualization sub-mod.
+            await createTemplate(ModType.Action, {
+                outDir: ".",
+                name: "My Action",
+                packageManifest: manifestPath,
+                quiet: true,
+            });
+
+            await createTemplate(ModType.Visualization, {
+                outDir: ".",
+                name: "My Viz",
+                packageManifest: manifestPath,
+                quiet: true,
+            });
+
+            const buildDir = path.join(project, "build");
+            const srcDir = path.join(project, "src");
+            const envPath = path.join(project, "env.d.ts");
+            const esbuildConfig = path.join(project, "esbuild.config.js");
+
+            await build({
+                outdir: buildDir,
+                src: srcDir,
+                watch: false,
+                debug: false,
+                manifestPath,
+                envPath,
+                esbuildConfig,
+                quiet: true,
+            });
+
+            // Verify action sub-mod was built.
+            const actionBuild = path.join(
+                project,
+                "actions",
+                "my-action",
+                "build",
+                "my-script.js"
+            );
+            expect(existsSync(actionBuild)).toBeTruthy();
+
+            // Verify visualization sub-mod was built.
+            const vizBuild = path.join(
+                project,
+                "visualizations",
+                "my-viz",
+                "build",
+                "main.js"
+            );
+            expect(existsSync(vizBuild)).toBeTruthy();
+        });
+
+        test("throws when mods array is empty", async () => {
+            await setupProject(project, ModType.Package);
+
+            await expect(
+                build({
+                    outdir: path.join(project, "build"),
+                    src: path.join(project, "src"),
+                    watch: false,
+                    debug: false,
+                    manifestPath,
+                    envPath: path.join(project, "env.d.ts"),
+                    esbuildConfig: path.join(project, "esbuild.config.js"),
+                    quiet: true,
+                })
+            ).rejects.toThrow("non-empty 'mods' array");
         });
     });
 

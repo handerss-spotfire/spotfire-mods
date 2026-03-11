@@ -383,16 +383,6 @@ export async function build({
     esbuildConfig,
     ...quiet
 }: BuildOptions & QuietOtions) {
-    /** Absolute path to directory containing the src files to be bundled. */
-    const absSrcDir = path.resolve(srcDir);
-
-    /** Absolute path to the output directory. */
-    const absOutDir = path.resolve(outDir);
-
-    if (!existsSync(absSrcDir)) {
-        throw new Error(`Cannot find source folder: '${absSrcDir}'`);
-    }
-
     const manifestExists = existsSync(manifestPath);
 
     if (!manifestExists) {
@@ -409,26 +399,38 @@ export async function build({
             watch,
             ...quiet,
         });
-    } else if (modType === ModType.Action) {
-        await buildActionMod({
-            absOutDir,
-            srcDir,
-            manifestPath,
-            envPath,
-            debug,
-            watch,
-            esbuildConfig,
-            ...quiet,
-        });
-    } else if (modType === ModType.Visualization) {
-        await buildVisualizationMod({
-            absOutDir,
-            srcDir,
-            esbuildConfig,
-            debug,
-            watch,
-            ...quiet,
-        });
+    } else {
+        /** Absolute path to directory containing the src files to be bundled. */
+        const absSrcDir = path.resolve(srcDir);
+
+        /** Absolute path to the output directory. */
+        const absOutDir = path.resolve(outDir);
+
+        if (!existsSync(absSrcDir)) {
+            throw new Error(`Cannot find source folder: '${absSrcDir}'`);
+        }
+
+        if (modType === ModType.Action) {
+            await buildActionMod({
+                absOutDir,
+                srcDir,
+                manifestPath,
+                envPath,
+                debug,
+                watch,
+                esbuildConfig,
+                ...quiet,
+            });
+        } else if (modType === ModType.Visualization) {
+            await buildVisualizationMod({
+                absOutDir,
+                srcDir,
+                esbuildConfig,
+                debug,
+                watch,
+                ...quiet,
+            });
+        }
     }
 }
 

@@ -306,17 +306,30 @@ async function createModTemplate({
         }
 
         stdout("🎉 Template has been successfully created!");
-        stdout(
-            colors.bold(
-                "\n⚠️ Please run the following commands to start developing:"
-            )
-        );
-        if (cwd !== targetFolder) {
-            const relativeTarget = path.relative(cwd, targetFolder);
-            stdout(colors.bold(colors.yellow(`  cd ${relativeTarget}`)));
+        if (packageManifest && modType !== ModType.Package) {
+            stdout(
+                colors.bold(
+                    "\n⚠️ Run the following command to build:"
+                )
+            );
+            stdout(colors.bold(colors.yellow("  npm run build")));
+        } else {
+            stdout(
+                colors.bold(
+                    "\n⚠️ Please run the following commands to start developing:"
+                )
+            );
+            if (cwd !== targetFolder) {
+                const relativeTarget = path.relative(cwd, targetFolder);
+                stdout(colors.bold(colors.yellow(`  cd ${relativeTarget}`)));
+            }
+            stdout(colors.bold(colors.yellow("  npm install")));
+            if (modType === ModType.Package) {
+                stdout(colors.bold(colors.yellow("  npx @spotfire/mods-sdk new action")));
+                stdout(colors.bold(colors.yellow("  npx @spotfire/mods-sdk new visualization")));
+            }
+            stdout(colors.bold(colors.yellow("  npm run build")));
         }
-        stdout(colors.bold(colors.yellow("  npm install")));
-        stdout(colors.bold(colors.yellow("  npm run build")));
         stdout(colors.bold("\nFor more info please see the README.md file."));
     } finally {
         rl.close();
