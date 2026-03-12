@@ -242,6 +242,63 @@ describe("--package-manifest flag", () => {
         );
     });
 
+    test("adds reference to package tsconfig.json for new action", async () => {
+        await setupPackageProject();
+        const pkgManifestPath = path.join(packageProject, "mod-manifest.json");
+
+        await createTemplate(ModType.Action, {
+            outDir: ".",
+            name: "Tsconfig Action",
+            packageManifest: pkgManifestPath,
+            quiet: true,
+        });
+
+        const tsconfigPath = path.join(packageProject, "tsconfig.json");
+        const tsconfig = JSON.parse(readFileSync(tsconfigPath, "utf-8"));
+        expect(tsconfig.references).toContainEqual({
+            path: "actions/tsconfig-action",
+        });
+    });
+
+    test("adds reference to package tsconfig.json for new visualization", async () => {
+        await setupPackageProject();
+        const pkgManifestPath = path.join(packageProject, "mod-manifest.json");
+
+        await createTemplate(ModType.Visualization, {
+            outDir: ".",
+            name: "Tsconfig Viz",
+            packageManifest: pkgManifestPath,
+            quiet: true,
+        });
+
+        const tsconfigPath = path.join(packageProject, "tsconfig.json");
+        const tsconfig = JSON.parse(readFileSync(tsconfigPath, "utf-8"));
+        expect(tsconfig.references).toContainEqual({
+            path: "visualizations/tsconfig-viz",
+        });
+    });
+
+    test("adds composite true to sub-mod tsconfig.json", async () => {
+        await setupPackageProject();
+        const pkgManifestPath = path.join(packageProject, "mod-manifest.json");
+
+        await createTemplate(ModType.Action, {
+            outDir: ".",
+            name: "Composite Action",
+            packageManifest: pkgManifestPath,
+            quiet: true,
+        });
+
+        const subTsconfigPath = path.join(
+            packageProject,
+            "actions",
+            "composite-action",
+            "tsconfig.json"
+        );
+        const subTsconfig = JSON.parse(readFileSync(subTsconfigPath, "utf-8"));
+        expect(subTsconfig.compilerOptions.composite).toBe(true);
+    });
+
     test("requires --name when creating inside a package in quiet mode", async () => {
         await setupPackageProject();
         const pkgManifestPath = path.join(packageProject, "mod-manifest.json");

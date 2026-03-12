@@ -299,6 +299,53 @@ async function createModTemplate({
                     `📦 Registered '${newModManifestRel}' in package manifest.`
                 );
             }
+
+            // Update package tsconfig.json references and sub-mod tsconfig.json.
+            const pkgTsconfigPath = path.join(packageDir, "tsconfig.json");
+            if (existsSync(pkgTsconfigPath)) {
+                const newModDirRel = path
+                    .relative(packageDir, targetFolder)
+                    .replace(/\\/g, "/");
+
+                const pkgTsconfig = JSON.parse(
+                    await readFile(pkgTsconfigPath, "utf-8")
+                );
+                if (Array.isArray(pkgTsconfig.references)) {
+                    const alreadyReferenced = pkgTsconfig.references.some(
+                        (ref: { path: string }) => ref.path === newModDirRel
+                    );
+                    if (!alreadyReferenced) {
+                        pkgTsconfig.references.push({ path: newModDirRel });
+                        await writeFile(
+                            pkgTsconfigPath,
+                            JSON.stringify(pkgTsconfig, null, 4) + "\n",
+                            "utf-8"
+                        );
+                        stdout(
+                            `📦 Added '${newModDirRel}' to tsconfig.json references.`
+                        );
+                    }
+                }
+
+                // Add "composite": true to the sub-mod's tsconfig.json.
+                const subTsconfigPath = path.join(targetFolder, "tsconfig.json");
+                if (existsSync(subTsconfigPath)) {
+                    const subTsconfig = JSON.parse(
+                        await readFile(subTsconfigPath, "utf-8")
+                    );
+                    if (
+                        subTsconfig.compilerOptions &&
+                        !subTsconfig.compilerOptions.composite
+                    ) {
+                        subTsconfig.compilerOptions.composite = true;
+                        await writeFile(
+                            subTsconfigPath,
+                            JSON.stringify(subTsconfig, null, 4) + "\n",
+                            "utf-8"
+                        );
+                    }
+                }
+            }
         }
 
         if (gitignore) {

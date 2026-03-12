@@ -5,7 +5,7 @@
     "scripts": {
         "build": "mods-sdk build",
         "build:dev": "mods-sdk build --watch --debug",
-        "tsc:dev": "tsc --watch",
+        "tsc:dev": "tsc --build --watch",
         "server": "mods-dev-server --allow-project-root true"
     },
     "devDependencies": {
