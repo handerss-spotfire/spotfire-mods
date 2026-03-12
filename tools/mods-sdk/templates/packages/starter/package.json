@@ -4,7 +4,9 @@
     "type": "module",
     "scripts": {
         "build": "mods-sdk build",
-        "build:dev": "mods-sdk build --watch --debug"
+        "build:dev": "mods-sdk build --watch --debug",
+        "tsc:dev": "tsc --watch",
+        "server": "mods-dev-server --allow-project-root true"
     },
     "devDependencies": {
         "@spotfire/mods-api": "~MODS-API-VERSION",

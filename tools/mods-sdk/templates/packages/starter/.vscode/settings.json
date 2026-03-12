@@ -1,0 +1,12 @@
+{
+    "json.schemas": [
+        {
+            "fileMatch": ["actions/**/mod-manifest.json"],
+            "url": "./node_modules/@spotfire/mods-api/action-mods/schema.json"
+        },
+        {
+            "fileMatch": ["visualizations/**/mod-manifest.json"],
+            "url": "./node_modules/@spotfire/mods-api/visualization-mods/schema.json"
+        }
+    ]
+}
