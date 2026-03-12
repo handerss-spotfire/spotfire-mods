@@ -11,6 +11,7 @@
         "action-mods/*.d.ts",
         "action-mods/*.json",
         "visualization-mods/*.d.ts",
-        "visualization-mods/*.json"
+        "visualization-mods/*.json",
+        "package-mods/*.json"
     ]
 }

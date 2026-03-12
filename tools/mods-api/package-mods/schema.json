@@ -1,0 +1,90 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "The Spotfire Package Mod manifest schema",
+    "type": "object",
+    "required": ["apiVersion", "version", "name", "id", "icon", "type", "mods"],
+    "additionalProperties": false,
+    "properties": {
+        "version": {
+            "type": "string",
+            "title": "Mod version.",
+            "description": "Specifies the version of this Mod.",
+            "default": "",
+            "examples": ["1.0"],
+            "pattern": "^(.*)$"
+        },
+        "apiVersion": {
+            "type": "string",
+            "title": "Mod API version.",
+            "description": "Specifies the version of the Mod API used by this package Mod. Package mods require at least API version 2.5.",
+            "default": "2.5",
+            "examples": ["2.5"],
+            "pattern": "^(.*)$"
+        },
+        "name": {
+            "type": "string",
+            "title": "Name of the mod",
+            "description": "Specifies the name of this Mod. The name will be shown to the user when this Mod is handled in Spotfire.",
+            "default": "",
+            "examples": ["My Package Mod"],
+            "pattern": "^(.*)$"
+        },
+        "description": {
+            "type": "string",
+            "title": "Description of the mod",
+            "description": "Specifies the description of this Mod. The description will be shown to the user of the mod.",
+            "default": "",
+            "examples": ["A package containing multiple mods."],
+            "pattern": "^(.*)$"
+        },
+        "icon": {
+            "type": "string",
+            "title": "Specifies the name of the file containing the svg icon to be used for this Mod.",
+            "default": "icon.svg"
+        },
+        "id": {
+            "type": "string",
+            "title": "Mod ID. A unique string.",
+            "default": "",
+            "examples": ["my-package-mod"],
+            "pattern": "^[a-zA-Z0-9]+[a-zA-Z0-9-._]*(?<=[a-zA-Z0-9])$"
+        },
+        "type": {
+            "type": "string",
+            "title": "The type of mod.",
+            "default": "package",
+            "enum": ["package"],
+            "pattern": "^(.*)$"
+        },
+        "classification": {
+            "type": "array",
+            "title": "Classification of the mod.",
+            "description": "Classifies the mod. Used to indicate special mod categories.",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+                "type": "string",
+                "title": "The classification value.",
+                "enum": ["DataScienceMod"],
+                "examples": ["DataScienceMod"]
+            }
+        },
+        "mods": {
+            "type": "array",
+            "title": "The sub-mods included in this package",
+            "description": "An array of relative paths to the mod-manifest.json files of the sub-mods included in this package. Package mods cannot contain other package mods.",
+            "minItems": 1,
+            "items": {
+                "type": "string",
+                "title": "Sub-mod manifest path",
+                "description": "A relative path to a sub-mod's mod-manifest.json file.",
+                "default": "",
+                "examples": [
+                    "visual/mod-manifest.json",
+                    "action/mod-manifest.json"
+                ],
+                "pattern": "^(.*)$"
+            }
+        }
+    }
+}
