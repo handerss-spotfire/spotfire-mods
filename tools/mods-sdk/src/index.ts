@@ -43,7 +43,10 @@ Command.prototype.quiet = function () {
             (arg) => assertValidVersion(arg)
         )
         .option("--no-gitignore", "if no .gitignore file should be created")
-        .option("--name <name>", "the name of the mod (defaults to the folder name)")
+        .option(
+            "--name <name>",
+            "the name of the mod (defaults to the folder name)"
+        )
         .option(
             "--package-manifest <path>",
             "path to a package mod manifest; the new mod will be created inside it"

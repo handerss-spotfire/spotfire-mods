@@ -147,10 +147,14 @@ async function createModTemplate({
             if (!_name && !quiet.quiet) {
                 _name = await rl.question("Enter a name for the mod: ");
                 if (!_name || _name.trim().length === 0) {
-                    throw new Error("A name is required when creating a mod inside a package.");
+                    throw new Error(
+                        "A name is required when creating a mod inside a package."
+                    );
                 }
             } else if (!_name) {
-                throw new Error("A --name is required when creating a mod inside a package.");
+                throw new Error(
+                    "A --name is required when creating a mod inside a package."
+                );
             }
 
             const packageDir = path.dirname(path.resolve(packageManifest));
@@ -192,8 +196,11 @@ async function createModTemplate({
 
         let defaultApiVersion: string;
         if (packageManifest && modType !== ModType.Package && !_apiVersion) {
-            const pkgManifest = await readManifest(path.resolve(packageManifest));
-            defaultApiVersion = pkgManifest.apiVersion ?? formatVersion(features.PackageMods);
+            const pkgManifest = await readManifest(
+                path.resolve(packageManifest)
+            );
+            defaultApiVersion =
+                pkgManifest.apiVersion ?? formatVersion(features.PackageMods);
         } else if (modType === ModType.Package) {
             defaultApiVersion = formatVersion(features.PackageMods);
         } else if (modType === ModType.Action) {
@@ -213,7 +220,9 @@ async function createModTemplate({
             !apiVersion.result.supportsFeature("PackageMods")
         ) {
             throw new Error(
-                `Package mods require apiVersion ${formatVersion(features.PackageMods)} or later, was '${apiVersion.result.toManifest()}'.`
+                `Package mods require apiVersion ${formatVersion(
+                    features.PackageMods
+                )} or later, was '${apiVersion.result.toManifest()}'.`
             );
         }
 
@@ -262,9 +271,7 @@ async function createModTemplate({
         });
 
         if (modType === ModType.Package) {
-            const manifest = JSON.parse(
-                await readFile(manifestPath, "utf-8")
-            );
+            const manifest = JSON.parse(await readFile(manifestPath, "utf-8"));
             for (const subManifestRelPath of manifest.mods ?? []) {
                 const subManifestPath = path.join(
                     targetFolder,
@@ -294,7 +301,11 @@ async function createModTemplate({
 
             if (!pkgManifest.mods.includes(newModManifestRel)) {
                 pkgManifest.mods.push(newModManifestRel);
-                await writeManifest(absPackageManifest, pkgManifest, quiet.quiet);
+                await writeManifest(
+                    absPackageManifest,
+                    pkgManifest,
+                    quiet.quiet
+                );
                 stdout(
                     `📦 Registered '${newModManifestRel}' in package manifest.`
                 );
@@ -328,7 +339,10 @@ async function createModTemplate({
                 }
 
                 // Add "composite": true to the sub-mod's tsconfig.json.
-                const subTsconfigPath = path.join(targetFolder, "tsconfig.json");
+                const subTsconfigPath = path.join(
+                    targetFolder,
+                    "tsconfig.json"
+                );
                 if (existsSync(subTsconfigPath)) {
                     const subTsconfig = JSON.parse(
                         await readFile(subTsconfigPath, "utf-8")
@@ -354,11 +368,7 @@ async function createModTemplate({
 
         stdout("🎉 Template has been successfully created!");
         if (packageManifest && modType !== ModType.Package) {
-            stdout(
-                colors.bold(
-                    "\n⚠️ Run the following command to build:"
-                )
-            );
+            stdout(colors.bold("\n⚠️ Run the following command to build:"));
             stdout(colors.bold(colors.yellow("  npm run build")));
         } else {
             stdout(
@@ -372,8 +382,18 @@ async function createModTemplate({
             }
             stdout(colors.bold(colors.yellow("  npm install")));
             if (modType === ModType.Package) {
-                stdout(colors.bold(colors.yellow("  npx @spotfire/mods-sdk new action")));
-                stdout(colors.bold(colors.yellow("  npx @spotfire/mods-sdk new visualization")));
+                stdout(
+                    colors.bold(
+                        colors.yellow("  npx @spotfire/mods-sdk new action")
+                    )
+                );
+                stdout(
+                    colors.bold(
+                        colors.yellow(
+                            "  npx @spotfire/mods-sdk new visualization"
+                        )
+                    )
+                );
             }
             stdout(colors.bold(colors.yellow("  npm run build")));
         }

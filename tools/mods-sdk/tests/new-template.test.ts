@@ -1,7 +1,12 @@
 import { describe, expect, test } from "@jest/globals";
 import { existsSync, readFileSync, rmSync } from "fs";
 import path from "path";
-import { createGitIgnore, createTemplate, modIdToName, toModId } from "../src/new-template";
+import {
+    createGitIgnore,
+    createTemplate,
+    modIdToName,
+    toModId,
+} from "../src/new-template";
 import { ModType } from "../src/utils";
 import { setupProject } from "./test-utils";
 
@@ -91,12 +96,10 @@ describe("can create project with different api version", () => {
         expect(manifestJson["type"]).toEqual("action");
 
         const packageJsonPath = path.join(projectFolder, "package.json");
-        const packageJson = JSON.parse(
-            readFileSync(packageJsonPath, "utf-8")
+        const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
+        expect(packageJson["devDependencies"]["@spotfire/mods-api"]).toEqual(
+            "~2.1.0"
         );
-        expect(
-            packageJson["devDependencies"]["@spotfire/mods-api"]
-        ).toEqual("~2.1.0");
     });
 
     test("visualization mod", async () => {
@@ -109,12 +112,10 @@ describe("can create project with different api version", () => {
         expect(manifestJson["type"]).toEqual("visualization");
 
         const packageJsonPath = path.join(projectFolder, "package.json");
-        const packageJson = JSON.parse(
-            readFileSync(packageJsonPath, "utf-8")
+        const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
+        expect(packageJson["devDependencies"]["@spotfire/mods-api"]).toEqual(
+            "~2.1.0"
         );
-        expect(
-            packageJson["devDependencies"]["@spotfire/mods-api"]
-        ).toEqual("~2.1.0");
     });
 });
 
@@ -234,9 +235,7 @@ describe("--package-manifest flag", () => {
             quiet: true,
         });
 
-        const pkgManifest = JSON.parse(
-            readFileSync(pkgManifestPath, "utf-8")
-        );
+        const pkgManifest = JSON.parse(readFileSync(pkgManifestPath, "utf-8"));
         expect(pkgManifest["mods"]).toContain(
             "actions/extra-action/mod-manifest.json"
         );
