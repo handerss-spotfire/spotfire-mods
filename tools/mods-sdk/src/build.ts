@@ -300,37 +300,40 @@ async function createEnvFile({
     }
 }
 
-let ctx: esbuild.BuildContext | null;
-async function restartEsbuildImpl({
-    defaultConfig,
-    esbuildConfigPath,
-    outdir,
-    debug,
-    quiet,
-}: {
-    defaultConfig: esbuild.BuildOptions;
-    esbuildConfigPath: string;
-    outdir: string;
-    debug: boolean;
-} & QuietOtions) {
-    try {
-        if (ctx) {
-            await ctx.dispose();
-        }
+function createEsbuildManager() {
+    let ctx: esbuild.BuildContext | null = null;
 
-        const esbuildOptions = await getEsbuildOptions({
-            esbuildConfigPath,
-            defaultConfig,
-            outdir,
-            debug,
-            quiet: ctx != null || quiet,
-        });
-        ctx = await esbuild.context(esbuildOptions);
-        await ctx.rebuild();
-        await ctx.watch();
-    } catch (e) {
-        console.error("Failed to bundle mod.");
-    }
+    return async function restartEsbuild({
+        defaultConfig,
+        esbuildConfigPath,
+        outdir,
+        debug,
+        quiet,
+    }: {
+        defaultConfig: esbuild.BuildOptions;
+        esbuildConfigPath: string;
+        outdir: string;
+        debug: boolean;
+    } & QuietOtions) {
+        try {
+            if (ctx) {
+                await ctx.dispose();
+            }
+
+            const esbuildOptions = await getEsbuildOptions({
+                esbuildConfigPath,
+                defaultConfig,
+                outdir,
+                debug,
+                quiet: ctx != null || quiet,
+            });
+            ctx = await esbuild.context(esbuildOptions);
+            await ctx.rebuild();
+            await ctx.watch();
+        } catch (e) {
+            console.error("Failed to bundle mod.");
+        }
+    };
 }
 
 /**
@@ -591,7 +594,8 @@ async function buildActionMod({
         manifestWatcher.on("change", async (path) => onChange());
         manifestWatcher.on("ready", onChange);
 
-        restartEsbuildImpl({
+        const restartEsbuild = createEsbuildManager();
+        restartEsbuild({
             defaultConfig,
             esbuildConfigPath,
             outdir: absOutDir,
@@ -683,7 +687,8 @@ async function buildVisualizationMod({
 
     if (watch) {
         stdout("Watching for file changes");
-        restartEsbuildImpl({
+        const restartEsbuild = createEsbuildManager();
+        restartEsbuild({
             defaultConfig,
             esbuildConfigPath,
             outdir: absOutDir,
