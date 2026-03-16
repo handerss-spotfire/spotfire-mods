@@ -1,0 +1,75 @@
+{
+    "apiVersion": "2.4",
+    "type": "visualization",
+    "version": "1.0",
+    "name": "Graphical Table",
+    "id": "ts-dev-graphical-table",
+    "icon": "icon.svg",
+    "properties": [{ "name": "RowHeight", "type": "integer", "defaultValue": 60 }],
+    "dataViewDefinition": {
+        "axes": [{ "name": "Row by", "mode": "categorical", "placement": "left" }]
+    },
+    "layers": [
+        {
+            "type": "Bar Chart",
+            "icon": "bar-chart.svg",
+            "properties": [{ "name": "ColumnWidth", "type": "integer", "defaultValue": 400 }],
+            "dataViewDefinition": {
+                "extendedAxes": ["Row by"],
+                "colorAxis": { "mode": "categorical" },
+                "axes": [
+                    {
+                        "name": "Category",
+                        "mode": "categorical"
+                    },
+                    {
+                        "name": "Value",
+                        "mode": "continuous",
+                        "dataTypes": {
+                            "allowBoolean": false,
+                            "allowDateTime": false,
+                            "allowString": false,
+                            "allowTimeSpan": false
+                        }
+                    }
+                ],
+                "tooltip": { "enabled": true }
+            }
+        },
+        {
+            "type": "Scatter Plot",
+            "icon": "scatter-plot.svg",
+            "properties": [{ "name": "ColumnWidth", "type": "integer", "defaultValue": 200 }],
+            "dataViewDefinition": {
+                "extendedAxes": ["Row by"],
+                "colorAxis": { "mode": "categorical" },
+                "axes": [
+                    {
+                        "name": "X",
+                        "mode": "continuous",
+                        "allowNonAggregatingMeasures": "prefer",
+                        "dataTypes": {
+                            "allowBoolean": false,
+                            "allowDateTime": false,
+                            "allowString": false,
+                            "allowTimeSpan": false
+                        }
+                    },
+                    {
+                        "name": "Y",
+                        "mode": "continuous",
+                        "allowNonAggregatingMeasures": "prefer",
+                        "dataTypes": {
+                            "allowBoolean": false,
+                            "allowDateTime": false,
+                            "allowString": false,
+                            "allowTimeSpan": false
+                        }
+                    }
+                ],
+                "tooltip": { "enabled": true }
+            }
+        }
+    ],
+    "files": ["index.html", "main.css", "build/main.js"]
+}
