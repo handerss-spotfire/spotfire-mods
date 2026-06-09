@@ -177,6 +177,15 @@ async function createModTemplate({
                 );
             }
 
+            if (apiVersion.result.supportsFeature("Esm")) {
+                // From apiVersion 2.6 entry points are registered via
+                // RegisterEntryPoint, so the manifest no longer stores one.
+                manifestJson = manifestJson.replace(
+                    /\n[^\n]*"entryPoint":[^\n]*/,
+                    ""
+                );
+            }
+
             return manifestJson
                 .replace("$MOD-NAME", modName)
                 .replace("$MOD-ID", modId)
