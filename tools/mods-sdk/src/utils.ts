@@ -1,6 +1,7 @@
 import { existsSync } from "fs";
 import { readFile, writeFile } from "fs/promises";
-import { fileURLToPath } from "url";
+import { createRequire } from "module";
+import { fileURLToPath, pathToFileURL } from "url";
 import { dirname, join } from "path";
 
 export type Success<TSuccess> = { status: "success"; result: TSuccess };
@@ -140,6 +141,14 @@ export class ApiVersion {
         }
     }
 
+    isNewerThan(other: ApiVersion) {
+        if (this.major !== other.major) {
+            return this.major > other.major;
+        }
+
+        return this.minor > other.minor;
+    }
+
     supportsFeature(feature: Feature) {
         const required = features[feature];
 
@@ -168,8 +177,29 @@ export const features = {
     DataViews: { major: 2, minor: 1 },
     ScriptInvocations: { major: 2, minor: 5 },
     Agents: { major: 2, minor: 5 },
+    Esm: { major: 2, minor: 6 },
 };
 type Feature = keyof typeof features;
+
+/**
+ * The latest apiVersion this SDK has knowledge of, derived from the highest
+ * version among the known features.
+ */
+export function maxKnownApiVersion(): ApiVersion {
+    let major = 0;
+    let minor = 0;
+    for (const version of Object.values(features)) {
+        if (
+            version.major > major ||
+            (version.major === major && version.minor > minor)
+        ) {
+            major = version.major;
+            minor = version.minor;
+        }
+    }
+
+    return new ApiVersion(major, minor);
+}
 
 export function formatVersion({
     major,
@@ -268,6 +298,24 @@ export function toAlphaNumWithSeparators(str: string) {
     return toAlphaNum(capitalizeBeforeSeparators(str));
 }
 
+/**
+ * Loads prettier from the project being operated on (the directory of
+ * 'filePath') rather than from the SDK's own dependency tree. When the SDK runs
+ * via 'npx' its devDependencies are not installed, and a bare 'import("prettier")'
+ * would resolve relative to the SDK in the npx cache and fail. Resolving from the
+ * project also means the user's installed prettier version (and any plugins) is
+ * used. Falls back to a bare import so a prettier bundled with the SDK still works.
+ */
+async function loadPrettier(filePath: string) {
+    try {
+        const require = createRequire(pathToFileURL(join(dirname(filePath), "/")));
+        const prettierPath = require.resolve("prettier");
+        return (await import(pathToFileURL(prettierPath).href)).default;
+    } catch {
+        return (await import("prettier")).default;
+    }
+}
+
 export async function formatIfPossible(
     filePath: string,
     content: string,
@@ -275,13 +323,13 @@ export async function formatIfPossible(
 ) {
     let formattedContent = content;
     try {
-        const prettier = await import("prettier");
-        const config = await prettier.default.resolveConfig(filePath, {
+        const prettier = await loadPrettier(filePath);
+        const config = await prettier.resolveConfig(filePath, {
             editorconfig: true,
         });
 
         // In Prettier ^3.0.0 'format' returns a promise.
-        formattedContent = await prettier.default.format(content, {
+        formattedContent = await prettier.format(content, {
             filepath: filePath,
             ...config,
         });
