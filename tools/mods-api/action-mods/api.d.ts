@@ -4,7 +4,7 @@
  * in the license file that is distributed with this file.
  * 
  * Spotfire Action Mods API declaration.
- * Version: 2.5
+ * Version: 2.6
  */
 
 declare namespace Spotfire.Dxp {
@@ -1865,6 +1865,14 @@ declare namespace Spotfire.Dxp {
          */
         class Visual extends Framework.DocumentModel.DocumentNode implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext> {
             /**
+             * Gets the action triggers of this visual.
+             * 
+             * @since 2.6
+             * 
+             * @group Default capability
+             */
+            get ActionTriggers(): Actions.ActionTriggerCollection;
+            /**
              * Gets the collection of custom nodes associated with this visual.
              * 
              * @since 2.0
@@ -2072,6 +2080,162 @@ declare namespace Spotfire.Dxp {
                 System_Collections_IEnumerable: Implementation<System.Collections.IEnumerable>,
             };
             private __type_3134114050: null;
+        }
+        
+        namespace Actions {
+            /**
+             * Represents a trigger for an action in, for example, a Visualization.
+             * 
+             * @since 2.6
+             * 
+             * @group Default capability
+             */
+            class ActionTrigger extends Framework.DocumentModel.DocumentNode implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext> {
+                /**
+                 * Gets where this trigger is displayed on the visualization.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                get AccessPoint(): ActionTriggerAccessPointDisplay;
+                /**
+                 * Gets the action mod script this trigger executes, or null if the trigger does not execute
+                 * an action mod script.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                get ActionModScript(): (Mods.ActionModScriptDetails | null);
+                /**
+                 * Gets the text this trigger is labelled with, or an empty string if {@link Spotfire.Dxp.Application.Actions.ActionTrigger.HasAction} is
+                 * false.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                get DisplayName(): JsType<System.String>;
+                /**
+                 * Gets a value indicating whether this trigger has an action to execute. A trigger without an
+                 * action is not displayed on the visualization.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                get HasAction(): JsType<System.Boolean>;
+                /**
+                 * @ignore
+                 * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                 */
+                constructor();
+                /**
+                 * @ignore
+                 * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                 */
+                _interfaces: {
+                    System_IServiceProvider: Implementation<System.IServiceProvider>,
+                    Spotfire_Dxp_Framework_DocumentModel_ITransactions: Implementation<Framework.DocumentModel.ITransactions>,
+                    Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
+                };
+                private __type_3132068301: null;
+            }
+            
+            /**
+             * Describes where an {@link Spotfire.Dxp.Application.Actions.ActionTrigger} is displayed on a visualization.
+             * 
+             * @since 2.6
+             * 
+             * @group Default capability
+             */
+            class ActionTriggerAccessPointDisplay extends System.Enum {
+                /**
+                 * @ignore
+                 * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                 */
+                constructor();
+                /** Indicates that the trigger shall be shown in the context menu of the visualization. */
+                static readonly ContextMenuItem: ActionTriggerAccessPointDisplay;
+                /** Indicates that the trigger shall be shown as a floating button in the visualization. */
+                static readonly FloatingButton: ActionTriggerAccessPointDisplay;
+                /** Indicates that the trigger shall be shown as a button in the title bar of the visualization. */
+                static readonly TitleBarButton: ActionTriggerAccessPointDisplay;
+                private __type_2078741591: null;
+            }
+            
+            /**
+             * A collection of {@link Spotfire.Dxp.Application.Actions.ActionTrigger} instances.
+             * 
+             * @since 2.6
+             * 
+             * @group Default capability
+             */
+            class ActionTriggerCollection extends Framework.DocumentModel.DocumentNode implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext>, Explicit<System.Collections.Generic.IEnumerable<ActionTrigger>>, Explicit<System.Collections.IEnumerable> {
+                /**
+                 * Gets the number of triggers in the collection.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                get Count(): JsType<System.Int32>;
+                /**
+                 * @ignore
+                 * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                 */
+                constructor();
+                [Symbol.iterator](): Iterator<ActionTrigger>;
+                /**
+                 * Adds an action trigger that executes the script described by invocation when the
+                 * user activates it.
+                 * @param accessPoint Where on the visualization the trigger is displayed.
+                 * @param invocation The action mod script to execute.
+                 * @returns The added trigger.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                Add(accessPoint: ActionTriggerAccessPointDisplay, invocation: Mods.ActionModScriptInvocation): ActionTrigger;
+                /**
+                 * Inserts an action trigger that executes the script described by invocation when
+                 * the user activates it, at the position given by index. The position decides
+                 * where the trigger is displayed in relation to the other triggers of the visualization.
+                 * @param index The position to insert the trigger at.
+                 * @param accessPoint Where on the visualization the trigger is displayed.
+                 * @param invocation The action mod script to execute.
+                 * @returns The inserted trigger.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                Insert(index: (JsType<System.Int32> | System.Int32), accessPoint: ActionTriggerAccessPointDisplay, invocation: Mods.ActionModScriptInvocation): ActionTrigger;
+                /**
+                 * Removes the specified trigger from this collection.
+                 * @param trigger The trigger to remove.
+                 * @returns true if the trigger was removed, otherwise false.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                Remove(trigger: ActionTrigger): JsType<System.Boolean>;
+                /**
+                 * @ignore
+                 * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                 */
+                _interfaces: {
+                    System_IServiceProvider: Implementation<System.IServiceProvider>,
+                    Spotfire_Dxp_Framework_DocumentModel_ITransactions: Implementation<Framework.DocumentModel.ITransactions>,
+                    Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
+                    System_Collections_Generic_IEnumerable: Implementation<System.Collections.Generic.IEnumerable<ActionTrigger>>,
+                    System_Collections_IEnumerable: Implementation<System.Collections.IEnumerable>,
+                };
+                private __type_1702777943: null;
+            }
         }
         
         namespace AnalyticItems {
@@ -5923,6 +6087,86 @@ declare namespace Spotfire.Dxp {
             }
             
             /**
+             * Provides the execution context for a {@link Spotfire.Dxp.Application.Insights.DocumentInsightAgent}.
+             * The context is created inside a snapshot read callback, so all document node
+             * properties are snapshot nodes that can be accessed directly without additional
+             * snapshot reads.
+             * 
+             * @since 2.6
+             * 
+             * @group Default capability
+             */
+            class DocumentInsightAgentContext extends Object {
+                /**
+                 * Gets the AI service.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Extended capability 'AI'
+                 */
+                get AiService(): Framework.Ai.AiService;
+                /**
+                 * Gets the snapshot document.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                get Document(): Document;
+                /**
+                 * Gets the import context.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                get ImportContext(): Data.Import.ImportContext;
+                /**
+                 * Gets the MCP (Model Context Protocol) service. {@link Spotfire.Dxp.Framework.Ai.Mcp.McpService.GetMcps} returns the
+                 * MCP servers (endpoints) configured for the current session; call
+                 * {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint.GetTools} on the ones you want to obtain their tools to pass into a
+                 * chat completion call.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Extended capability 'AI'
+                 */
+                get McpService(): Framework.Ai.Mcp.McpService;
+                /**
+                 * Gets the user interaction capabilities. This can be used to report progress,
+                 * display messages, or prompt the user during insight agent execution.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                get UserInteraction(): UserInteraction;
+                /**
+                 * @ignore
+                 * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                 */
+                constructor();
+                /**
+                 * Reports the result found by the agent, including any insights (if any where found).
+                 * @param title The title of the result.
+                 * @param summary A summary of the result.
+                 * @param insights Any agent insights found by the agent that the user can act on.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                ReportResult(title: (JsType<System.String> | System.String), summary: (JsType<System.String> | System.String), insights?: OrExplicit<System.Collections.Generic.IEnumerable<AgentInsight>>): void;
+                /**
+                 * @ignore
+                 * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                 */
+                _interfaces: {
+                };
+                private __type_3151145390: null;
+            }
+            
+            /**
              * Common interface for all insight results, whether produced by classic insight modules
              * or by AI-powered insight agents.
              * 
@@ -5968,7 +6212,7 @@ declare namespace Spotfire.Dxp {
                 constructor();
                 /**
                  * Gets the setting to show the icon of the action script or action mod executed by this insight.
-                 * @returns The icon setting.
+                 * @returns The insight image.
                  * 
                  * @since 2.5
                  * 
@@ -5978,7 +6222,7 @@ declare namespace Spotfire.Dxp {
                 /**
                  * Gets the setting to show a binary preview image loaded from a file path in an action mod.
                  * @param filePath The relative file path within the mod (e.g., "images/preview.png").
-                 * @returns The icon setting.
+                 * @returns The insight image.
                  * 
                  * @since 2.5
                  * 
@@ -5988,7 +6232,7 @@ declare namespace Spotfire.Dxp {
                 /**
                  * Gets the setting to show a custom SVG icon.
                  * @param svgIcon The SVG icon markup.
-                 * @returns The icon setting.
+                 * @returns The insight image.
                  * 
                  * @since 2.5
                  * 
@@ -5997,7 +6241,7 @@ declare namespace Spotfire.Dxp {
                 static CustomIcon(svgIcon: (JsType<System.String> | System.String)): InsightImage;
                 /**
                  * Gets the setting to show the icon of the insight script or the current agent mod.
-                 * @returns The icon setting.
+                 * @returns The insight image.
                  * 
                  * @since 2.5
                  * 
@@ -6007,7 +6251,7 @@ declare namespace Spotfire.Dxp {
                 /**
                  * Gets the setting to show a live preview of the insight result. This will render the first new page or visual.
                  * Note that this may impact the overall performance and freeze the UI temporarily, depending on the complexity of the insight.
-                 * @returns The icon setting.
+                 * @returns The insight image.
                  * 
                  * @since 2.5
                  * 
@@ -6015,10 +6259,21 @@ declare namespace Spotfire.Dxp {
                  */
                 static LivePreview(): InsightImage;
                 /**
+                 * Gets the setting to show a live preview of the insight result, with a fallback image that is shown when the
+                 * live preview cannot be rendered, for instance when the rendering times out.
+                 * @param fallbackImage The image to show instead of the live preview. Any image except a live preview.
+                 * @returns The insight image.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                static LivePreview(fallbackImage: InsightImage): InsightImage;
+                /**
                  * Gets the setting to show a live preview of a page as the insight result.
                  * Note that this may impact the overall performance and freeze the UI temporarily, depending on the complexity of the insight.
                  * @param previewPage The page to render a preview for.
-                 * @returns The icon setting.
+                 * @returns The insight image.
                  * 
                  * @since 2.5
                  * 
@@ -6029,7 +6284,7 @@ declare namespace Spotfire.Dxp {
                  * Gets the setting to show a live preview of a visual as the insight result.
                  * Note that this may impact the overall performance and freeze the UI temporarily, depending on the complexity of the insight.
                  * @param previewVisual The visual to render a preview for.
-                 * @returns The icon setting.
+                 * @returns The insight image.
                  * 
                  * @since 2.5
                  * 
@@ -6037,8 +6292,32 @@ declare namespace Spotfire.Dxp {
                  */
                 static LivePreview(previewVisual: Visual): InsightImage;
                 /**
+                 * Gets the setting to show a live preview of a page as the insight result, with a fallback image that is shown
+                 * when the live preview cannot be rendered, for instance when the rendering times out.
+                 * @param previewPage The page to render a preview for.
+                 * @param fallbackImage The image to show instead of the live preview. Any image except a live preview.
+                 * @returns The insight image.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                static LivePreview(previewPage: Page, fallbackImage: InsightImage): InsightImage;
+                /**
+                 * Gets the setting to show a live preview of a visual as the insight result, with a fallback image that is shown
+                 * when the live preview cannot be rendered, for instance when the rendering times out.
+                 * @param previewVisual The visual to render a preview for.
+                 * @param fallbackImage The image to show instead of the live preview. Any image except a live preview.
+                 * @returns The insight image.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                static LivePreview(previewVisual: Visual, fallbackImage: InsightImage): InsightImage;
+                /**
                  * Gets the setting to show no icon.
-                 * @returns The icon setting.
+                 * @returns The insight image.
                  * 
                  * @since 2.5
                  * 
@@ -6152,6 +6431,17 @@ declare namespace Spotfire.Dxp {
                  * @group Default capability
                  */
                 get ImportContext(): Data.Import.ImportContext;
+                /**
+                 * Gets the MCP (Model Context Protocol) service. {@link Spotfire.Dxp.Framework.Ai.Mcp.McpService.GetMcps} returns the
+                 * MCP servers (endpoints) configured for the current session; call
+                 * {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint.GetTools} on the ones you want to obtain their tools to pass into a
+                 * chat completion call.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Extended capability 'AI'
+                 */
+                get McpService(): Framework.Ai.Mcp.McpService;
                 /**
                  * Gets the user interaction capabilities. This can be used to send messages, prompts, or other interactions back to the user during insight agent execution.
                  * 
@@ -6324,7 +6614,7 @@ declare namespace Spotfire.Dxp {
                  * 
                  * @since 2.5
                  * 
-                 * @group Default capability
+                 * @group Extended capability 'AI'
                  */
                 get AiService(): Framework.Ai.AiService;
                 /**
@@ -6343,6 +6633,17 @@ declare namespace Spotfire.Dxp {
                  * @group Default capability
                  */
                 get ImportContext(): Data.Import.ImportContext;
+                /**
+                 * Gets the MCP (Model Context Protocol) service. {@link Spotfire.Dxp.Framework.Ai.Mcp.McpService.GetMcps} returns the
+                 * MCP servers (endpoints) configured for the current session; call
+                 * {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint.GetTools} on the ones you want to obtain their tools to pass into a
+                 * chat completion call.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Extended capability 'AI'
+                 */
+                get McpService(): Framework.Ai.Mcp.McpService;
                 /**
                  * Gets the user interaction capabilities. This can be used to report progress,
                  * display messages, or prompt the user during insight agent execution.
@@ -6704,6 +7005,44 @@ declare namespace Spotfire.Dxp {
                 _interfaces: {
                 };
                 private __type_2799937907: null;
+            }
+            
+            /**
+             * Identifies a script in an action mod.
+             * 
+             * @since 2.6
+             * 
+             * @group Default capability
+             */
+            class ActionModScriptDetails extends Object {
+                /**
+                 * Gets the identifier of the action mod containing the script.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                get ModIdentifier(): ModIdentifier;
+                /**
+                 * Gets the id of the script in the action mod.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                get ScriptId(): JsType<System.String>;
+                /**
+                 * @ignore
+                 * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                 */
+                constructor();
+                /**
+                 * @ignore
+                 * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                 */
+                _interfaces: {
+                };
+                private __type_385593334: null;
             }
             
             /**
@@ -7162,6 +7501,59 @@ declare namespace Spotfire.Dxp {
                     Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
                 };
                 private __type_1474382124: null;
+            }
+            
+            /**
+             * Represents an action on a notification created from an action mod. When the user invokes the action the
+             * associated {@link Spotfire.Dxp.Application.Mods.ActionModScriptInvocation} is executed. This is the action mod counterpart of
+             * {@link Spotfire.Dxp.Framework.ApplicationModel.NotificationAction}, which cannot be created from an
+             * action mod because it wraps a delegate.
+             * 
+             * @since 2.6
+             * 
+             * @group Default capability
+             */
+            class ModNotificationAction extends Object {
+                /**
+                 * @ignore
+                 * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                 */
+                constructor();
+                /**
+                 * Creates a {@link Spotfire.Dxp.Application.Mods.ModNotificationAction} with the specified text that executes the
+                 * specified invocation when invoked by the user.
+                 * @param text The text to use on links, buttons and tooltips when rendering this action.
+                 * @param invocation The script invocation to execute when the user clicks the link or button rendered for this instance.
+                 * @returns A new {@link Spotfire.Dxp.Application.Mods.ModNotificationAction} instance.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                static Create(text: (JsType<System.String> | System.String), invocation: ActionModScriptInvocation): ModNotificationAction;
+                /**
+                 * Creates a {@link Spotfire.Dxp.Application.Mods.ModNotificationAction} with the specified text that executes the
+                 * specified invocation when invoked by the user.
+                 * @param text The text to use on links and buttons when rendering this action in space restricted contexts.
+                 * Such as in cards in the notification fly-out.
+                 * @param longText The text to use for tooltips or as text on links and buttons when rendering this action in
+                 * contexts where space is not restricted. Such as in the notification dialog.
+                 * @param dismissWhenInvoked if set to true the notification is dismissed when the action is invoked.
+                 * @param invocation The script invocation to execute when the user clicks the link or button rendered for this instance.
+                 * @returns A new {@link Spotfire.Dxp.Application.Mods.ModNotificationAction} instance.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                static Create(text: (JsType<System.String> | System.String), longText: (JsType<System.String> | System.String), dismissWhenInvoked: (JsType<System.Boolean> | System.Boolean), invocation: ActionModScriptInvocation): ModNotificationAction;
+                /**
+                 * @ignore
+                 * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                 */
+                _interfaces: {
+                };
+                private __type_1135699484: null;
             }
             
             /**
@@ -11207,6 +11599,79 @@ declare namespace Spotfire.Dxp {
                     Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
                 };
                 private __type_3276274596: null;
+            }
+            
+            /**
+             * Represents a non-geographical extent.
+             * 
+             * @since 2.6
+             * 
+             * @group Default capability
+             */
+            class Extent extends Object {
+                /**
+                 * Gets the x max value of the extent.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                get XMax(): JsType<System.Double>;
+                /**
+                 * Gets the x min value of the extent.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                get XMin(): JsType<System.Double>;
+                /**
+                 * Gets the y max value of the extent.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                get YMax(): JsType<System.Double>;
+                /**
+                 * Gets the y min value of the extent.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                get YMin(): JsType<System.Double>;
+                /**
+                 * Initializes a new instance of the {@link Spotfire.Dxp.Application.Visuals.Extent} class.
+                 * @param xMin The x min value.
+                 * @param xMax The x max value.
+                 * @param yMin The y min value.
+                 * @param yMax The y max value.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                constructor(xMin: (JsType<System.Double> | System.Double), xMax: (JsType<System.Double> | System.Double), yMin: (JsType<System.Double> | System.Double), yMax: (JsType<System.Double> | System.Double));
+                /**
+                 * Determines whether the specified object is equal to the current object.
+                 * @param obj The object to compare with the current object.
+                 * @returns true if the specified object  is equal to the current object; otherwise, false.
+                 */
+                Equals(obj: any): JsType<System.Boolean>;
+                /**
+                 * Indicates whether the current object is equal to another object of the same type.
+                 * @param other An object to compare with this object.
+                 * @returns true if the current object is equal to the other parameter; otherwise, false.
+                 */
+                Equals(other: Extent): JsType<System.Boolean>;
+                /**
+                 * @ignore
+                 * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                 */
+                _interfaces: {
+                };
+                private __type_526662323: null;
             }
             
             /**
@@ -21882,6 +22347,14 @@ declare namespace Spotfire.Dxp {
                  */
                 static readonly Treemap: Framework.DocumentModel.TypeIdentifier;
                 /**
+                 * {@link Spotfire.Dxp.Application.Visuals.VisualTypeIdentifiers.WaferMap} identifier.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                static readonly WaferMap: Framework.DocumentModel.TypeIdentifier;
+                /**
                  * {@link Spotfire.Dxp.Application.Visuals.VisualTypeIdentifiers.WaterfallChart} identifier.
                  * 
                  * @since 2.0
@@ -24855,6 +25328,17 @@ declare namespace Spotfire.Dxp {
                  */
                 class FittingModel extends Framework.DocumentModel.DocumentNode implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext> {
                     /**
+                     * Gets or sets a value indicating whether scale transforms should be applied before fitting or after evaluating the curve. If true the fitted curves will not be affected
+                     * by the scale transforms. This can be useful for certain fitting models where the fitting algorithm assumes untransformed data,
+                     * or when the user wants to fit on the original data values regardless of the applied transforms.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get CalculateOnUntransformedValues(): JsType<System.Boolean>;
+                    set CalculateOnUntransformedValues(value: JsType<System.Boolean>);
+                    /**
                      * Gets or sets a value indicating whether this {@link Spotfire.Dxp.Application.Visuals.FittingModels.FittingModel} is enabled.
                      * 
                      * @since 2.0
@@ -25751,6 +26235,7 @@ declare namespace Spotfire.Dxp {
                 class GaussianFittingModel extends FittingModel implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext> {
                     /**
                      * Gets or sets the value of the Amplitude of the Gaussian curve.
+                     * @deprecated Use AmplitudeParameter instead.
                      * 
                      * @since 2.0
                      * 
@@ -25760,6 +26245,7 @@ declare namespace Spotfire.Dxp {
                     set Amplitude(value: JsType<System.Double>);
                     /**
                      * Gets or sets a value indicating whether the Amplitude should be constant during the fitting calculation.
+                     * @deprecated Use AmplitudeParameter.Mode instead.
                      * 
                      * @since 2.0
                      * 
@@ -25767,6 +26253,14 @@ declare namespace Spotfire.Dxp {
                      */
                     get AmplitudeIsFixed(): JsType<System.Boolean>;
                     set AmplitudeIsFixed(value: JsType<System.Boolean>);
+                    /**
+                     * Gets the {@link Spotfire.Dxp.Application.Visuals.FittingModels.CurveFitParameter} for the amplitude.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get AmplitudeParameter(): CurveFitParameter;
                     /**
                      * Gets the Gaussian curve.
                      * 
@@ -25777,6 +26271,7 @@ declare namespace Spotfire.Dxp {
                     get Curve(): ReferenceCurve;
                     /**
                      * Gets or sets the value of the Position (mean) of the Gaussian curve.
+                     * @deprecated Use PositionParameter instead.
                      * 
                      * @since 2.0
                      * 
@@ -25786,6 +26281,7 @@ declare namespace Spotfire.Dxp {
                     set Position(value: JsType<System.Double>);
                     /**
                      * Gets or sets a value indicating whether the Position should be constant during the fitting calculation.
+                     * @deprecated Use PositionParameter.Mode instead.
                      * 
                      * @since 2.0
                      * 
@@ -25794,7 +26290,16 @@ declare namespace Spotfire.Dxp {
                     get PositionIsFixed(): JsType<System.Boolean>;
                     set PositionIsFixed(value: JsType<System.Boolean>);
                     /**
+                     * Gets the {@link Spotfire.Dxp.Application.Visuals.FittingModels.CurveFitParameter} for the position (mean).
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get PositionParameter(): CurveFitParameter;
+                    /**
                      * Gets or sets the value of the Width of the Gaussian curve.
+                     * @deprecated Use WidthParameter instead.
                      * 
                      * @since 2.0
                      * 
@@ -25804,6 +26309,7 @@ declare namespace Spotfire.Dxp {
                     set Width(value: JsType<System.Double>);
                     /**
                      * Gets or sets a value indicating whether the Width should be constant during the fitting calculation.
+                     * @deprecated Use WidthParameter.Mode instead.
                      * 
                      * @since 2.0
                      * 
@@ -25811,6 +26317,14 @@ declare namespace Spotfire.Dxp {
                      */
                     get WidthIsFixed(): JsType<System.Boolean>;
                     set WidthIsFixed(value: JsType<System.Boolean>);
+                    /**
+                     * Gets the {@link Spotfire.Dxp.Application.Visuals.FittingModels.CurveFitParameter} for the width.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get WidthParameter(): CurveFitParameter;
                     /**
                      * @ignore
                      * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
@@ -25944,6 +26458,7 @@ declare namespace Spotfire.Dxp {
                     get Curve(): ReferenceCurve;
                     /**
                      * Gets or sets the fixed max.
+                     * @deprecated Use MaxParameter instead.
                      * 
                      * @since 2.0
                      * 
@@ -25953,6 +26468,7 @@ declare namespace Spotfire.Dxp {
                     set FixedMax(value: JsType<System.Double>);
                     /**
                      * Gets or sets the fixed min.
+                     * @deprecated Use MinParameter instead.
                      * 
                      * @since 2.0
                      * 
@@ -25962,6 +26478,7 @@ declare namespace Spotfire.Dxp {
                     set FixedMin(value: JsType<System.Double>);
                     /**
                      * Gets or sets whether fixed max should be used.
+                     * @deprecated Use MaxParameter.Mode instead.
                      * 
                      * @since 2.0
                      * 
@@ -25971,6 +26488,7 @@ declare namespace Spotfire.Dxp {
                     set HasFixedMax(value: JsType<System.Boolean>);
                     /**
                      * Gets or sets whether fixed min should be used.
+                     * @deprecated Use MinParameter.Mode instead.
                      * 
                      * @since 2.0
                      * 
@@ -25986,6 +26504,22 @@ declare namespace Spotfire.Dxp {
                      * @group Default capability
                      */
                     get InflectionPoint(): ReferencePoint;
+                    /**
+                     * Gets the {@link Spotfire.Dxp.Application.Visuals.FittingModels.CurveFitParameter} for the max (upper asymptote).
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get MaxParameter(): CurveFitParameter;
+                    /**
+                     * Gets the {@link Spotfire.Dxp.Application.Visuals.FittingModels.CurveFitParameter} for the min (lower asymptote).
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get MinParameter(): CurveFitParameter;
                     /**
                      * @ignore
                      * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
@@ -27012,6 +27546,39 @@ declare namespace Spotfire.Dxp {
                         Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
                     };
                     private __type_4029804975: null;
+                }
+                
+                /**
+                 * Represents a {@link Spotfire.Dxp.Application.Visuals.Layers.Layer} that contains a {@link Spotfire.Dxp.Application.Visuals.Layers.VisualizationLayer.Visualization}.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                class VisualizationLayer extends Layer implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext> {
+                    /**
+                     * Gets the visualization contained in this layer.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get Visualization(): Visualization;
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                     */
+                    constructor();
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                     */
+                    _interfaces: {
+                        System_IServiceProvider: Implementation<System.IServiceProvider>,
+                        Spotfire_Dxp_Framework_DocumentModel_ITransactions: Implementation<Framework.DocumentModel.ITransactions>,
+                        Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
+                    };
+                    private __type_92471716: null;
                 }
             }
             
@@ -34058,6 +34625,1026 @@ declare namespace Spotfire.Dxp {
                         Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
                     };
                     private __type_3138265260: null;
+                }
+            }
+            
+            namespace WaferMap {
+                /**
+                 * Represents a single element of a {@link Spotfire.Dxp.Application.Visuals.WaferMap.BasemapLayer} (for example the wafer outline,
+                 * die grid, exposure field grid or crosshair).
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                class BasemapElement extends Framework.DocumentModel.DocumentNode implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext> {
+                    /**
+                     * Gets or sets a value indicating whether this basemap element is visible.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get Enabled(): JsType<System.Boolean>;
+                    set Enabled(value: JsType<System.Boolean>);
+                    /**
+                     * Gets or sets the stroke used to draw this basemap element.
+                     * A stroke whose {@link Spotfire.Dxp.Application.Visuals.Styles.Stroke.ColorType} is {@link Spotfire.Dxp.Application.Visuals.Styles.ColorType.Default} inherits
+                     * the panel color, and its width is the maximum width in pixels.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get Stroke(): Styles.Stroke;
+                    set Stroke(value: Styles.Stroke);
+                    /**
+                     * Gets or sets the transparency of this basemap element, in the range [0, 1] where 0 is fully opaque.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get Transparency(): JsType<System.Double>;
+                    set Transparency(value: JsType<System.Double>);
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                     */
+                    constructor();
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                     */
+                    _interfaces: {
+                        System_IServiceProvider: Implementation<System.IServiceProvider>,
+                        Spotfire_Dxp_Framework_DocumentModel_ITransactions: Implementation<Framework.DocumentModel.ITransactions>,
+                        Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
+                    };
+                    private __type_2119967491: null;
+                }
+                
+                /**
+                 * Represents a supporting basemap layer in the {@link Spotfire.Dxp.Application.Visuals.WaferMap.WaferMap}. Used to show the
+                 * wafer outline and other visual elements that can be derived from a wafer configuration.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                class BasemapLayer extends Layers.Layer implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext> {
+                    /**
+                     * Gets or sets the name of the wafer configuration to use for this layer.
+                     * In order for this property to be used, the {@link Spotfire.Dxp.Application.Visuals.WaferMap.BasemapLayer.ConfigurationSourceType} property
+                     * must be set to {@link Spotfire.Dxp.Application.Visuals.WaferMap.ConfigurationSourceType.Predefined}.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get ConfigurationId(): (JsType<System.String> | null);
+                    set ConfigurationId(value: (JsType<System.String> | null));
+                    /**
+                     * Gets or sets the wafer configuration source type.
+                     * This can be either {@link Spotfire.Dxp.Application.Visuals.WaferMap.ConfigurationSourceType.Predefined} or {@link Spotfire.Dxp.Application.Visuals.WaferMap.ConfigurationSourceType.Visualization}.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get ConfigurationSourceType(): ConfigurationSourceType;
+                    set ConfigurationSourceType(value: ConfigurationSourceType);
+                    /**
+                     * Gets or sets a layer to retrieve the configuration from.
+                     * In order for this property to be used, the {@link Spotfire.Dxp.Application.Visuals.WaferMap.BasemapLayer.ConfigurationSourceType} property must
+                     * be set to {@link Spotfire.Dxp.Application.Visuals.WaferMap.ConfigurationSourceType.Visualization}.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get ConfigurationVisualizationReference(): (WaferMapLayerVisualization | null);
+                    set ConfigurationVisualizationReference(value: (WaferMapLayerVisualization | null));
+                    /**
+                     * Gets an object with the visual properties for the crosshair.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get Crosshair(): BasemapElement;
+                    /**
+                     * Gets an object with the visual properties for the die grid.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get DieGrid(): BasemapElement;
+                    /**
+                     * Gets or sets the percentage of the wafer radius excluded from the die grid.
+                     * Expressed as a percent (2 means 2%). The default value is 2.
+                     * The valid range is [-50, 100]; negative values extend the effective radius
+                     * beyond the wafer outline.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get EdgeExclusionPercent(): JsType<System.Single>;
+                    set EdgeExclusionPercent(value: JsType<System.Single>);
+                    /**
+                     * Gets an object with the visual properties for the exposure field grid.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get FieldGrid(): BasemapElement;
+                    /**
+                     * Gets or sets the notch scale factor which determines how much the notch should be scaled on screen.
+                     * Typically, the notch is very small compared to the wafer and can be hard to see, so this scale factor can be used to make it more visible.
+                     * The default value is 2, which exaggerates the size of the notch on screen. The valid range is [0, 10].
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get NotchScaleFactor(): JsType<System.Single>;
+                    set NotchScaleFactor(value: JsType<System.Single>);
+                    /**
+                     * Gets an object with the visual properties for the wafer outline.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get Outline(): BasemapElement;
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                     */
+                    constructor();
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                     */
+                    _interfaces: {
+                        System_IServiceProvider: Implementation<System.IServiceProvider>,
+                        Spotfire_Dxp_Framework_DocumentModel_ITransactions: Implementation<Framework.DocumentModel.ITransactions>,
+                        Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
+                    };
+                    private __type_1901434726: null;
+                }
+                
+                /**
+                 * Represents an axis that refers to a wafer configuration.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                class ConfigurationByAxis extends CategoricalAxisBase implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext> {
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                     */
+                    constructor();
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                     */
+                    _interfaces: {
+                        System_IServiceProvider: Implementation<System.IServiceProvider>,
+                        Spotfire_Dxp_Framework_DocumentModel_ITransactions: Implementation<Framework.DocumentModel.ITransactions>,
+                        Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
+                    };
+                    private __type_4189297170: null;
+                }
+                
+                /**
+                 * Specifies the source type for the wafer configuration.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                class ConfigurationSourceType extends System.Enum {
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                     */
+                    constructor();
+                    /**
+                     * Represents that the configuration is based on column values.
+                     * 
+                     * @since 2.6
+                     */
+                    static readonly Column: ConfigurationSourceType;
+                    /**
+                     * Represents a predefined fixed configuration, taken from the wafer configuration data table of the wafer map.
+                     * 
+                     * @since 2.6
+                     */
+                    static readonly Predefined: ConfigurationSourceType;
+                    /**
+                     * Represents that the configuration is the same as the one used by a die layer.
+                     * 
+                     * @since 2.6
+                     */
+                    static readonly Visualization: ConfigurationSourceType;
+                    private __type_2010825005: null;
+                }
+                
+                /**
+                 * Die layer visualization for wafer maps.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                class DieLayerVisualization extends WaferMapLayerVisualization implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext> {
+                    /**
+                     * Gets the color axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get ColorAxis(): ColorAxis;
+                    /**
+                     * Gets the configuration by axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get ConfigurationByAxis(): ConfigurationByAxis;
+                    /**
+                     * Gets or sets the name of the wafer configuration to use for this layer.
+                     * In order for this property to be used, the {@link Spotfire.Dxp.Application.Visuals.WaferMap.DieLayerVisualization.ConfigurationSourceType} property
+                     * must be set to {@link Spotfire.Dxp.Application.Visuals.WaferMap.ConfigurationSourceType.Predefined}.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get ConfigurationId(): JsType<System.String>;
+                    set ConfigurationId(value: JsType<System.String>);
+                    /**
+                     * Gets or sets the wafer configuration source type.
+                     * When set to {@link Spotfire.Dxp.Application.Visuals.WaferMap.ConfigurationSourceType.Column}, the {@link Spotfire.Dxp.Application.Visuals.WaferMap.DieLayerVisualization.ConfigurationByAxis} will
+                     * be used to look up names of wafer configurations.
+                     * When set to {@link Spotfire.Dxp.Application.Visuals.WaferMap.ConfigurationSourceType.Predefined}, the {@link Spotfire.Dxp.Application.Visuals.WaferMap.DieLayerVisualization.ConfigurationId} property
+                     * will be used to look up a single wafer configuration.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get ConfigurationSourceType(): ConfigurationSourceType;
+                    set ConfigurationSourceType(value: ConfigurationSourceType);
+                    /**
+                     * Gets the die x-axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get XDieAxis(): DieXyAxis;
+                    /**
+                     * Gets the die y-axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get YDieAxis(): DieXyAxis;
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                     */
+                    constructor();
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                     */
+                    _interfaces: {
+                        System_IServiceProvider: Implementation<System.IServiceProvider>,
+                        Spotfire_Dxp_Framework_DocumentModel_ITransactions: Implementation<Framework.DocumentModel.ITransactions>,
+                        Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
+                    };
+                    private __type_2768579173: null;
+                }
+                
+                /**
+                 * Class representing wafer map die layer detail information, typically displayed in tooltips.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                class DieLayerVisualizationDetails extends Details implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext> {
+                    /**
+                     * Gets the detail item associated with the color by axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get Color(): NamedDetailItem;
+                    /**
+                     * Gets the detail item associated with the die X axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get XDie(): NamedDetailItem;
+                    /**
+                     * Gets the detail item associated with the die Y axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get YDie(): NamedDetailItem;
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                     */
+                    constructor();
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                     */
+                    _interfaces: {
+                        System_IServiceProvider: Implementation<System.IServiceProvider>,
+                        Spotfire_Dxp_Framework_DocumentModel_ITransactions: Implementation<Framework.DocumentModel.ITransactions>,
+                        Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
+                    };
+                    private __type_1806847691: null;
+                }
+                
+                /**
+                 * Axis used for the die X and die Y axes of a {@link Spotfire.Dxp.Application.Visuals.WaferMap.DieLayerVisualization}.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                class DieXyAxis extends Axis implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext> {
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                     */
+                    constructor();
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                     */
+                    _interfaces: {
+                        System_IServiceProvider: Implementation<System.IServiceProvider>,
+                        Spotfire_Dxp_Framework_DocumentModel_ITransactions: Implementation<Framework.DocumentModel.ITransactions>,
+                        Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
+                    };
+                    private __type_1694523204: null;
+                }
+                
+                /**
+                 * Represents a legend item containing the title of a wafer map data layer visualization.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                class LegendLayerTitleItem extends LegendTextItem implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext> {
+                    /**
+                     * Gets the title.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get Title(): JsType<System.String>;
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                     */
+                    constructor();
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                     */
+                    _interfaces: {
+                        System_IServiceProvider: Implementation<System.IServiceProvider>,
+                        Spotfire_Dxp_Framework_DocumentModel_ITransactions: Implementation<Framework.DocumentModel.ITransactions>,
+                        Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
+                    };
+                    private __type_2092795283: null;
+                }
+                
+                /**
+                 * Representation of a wafer map. Used to analyze yield and quality of a semiconductor production process.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                class WaferMap extends TrellisVisualization implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext> {
+                    /**
+                     * Gets or sets the table containing wafer configurations.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get ConfigurationTableReference(): (Data.DataTable | null);
+                    set ConfigurationTableReference(value: (Data.DataTable | null));
+                    /**
+                     * Gets or sets the interaction mode that controls how mouse input is interpreted
+                     * (for example, marking versus panning) in this {@link Spotfire.Dxp.Application.Visuals.WaferMap.WaferMap}.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get InteractionMode(): Maps.InteractionMode;
+                    set InteractionMode(value: Maps.InteractionMode);
+                    /**
+                     * Gets or sets the interactive layer, that is, the layer that will respond to user interaction like highlight.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get InteractiveLayerReference(): (Layers.Layer | null);
+                    set InteractiveLayerReference(value: (Layers.Layer | null));
+                    /**
+                     * Gets or sets the expanded/collapsed state of the layer handler widget shown in this {@link Spotfire.Dxp.Application.Visuals.WaferMap.WaferMap}.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get LayerHandlerState(): Maps.LayerHandlerState;
+                    set LayerHandlerState(value: Maps.LayerHandlerState);
+                    /**
+                     * Gets the collection of layers.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get Layers(): WaferMapLayerCollection;
+                    /**
+                     * Gets or sets the marking mode that controls the shape of the marking rubber-band in this {@link Spotfire.Dxp.Application.Visuals.WaferMap.WaferMap}.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get MarkingMode(): Maps.MarkingMode;
+                    set MarkingMode(value: Maps.MarkingMode);
+                    /**
+                     * Gets or sets a value indicating whether to show the interaction mode control.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get ShowInteractionMode(): JsType<System.Boolean>;
+                    set ShowInteractionMode(value: JsType<System.Boolean>);
+                    /**
+                     * Gets or sets a value indicating whether to show the layer handler.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get ShowLayerHandler(): JsType<System.Boolean>;
+                    set ShowLayerHandler(value: JsType<System.Boolean>);
+                    /**
+                     * Gets or sets a value indicating whether to show the navigation controls.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get ShowNavigationControls(): JsType<System.Boolean>;
+                    set ShowNavigationControls(value: JsType<System.Boolean>);
+                    /**
+                     * Gets or sets the trellis layer, that is, the layer that will control trellising.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get TrellisLayerReference(): Layers.VisualizationLayer;
+                    set TrellisLayerReference(value: Layers.VisualizationLayer);
+                    /**
+                     * Gets or sets the {@link Spotfire.Dxp.Application.Visuals.Extent} of this {@link Spotfire.Dxp.Application.Visuals.WaferMap.WaferMap}.
+                     * This is null by default, in which case the actual extent of the wafer map is
+                     * computed based on the contents of all layers.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get ViewExtent(): (Extent | null);
+                    set ViewExtent(value: (Extent | null));
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                     */
+                    constructor();
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                     */
+                    _interfaces: {
+                        System_IServiceProvider: Implementation<System.IServiceProvider>,
+                        Spotfire_Dxp_Framework_DocumentModel_ITransactions: Implementation<Framework.DocumentModel.ITransactions>,
+                        Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
+                    };
+                    private __type_2469966675: null;
+                }
+                
+                /**
+                 * Represents a collection of layers.
+                 * @remark This class provides functionality to manage a collection of {@link Spotfire.Dxp.Application.Visuals.Layers.Layer} objects.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                class WaferMapLayerCollection extends Framework.DocumentModel.DocumentNode implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext>, Explicit<System.Collections.Generic.IReadOnlyList<Layers.Layer>>, Explicit<System.Collections.Generic.IReadOnlyCollection<Layers.Layer>>, Explicit<System.Collections.Generic.IEnumerable<Layers.Layer>>, Explicit<System.Collections.IEnumerable> {
+                    /**
+                     * Gets the number of elements in the collection.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get Count(): JsType<System.Int32>;
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                     */
+                    constructor();
+                    [Symbol.iterator](): Iterator<Layers.Layer>;
+                    /**
+                     * Adds a new {@link Spotfire.Dxp.Application.Visuals.Layers.Layer} to the collection that is a duplicate of the specified layer.
+                     * Only layers that are part of this collection can be duplicated.
+                     * @param layer The layer to duplicate.
+                     * @returns A new {@link Spotfire.Dxp.Application.Visuals.Layers.Layer} instance.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    AddDuplicate(layer: Layers.Layer): Layers.Layer;
+                    /**
+                     * Adds a new {@link Spotfire.Dxp.Application.Visuals.WaferMap.BasemapLayer} to the collection.
+                     * @returns A new {@link Spotfire.Dxp.Application.Visuals.WaferMap.BasemapLayer} instance.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    AddNewBasemapLayer(): BasemapLayer;
+                    /**
+                     * Adds a new die layer to the collection.
+                     * @param visualization The visualization contained in the layer.
+                     * @returns A layer containing a {@link Spotfire.Dxp.Application.Visuals.WaferMap.DieLayerVisualization}.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    AddNewDieLayer(visualization: OutParam<DieLayerVisualization>): Layers.VisualizationLayer;
+                    /**
+                     * Adds a new marker layer to the collection.
+                     * @param visualization The visualization contained in the layer.
+                     * @returns A layer containing a {@link Spotfire.Dxp.Application.Visuals.WaferMap.WaferMapMarkerLayerVisualization}.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    AddNewMarkerLayer(visualization: OutParam<WaferMapMarkerLayerVisualization>): Layers.VisualizationLayer;
+                    /**
+                     * Adds a new {@link Spotfire.Dxp.Application.Visuals.ReferenceElements.ReferenceStatisticLayer} to the collection.
+                     * @returns A new {@link Spotfire.Dxp.Application.Visuals.ReferenceElements.ReferenceStatisticLayer} instance.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    AddNewReferenceStatisticLayer(): ReferenceElements.ReferenceStatisticLayer;
+                    /**
+                     * Gets the enumerator for the collection.
+                     * @returns An enumerator for the collection.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    GetEnumerator(): System.Collections.Generic.IEnumerator<Layers.Layer>;
+                    /**
+                     * Moves the specified layer within this collection.
+                     * @param layer The layer to move.
+                     * @param toIndex The index to move the layer to.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    Move(layer: Layers.Layer, toIndex: (JsType<System.Int32> | System.Int32)): void;
+                    /**
+                     * Removes the specified layer from this collection.
+                     * @param layer The layer to remove.
+                     * @returns true if the layer was successfully removed from this collection; otherwise false.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    Remove(layer: Layers.Layer): JsType<System.Boolean>;
+                    /**
+                     * Removes the layer at the specified index.
+                     * @param index The zero-based index of the layer to remove.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    RemoveAt(index: (JsType<System.Int32> | System.Int32)): void;
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                     */
+                    _interfaces: {
+                        System_IServiceProvider: Implementation<System.IServiceProvider>,
+                        Spotfire_Dxp_Framework_DocumentModel_ITransactions: Implementation<Framework.DocumentModel.ITransactions>,
+                        Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
+                        System_Collections_Generic_IReadOnlyList: Implementation<System.Collections.Generic.IReadOnlyList<Layers.Layer>>,
+                        System_Collections_Generic_IReadOnlyCollection: Implementation<System.Collections.Generic.IReadOnlyCollection<Layers.Layer>>,
+                        System_Collections_Generic_IEnumerable: Implementation<System.Collections.Generic.IEnumerable<Layers.Layer>>,
+                        System_Collections_IEnumerable: Implementation<System.Collections.IEnumerable>,
+                    };
+                    /**
+                     * Gets the {@link Spotfire.Dxp.Application.Visuals.Layers.Layer} at the specified index.
+                     * @param index The index of the element to get.
+                     * @returns The {@link Spotfire.Dxp.Application.Visuals.Layers.Layer} at the specified index.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    readonly Item: PropertyGet<(JsType<System.Int32> | System.Int32), Layers.Layer>;
+                    private __type_3136859306: null;
+                }
+                
+                /**
+                 * Represents a {@link Spotfire.Dxp.Application.Visuals.Visualization} that is used as a layer in a {@link Spotfire.Dxp.Application.Visuals.WaferMap.WaferMap}.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                class WaferMapLayerVisualization extends TrellisVisualization implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext> {
+                    /**
+                     * Gets the legend item for this layer visualization.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get LegendItem(): LegendLayerTitleItem;
+                    /**
+                     * Gets or sets a value indicating whether this visualization should be trellised the same way
+                     * as the main trellis layer in the wafer map, see {@link Spotfire.Dxp.Application.Visuals.WaferMap.WaferMap.TrellisLayerReference}.
+                     * The default value is true.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get TrellisingFollowsMainLayer(): JsType<System.Boolean>;
+                    set TrellisingFollowsMainLayer(value: JsType<System.Boolean>);
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                     */
+                    constructor();
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                     */
+                    _interfaces: {
+                        System_IServiceProvider: Implementation<System.IServiceProvider>,
+                        Spotfire_Dxp_Framework_DocumentModel_ITransactions: Implementation<Framework.DocumentModel.ITransactions>,
+                        Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
+                    };
+                    private __type_4290072542: null;
+                }
+                
+                /**
+                 * The visualization for wafer map marker layers.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                class WaferMapMarkerLayerVisualization extends WaferMapLayerVisualization implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext> {
+                    /**
+                     * Gets the color axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get ColorAxis(): ColorAxis;
+                    /**
+                     * Gets the details.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get Details(): WaferMapMarkerLayerVisualizationDetails;
+                    /**
+                     * Gets the drawing order axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get DrawingOrderAxis(): OrderByAxis;
+                    /**
+                     * Gets the label column.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get LabelColumn(): LabelColumn;
+                    /**
+                     * Gets or sets the font metadata used for the labels.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get LabelFont(): Framework.Styles.FontMetadata;
+                    set LabelFont(value: Framework.Styles.FontMetadata);
+                    /**
+                     * Gets or sets the size of labels showing images.
+                     * @remark The label size is expressed as a percentage of the panel size, with a minimum of 15 pixels and a maximum of the lesser of the panel's width or height.
+                     * A value of 0 will allow images as large as 15 x 15 pixels; a value of 100 will allow images as large as the lesser of the panel's width or height.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get LabelImageSize(): JsType<System.Single>;
+                    set LabelImageSize(value: JsType<System.Single>);
+                    /**
+                     * Gets or sets the placement strategy used for marker labels.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get LabelLayout(): MarkerLabelLayout;
+                    set LabelLayout(value: MarkerLabelLayout);
+                    /**
+                     * Gets the label renderer settings.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get LabelRenderer(): ValueRenderers.ValueRendererSettings;
+                    /**
+                     * Gets or sets a value that controls when marker labels are shown (for example, always, on marked rows only, or never).
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get LabelVisibility(): LabelVisibility;
+                    set LabelVisibility(value: LabelVisibility);
+                    /**
+                     * Gets the line connection.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get LineConnection(): LineConnection;
+                    /**
+                     * Gets the axis to group markers by.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get MarkerByAxis(): GroupByAxis;
+                    /**
+                     * Gets or sets the size of the markers.
+                     * @remark The size is expressed in percent of the height or width of the plot. A value of 100 means that
+                     * a marker will occupy the full height or width of the plot (whichever is smallest).
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get MarkerSize(): JsType<System.Single>;
+                    set MarkerSize(value: JsType<System.Single>);
+                    /**
+                     * Gets or sets the maximum number of marker labels drawn in the visualization.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get MaxNumberOfLabels(): JsType<System.Int32>;
+                    set MaxNumberOfLabels(value: JsType<System.Int32>);
+                    /**
+                     * Gets the marker rotation axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get RotationAxis(): MarkerRotationAxis;
+                    /**
+                     * Gets the axis that can be used to alter the expression by which marker shapes are chosen.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get ShapeAxis(): ShapeAxis;
+                    /**
+                     * Gets or sets a value indicating whether a label with empty content should be shown or not.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get ShowEmptyLabels(): JsType<System.Boolean>;
+                    set ShowEmptyLabels(value: JsType<System.Boolean>);
+                    /**
+                     * Gets the size axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get SizeAxis(): SizeAxis;
+                    /**
+                     * Gets the {@link Spotfire.Dxp.Application.Visuals.ScaleAxis} for the x-axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get XAxis(): ScaleAxis;
+                    /**
+                     * Gets or sets the amount of jittering in the x-direction.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get XJitter(): JsType<System.Double>;
+                    set XJitter(value: JsType<System.Double>);
+                    /**
+                     * Gets the {@link Spotfire.Dxp.Application.Visuals.ScaleAxis} for the y-axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get YAxis(): ScaleAxis;
+                    /**
+                     * Gets or sets the amount of jittering in the y-direction.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get YJitter(): JsType<System.Double>;
+                    set YJitter(value: JsType<System.Double>);
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                     */
+                    constructor();
+                    /**
+                     * Sets the label renderer.
+                     * @param typeId The type id.
+                     * @returns The label renderer settings associated with the type id.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    SetLabelRenderer(typeId: Framework.DocumentModel.TypeIdentifier): ValueRenderers.ValueRendererSettings;
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                     */
+                    _interfaces: {
+                        System_IServiceProvider: Implementation<System.IServiceProvider>,
+                        Spotfire_Dxp_Framework_DocumentModel_ITransactions: Implementation<Framework.DocumentModel.ITransactions>,
+                        Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
+                    };
+                    private __type_22689520: null;
+                }
+                
+                /**
+                 * Class representing wafer map marker layer detail information, typically displayed in tooltips.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                class WaferMapMarkerLayerVisualizationDetails extends Details implements Explicit<System.IServiceProvider>, Explicit<Framework.DocumentModel.ITransactions>, Explicit<Framework.DocumentModel.INodeContext> {
+                    /**
+                     * Gets the detail item associated with the color axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get Color(): NamedDetailItem;
+                    /**
+                     * Gets the detail item associated with the marker by axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get Marker(): NamedDetailItem;
+                    /**
+                     * Gets the detail item associated with the rotation by axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get Rotation(): NamedDetailItem;
+                    /**
+                     * Gets the detail item associated with the shape by axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get Shape(): NamedDetailItem;
+                    /**
+                     * Gets the detail item associated with the size by axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get Size(): NamedDetailItem;
+                    /**
+                     * Gets the detail item associated with the X axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get X(): NamedDetailItem;
+                    /**
+                     * Gets the detail item associated with the Y axis.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Default capability
+                     */
+                    get Y(): NamedDetailItem;
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                     */
+                    constructor();
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                     */
+                    _interfaces: {
+                        System_IServiceProvider: Implementation<System.IServiceProvider>,
+                        Spotfire_Dxp_Framework_DocumentModel_ITransactions: Implementation<Framework.DocumentModel.ITransactions>,
+                        Spotfire_Dxp_Framework_DocumentModel_INodeContext: Implementation<Framework.DocumentModel.INodeContext>,
+                    };
+                    private __type_2291213150: null;
                 }
             }
             
@@ -52141,6 +53728,118 @@ declare namespace Spotfire.Dxp {
                     private __type_2736338137: null;
                 }
             }
+            
+            namespace Mcp {
+                /**
+                 * A single MCP (Model Context Protocol) server configured for the current session, returned by
+                 * {@link Spotfire.Dxp.Framework.Ai.Mcp.McpService.GetMcps}. It exposes the server's identifying metadata and a
+                 * {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint.GetTools} method that returns this server's tools as {@link Spotfire.Dxp.Framework.Ai.AiTool} instances to
+                 * pass into a chat completion call.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                class McpEndpoint extends Object {
+                    /**
+                     * Gets a value indicating whether the last {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint.GetTools} call returned no tools because this server
+                     * requires the user to sign in first. Only meaningful after {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint.GetTools} has run.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Extended capability 'AI'
+                     */
+                    get AuthorizationRequired(): JsType<System.Boolean>;
+                    /**
+                     * Gets the optional human-readable description of this MCP server, or null when the server has none.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Extended capability 'AI'
+                     */
+                    get Description(): JsType<System.String>;
+                    /**
+                     * Gets the server-assigned identifier of this MCP server, or {@link System.Guid.Empty} when it has none.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Extended capability 'AI'
+                     */
+                    get Id(): JsType<System.Guid>;
+                    /**
+                     * Gets the human-readable display name of this MCP server.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Extended capability 'AI'
+                     */
+                    get Name(): JsType<System.String>;
+                    /**
+                     * Gets the URL of the MCP server this endpoint represents, or null when it is not known.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Extended capability 'AI'
+                     */
+                    get ServerUrl(): JsType<System.Uri>;
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                     */
+                    constructor();
+                    /**
+                     * Returns this MCP server's tools as {@link Spotfire.Dxp.Framework.Ai.AiTool} instances to pass into a chat completion
+                     * call, or an empty sequence if its tools cannot be retrieved.
+                     * @returns The tools provided by this MCP server, or an empty sequence when none are available.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Extended capability 'AI'
+                     */
+                    GetTools(): System.Collections.Generic.IEnumerable<AiTool>;
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                     */
+                    _interfaces: {
+                    };
+                    private __type_1542079169: null;
+                }
+                
+                /**
+                 * The MCP (Model Context Protocol) entry point. Call {@link Spotfire.Dxp.Framework.Ai.Mcp.McpService.GetMcps} to list the MCP servers configured
+                 * for the current session, then call {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint.GetTools} on the ones you want to obtain their
+                 * tools as {@link Spotfire.Dxp.Framework.Ai.AiTool} instances to pass into a chat completion call.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                class McpService extends Object {
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                     */
+                    constructor();
+                    /**
+                     * Lists the MCP servers configured for the current session as {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint} instances, which
+                     * can be filtered before calling {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint.GetTools} on the ones whose tools are wanted.
+                     * @returns The MCP endpoints, or an empty sequence when none are available.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Extended capability 'AI'
+                     */
+                    GetMcps(): System.Collections.Generic.IEnumerable<McpEndpoint>;
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                     */
+                    _interfaces: {
+                    };
+                    private __type_1839567799: null;
+                }
+            }
         }
         
         namespace ApplicationModel {
@@ -52264,6 +53963,19 @@ declare namespace Spotfire.Dxp {
                  */
                 AddErrorNotification(title: (JsType<System.String> | System.String), summary: (JsType<System.String> | System.String), details: (JsType<System.String> | System.String)): void;
                 /**
+                 * Adds a notification on error level with the specified actions that execute action
+                 * mod scripts when invoked by the user.
+                 * @param title The title of the notification.
+                 * @param summary The summary of the notification, may be null.
+                 * @param details The details of the notification, may be null.
+                 * @param actions The actions that are made available to the user for the notification.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                AddErrorNotificationWithActions(title: (JsType<System.String> | System.String), summary: (JsType<System.String> | System.String), details: (JsType<System.String> | System.String), ...actions: Application.Mods.ModNotificationAction[]): void;
+                /**
                  * Add a notification that contains information.
                  * @param title The title of the notification.
                  * @param summary The summary of the notification, may be null.
@@ -52275,6 +53987,19 @@ declare namespace Spotfire.Dxp {
                  */
                 AddInformationNotification(title: (JsType<System.String> | System.String), summary: (JsType<System.String> | System.String), details: (JsType<System.String> | System.String)): void;
                 /**
+                 * Adds a notification on information level with the specified actions that execute action
+                 * mod scripts when invoked by the user.
+                 * @param title The title of the notification.
+                 * @param summary The summary of the notification, may be null.
+                 * @param details The details of the notification, may be null.
+                 * @param actions The actions that are made available to the user for the notification.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                AddInformationNotificationWithActions(title: (JsType<System.String> | System.String), summary: (JsType<System.String> | System.String), details: (JsType<System.String> | System.String), ...actions: Application.Mods.ModNotificationAction[]): void;
+                /**
                  * Add a notification that contains a warning.
                  * @param title The title of the notification.
                  * @param summary The summary of the notification, may be null.
@@ -52285,6 +54010,19 @@ declare namespace Spotfire.Dxp {
                  * @group Default capability
                  */
                 AddWarningNotification(title: (JsType<System.String> | System.String), summary: (JsType<System.String> | System.String), details: (JsType<System.String> | System.String)): void;
+                /**
+                 * Adds a notification on warning level with the specified actions that execute action
+                 * mod scripts when invoked by the user.
+                 * @param title The title of the notification.
+                 * @param summary The summary of the notification, may be null.
+                 * @param details The details of the notification, may be null.
+                 * @param actions The actions that are made available to the user for the notification.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                AddWarningNotificationWithActions(title: (JsType<System.String> | System.String), summary: (JsType<System.String> | System.String), details: (JsType<System.String> | System.String), ...actions: Application.Mods.ModNotificationAction[]): void;
                 /**
                  * @ignore
                  * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
@@ -58438,6 +60176,1025 @@ declare namespace System {
             private __type_381284155: null;
         }
     }
+}
+
+declare module "spotfire/dxp/application" {
+    export import AnalysisApplication = Spotfire.Dxp.Application.AnalysisApplication;
+    export import Bookmark = Spotfire.Dxp.Application.Bookmark;
+    export import BookmarkCollection = Spotfire.Dxp.Application.BookmarkCollection;
+    export import BookmarkComponentFlags = Spotfire.Dxp.Application.BookmarkComponentFlags;
+    export import CustomNodes = Spotfire.Dxp.Application.CustomNodes;
+    export import DetailsOnDemandPanel = Spotfire.Dxp.Application.DetailsOnDemandPanel;
+    export import Document = Spotfire.Dxp.Application.Document;
+    export import DocumentCompatibility = Spotfire.Dxp.Application.DocumentCompatibility;
+    export import DocumentMetadata = Spotfire.Dxp.Application.DocumentMetadata;
+    export import DocumentOpenSettings = Spotfire.Dxp.Application.DocumentOpenSettings;
+    export import DocumentProperties = Spotfire.Dxp.Application.DocumentProperties;
+    export import DocumentSaveSettings = Spotfire.Dxp.Application.DocumentSaveSettings;
+    export import ImageCollection = Spotfire.Dxp.Application.ImageCollection;
+    export import Page = Spotfire.Dxp.Application.Page;
+    export import PageCollection = Spotfire.Dxp.Application.PageCollection;
+    export import PageNavigationMode = Spotfire.Dxp.Application.PageNavigationMode;
+    export import Panel = Spotfire.Dxp.Application.Panel;
+    export import PanelCollection = Spotfire.Dxp.Application.PanelCollection;
+    export import PanelTypeIdentifiers = Spotfire.Dxp.Application.PanelTypeIdentifiers;
+    export import StyleElement = Spotfire.Dxp.Application.StyleElement;
+    export import Visual = Spotfire.Dxp.Application.Visual;
+    export import VisualCollection = Spotfire.Dxp.Application.VisualCollection;
+}
+
+declare module "spotfire/dxp/application/actions" {
+    export import ActionTrigger = Spotfire.Dxp.Application.Actions.ActionTrigger;
+    export import ActionTriggerAccessPointDisplay = Spotfire.Dxp.Application.Actions.ActionTriggerAccessPointDisplay;
+    export import ActionTriggerCollection = Spotfire.Dxp.Application.Actions.ActionTriggerCollection;
+}
+
+declare module "spotfire/dxp/application/analyticitems" {
+    export import Bookmark = Spotfire.Dxp.Application.AnalyticItems.Bookmark;
+    export import BookmarkContext = Spotfire.Dxp.Application.AnalyticItems.BookmarkContext;
+    export import BookmarkLinks = Spotfire.Dxp.Application.AnalyticItems.BookmarkLinks;
+    export import BookmarkManager = Spotfire.Dxp.Application.AnalyticItems.BookmarkManager;
+}
+
+declare module "spotfire/dxp/application/calculations" {
+    export import Calculation = Spotfire.Dxp.Application.Calculations.Calculation;
+    export import CalculationCollection = Spotfire.Dxp.Application.Calculations.CalculationCollection;
+    export import CalculationDependency = Spotfire.Dxp.Application.Calculations.CalculationDependency;
+    export import CalculationDependencyCollection = Spotfire.Dxp.Application.Calculations.CalculationDependencyCollection;
+    export import CalculationDependencyIdentifier = Spotfire.Dxp.Application.Calculations.CalculationDependencyIdentifier;
+    export import CalculationResults = Spotfire.Dxp.Application.Calculations.CalculationResults;
+    export import CalculationResultsIdentifier = Spotfire.Dxp.Application.Calculations.CalculationResultsIdentifier;
+    export import CalculationSettings = Spotfire.Dxp.Application.Calculations.CalculationSettings;
+    export import CalculationSettingsValidationResult = Spotfire.Dxp.Application.Calculations.CalculationSettingsValidationResult;
+    export import CalculationTypeIdentifiers = Spotfire.Dxp.Application.Calculations.CalculationTypeIdentifiers;
+    export import ColumnsCalculationResult = Spotfire.Dxp.Application.Calculations.ColumnsCalculationResult;
+    export import DataColumnCalculationDependency = Spotfire.Dxp.Application.Calculations.DataColumnCalculationDependency;
+    export import DataColumnCalculationDependencyCollection = Spotfire.Dxp.Application.Calculations.DataColumnCalculationDependencyCollection;
+    export import DataSelectionCalculationDependency = Spotfire.Dxp.Application.Calculations.DataSelectionCalculationDependency;
+    export import ResultAccumulator = Spotfire.Dxp.Application.Calculations.ResultAccumulator;
+}
+
+declare module "spotfire/dxp/application/calculations/datarelationships" {
+    export import ComparisonMethod = Spotfire.Dxp.Application.Calculations.DataRelationships.ComparisonMethod;
+    export import DataRelationshipsCalculationResults = Spotfire.Dxp.Application.Calculations.DataRelationships.DataRelationshipsCalculationResults;
+    export import DataRelationshipsCalculationSettings = Spotfire.Dxp.Application.Calculations.DataRelationships.DataRelationshipsCalculationSettings;
+    export import DataRelationshipsColumnCollection = Spotfire.Dxp.Application.Calculations.DataRelationships.DataRelationshipsColumnCollection;
+    export import Measure = Spotfire.Dxp.Application.Calculations.DataRelationships.Measure;
+}
+
+declare module "spotfire/dxp/application/export" {
+    export import Report = Spotfire.Dxp.Application.Export.Report;
+}
+
+declare module "spotfire/dxp/application/extension" {
+    export import CustomNode = Spotfire.Dxp.Application.Extension.CustomNode;
+}
+
+declare module "spotfire/dxp/application/filters" {
+    export import CheckBoxFilter = Spotfire.Dxp.Application.Filters.CheckBoxFilter;
+    export import CheckBoxHierarchyFilter = Spotfire.Dxp.Application.Filters.CheckBoxHierarchyFilter;
+    export import ColumnFilter = Spotfire.Dxp.Application.Filters.ColumnFilter;
+    export import Filter = Spotfire.Dxp.Application.Filters.Filter;
+    export import FilterBase = Spotfire.Dxp.Application.Filters.FilterBase;
+    export import FilterCollection = Spotfire.Dxp.Application.Filters.FilterCollection;
+    export import FilterGroup = Spotfire.Dxp.Application.Filters.FilterGroup;
+    export import FilterGroupItem = Spotfire.Dxp.Application.Filters.FilterGroupItem;
+    export import FilterGroupItemCollection = Spotfire.Dxp.Application.Filters.FilterGroupItemCollection;
+    export import FilterHandle = Spotfire.Dxp.Application.Filters.FilterHandle;
+    export import FilteringScheme = Spotfire.Dxp.Application.Filters.FilteringScheme;
+    export import FilteringSchemeCollection = Spotfire.Dxp.Application.Filters.FilteringSchemeCollection;
+    export import FilterPanel = Spotfire.Dxp.Application.Filters.FilterPanel;
+    export import FilterSubGroup = Spotfire.Dxp.Application.Filters.FilterSubGroup;
+    export import FilterTypeIdentifiers = Spotfire.Dxp.Application.Filters.FilterTypeIdentifiers;
+    export import HierarchyFilter = Spotfire.Dxp.Application.Filters.HierarchyFilter;
+    export import ItemFilter = Spotfire.Dxp.Application.Filters.ItemFilter;
+    export import ItemFiltering = Spotfire.Dxp.Application.Filters.ItemFiltering;
+    export import ListBoxFilter = Spotfire.Dxp.Application.Filters.ListBoxFilter;
+    export import RadioButtonFilter = Spotfire.Dxp.Application.Filters.RadioButtonFilter;
+    export import RangeFilter = Spotfire.Dxp.Application.Filters.RangeFilter;
+    export import SingleValueColumnFilter = Spotfire.Dxp.Application.Filters.SingleValueColumnFilter;
+    export import TableGroup = Spotfire.Dxp.Application.Filters.TableGroup;
+    export import TableGroupCollection = Spotfire.Dxp.Application.Filters.TableGroupCollection;
+    export import TextFilter = Spotfire.Dxp.Application.Filters.TextFilter;
+    export import ValueRange = Spotfire.Dxp.Application.Filters.ValueRange;
+    export import VisualScale = Spotfire.Dxp.Application.Filters.VisualScale;
+}
+
+declare module "spotfire/dxp/application/insights" {
+    export import ActionModInsight = Spotfire.Dxp.Application.Insights.ActionModInsight;
+    export import AgentInsight = Spotfire.Dxp.Application.Insights.AgentInsight;
+    export import DocumentInsightAgentContext = Spotfire.Dxp.Application.Insights.DocumentInsightAgentContext;
+    export import InsightBase = Spotfire.Dxp.Application.Insights.InsightBase;
+    export import InsightImage = Spotfire.Dxp.Application.Insights.InsightImage;
+    export import InsightImageType = Spotfire.Dxp.Application.Insights.InsightImageType;
+    export import MarkingInsightAgentContext = Spotfire.Dxp.Application.Insights.MarkingInsightAgentContext;
+    export import UserInteraction = Spotfire.Dxp.Application.Insights.UserInteraction;
+    export import UserQuestionOption = Spotfire.Dxp.Application.Insights.UserQuestionOption;
+    export import VisualInsightAgentContext = Spotfire.Dxp.Application.Insights.VisualInsightAgentContext;
+}
+
+declare module "spotfire/dxp/application/layout" {
+    export import DockingPlacement = Spotfire.Dxp.Application.Layout.DockingPlacement;
+    export import LayoutDefinition = Spotfire.Dxp.Application.Layout.LayoutDefinition;
+    export import PanelRegion = Spotfire.Dxp.Application.Layout.PanelRegion;
+    export import PanelState = Spotfire.Dxp.Application.Layout.PanelState;
+    export import TileMode = Spotfire.Dxp.Application.Layout.TileMode;
+    export import VisualizationAreaSize = Spotfire.Dxp.Application.Layout.VisualizationAreaSize;
+}
+
+declare module "spotfire/dxp/application/mods" {
+    export import ActionModResource = Spotfire.Dxp.Application.Mods.ActionModResource;
+    export import ActionModScriptArgument = Spotfire.Dxp.Application.Mods.ActionModScriptArgument;
+    export import ActionModScriptArgumentDataView = Spotfire.Dxp.Application.Mods.ActionModScriptArgumentDataView;
+    export import ActionModScriptArgumentExpression = Spotfire.Dxp.Application.Mods.ActionModScriptArgumentExpression;
+    export import ActionModScriptArgumentLiteral = Spotfire.Dxp.Application.Mods.ActionModScriptArgumentLiteral;
+    export import ActionModScriptArgumentNode = Spotfire.Dxp.Application.Mods.ActionModScriptArgumentNode;
+    export import ActionModScriptDetails = Spotfire.Dxp.Application.Mods.ActionModScriptDetails;
+    export import ActionModScriptInvocation = Spotfire.Dxp.Application.Mods.ActionModScriptInvocation;
+    export import ActionModScriptUtils = Spotfire.Dxp.Application.Mods.ActionModScriptUtils;
+    export import ModAxis = Spotfire.Dxp.Application.Mods.ModAxis;
+    export import ModDataViewVisualization = Spotfire.Dxp.Application.Mods.ModDataViewVisualization;
+    export import ModIdentifier = Spotfire.Dxp.Application.Mods.ModIdentifier;
+    export import ModLayer = Spotfire.Dxp.Application.Mods.ModLayer;
+    export import ModLayerCollection = Spotfire.Dxp.Application.Mods.ModLayerCollection;
+    export import ModLegendAxisItem = Spotfire.Dxp.Application.Mods.ModLegendAxisItem;
+    export import ModManager = Spotfire.Dxp.Application.Mods.ModManager;
+    export import ModNotificationAction = Spotfire.Dxp.Application.Mods.ModNotificationAction;
+    export import ModProperty = Spotfire.Dxp.Application.Mods.ModProperty;
+    export import ModVisualization = Spotfire.Dxp.Application.Mods.ModVisualization;
+    export import ModVisualizationBase = Spotfire.Dxp.Application.Mods.ModVisualizationBase;
+}
+
+declare module "spotfire/dxp/application/tools" {
+    export import CopyCellValueContext = Spotfire.Dxp.Application.Tools.CopyCellValueContext;
+    export import MapChartCoordinatesContext = Spotfire.Dxp.Application.Tools.MapChartCoordinatesContext;
+    export import TablePlotCellContext = Spotfire.Dxp.Application.Tools.TablePlotCellContext;
+    export import TablePlotColumnContext = Spotfire.Dxp.Application.Tools.TablePlotColumnContext;
+}
+
+declare module "spotfire/dxp/application/userpreferences" {
+    export import VisualizationPreferences = Spotfire.Dxp.Application.UserPreferences.VisualizationPreferences;
+}
+
+declare module "spotfire/dxp/application/visuals" {
+    export import Axis = Spotfire.Dxp.Application.Visuals.Axis;
+    export import AxisBinding = Spotfire.Dxp.Application.Visuals.AxisBinding;
+    export import AxisEvaluationMode = Spotfire.Dxp.Application.Visuals.AxisEvaluationMode;
+    export import AxisMode = Spotfire.Dxp.Application.Visuals.AxisMode;
+    export import AxisRange = Spotfire.Dxp.Application.Visuals.AxisRange;
+    export import AxisTransformType = Spotfire.Dxp.Application.Visuals.AxisTransformType;
+    export import BarChart = Spotfire.Dxp.Application.Visuals.BarChart;
+    export import BarChartDetails = Spotfire.Dxp.Application.Visuals.BarChartDetails;
+    export import BarChartOrientation = Spotfire.Dxp.Application.Visuals.BarChartOrientation;
+    export import BoxPlot = Spotfire.Dxp.Application.Visuals.BoxPlot;
+    export import BoxPlotComparisonCircles = Spotfire.Dxp.Application.Visuals.BoxPlotComparisonCircles;
+    export import BoxPlotDetails = Spotfire.Dxp.Application.Visuals.BoxPlotDetails;
+    export import BoxPlotOrientation = Spotfire.Dxp.Application.Visuals.BoxPlotOrientation;
+    export import BoxPlotReferencePoint = Spotfire.Dxp.Application.Visuals.BoxPlotReferencePoint;
+    export import BoxPlotReferencePointCollection = Spotfire.Dxp.Application.Visuals.BoxPlotReferencePointCollection;
+    export import BoxPlotSortMode = Spotfire.Dxp.Application.Visuals.BoxPlotSortMode;
+    export import BoxPlotStatistic = Spotfire.Dxp.Application.Visuals.BoxPlotStatistic;
+    export import BoxPlotStatisticCollection = Spotfire.Dxp.Application.Visuals.BoxPlotStatisticCollection;
+    export import BoxPlotStatisticsTable = Spotfire.Dxp.Application.Visuals.BoxPlotStatisticsTable;
+    export import BoxPlotViolin = Spotfire.Dxp.Application.Visuals.BoxPlotViolin;
+    export import BoxPlotVisibleMarkers = Spotfire.Dxp.Application.Visuals.BoxPlotVisibleMarkers;
+    export import Camera = Spotfire.Dxp.Application.Visuals.Camera;
+    export import CategoricalAxis = Spotfire.Dxp.Application.Visuals.CategoricalAxis;
+    export import CategoricalAxisBase = Spotfire.Dxp.Application.Visuals.CategoricalAxisBase;
+    export import CategoryKey = Spotfire.Dxp.Application.Visuals.CategoryKey;
+    export import CategoryMode = Spotfire.Dxp.Application.Visuals.CategoryMode;
+    export import CellRange = Spotfire.Dxp.Application.Visuals.CellRange;
+    export import ColorAxis = Spotfire.Dxp.Application.Visuals.ColorAxis;
+    export import CombinationChart = Spotfire.Dxp.Application.Visuals.CombinationChart;
+    export import CombinationChartBarProperties = Spotfire.Dxp.Application.Visuals.CombinationChartBarProperties;
+    export import CombinationChartDetails = Spotfire.Dxp.Application.Visuals.CombinationChartDetails;
+    export import CombinationChartLineProperties = Spotfire.Dxp.Application.Visuals.CombinationChartLineProperties;
+    export import CombinationChartOrientation = Spotfire.Dxp.Application.Visuals.CombinationChartOrientation;
+    export import CombinationChartSeriesType = Spotfire.Dxp.Application.Visuals.CombinationChartSeriesType;
+    export import ContinuousAxisBase = Spotfire.Dxp.Application.Visuals.ContinuousAxisBase;
+    export import ContinuousScaleType = Spotfire.Dxp.Application.Visuals.ContinuousScaleType;
+    export import CrossTablePlot = Spotfire.Dxp.Application.Visuals.CrossTablePlot;
+    export import CrossTableSubtotal = Spotfire.Dxp.Application.Visuals.CrossTableSubtotal;
+    export import CrossTableSubtotalCollection = Spotfire.Dxp.Application.Visuals.CrossTableSubtotalCollection;
+    export import CrossTableSubtotalsLayout = Spotfire.Dxp.Application.Visuals.CrossTableSubtotalsLayout;
+    export import CrossTableTotals = Spotfire.Dxp.Application.Visuals.CrossTableTotals;
+    export import DataSelectionVisualizationSubset = Spotfire.Dxp.Application.Visuals.DataSelectionVisualizationSubset;
+    export import DefaultVisualizationSubset = Spotfire.Dxp.Application.Visuals.DefaultVisualizationSubset;
+    export import Dendrogram = Spotfire.Dxp.Application.Visuals.Dendrogram;
+    export import DendrogramLegendItem = Spotfire.Dxp.Application.Visuals.DendrogramLegendItem;
+    export import DetailItem = Spotfire.Dxp.Application.Visuals.DetailItem;
+    export import DetailItemCollection = Spotfire.Dxp.Application.Visuals.DetailItemCollection;
+    export import Details = Spotfire.Dxp.Application.Visuals.Details;
+    export import DetailsDisplayMode = Spotfire.Dxp.Application.Visuals.DetailsDisplayMode;
+    export import ErrorBars = Spotfire.Dxp.Application.Visuals.ErrorBars;
+    export import ExpressionColumn = Spotfire.Dxp.Application.Visuals.ExpressionColumn;
+    export import ExpressionDetailItem = Spotfire.Dxp.Application.Visuals.ExpressionDetailItem;
+    export import ExpressionRuleCondition = Spotfire.Dxp.Application.Visuals.ExpressionRuleCondition;
+    export import Extent = Spotfire.Dxp.Application.Visuals.Extent;
+    export import FilterRule = Spotfire.Dxp.Application.Visuals.FilterRule;
+    export import FilterRuleCollection = Spotfire.Dxp.Application.Visuals.FilterRuleCollection;
+    export import Formatting = Spotfire.Dxp.Application.Visuals.Formatting;
+    export import GroupByAxis = Spotfire.Dxp.Application.Visuals.GroupByAxis;
+    export import HeatMap = Spotfire.Dxp.Application.Visuals.HeatMap;
+    export import HeatMapDetails = Spotfire.Dxp.Application.Visuals.HeatMapDetails;
+    export import HeatMapEmptyValueReplacement = Spotfire.Dxp.Application.Visuals.HeatMapEmptyValueReplacement;
+    export import HeatMapEmptyValueReplacementColumnAverage = Spotfire.Dxp.Application.Visuals.HeatMapEmptyValueReplacementColumnAverage;
+    export import HeatMapEmptyValueReplacementConstant = Spotfire.Dxp.Application.Visuals.HeatMapEmptyValueReplacementConstant;
+    export import HeatMapEmptyValueReplacementRowAverage = Spotfire.Dxp.Application.Visuals.HeatMapEmptyValueReplacementRowAverage;
+    export import HeatMapEmptyValueReplacementRowInterpolation = Spotfire.Dxp.Application.Visuals.HeatMapEmptyValueReplacementRowInterpolation;
+    export import HeatMapMeasureAxis = Spotfire.Dxp.Application.Visuals.HeatMapMeasureAxis;
+    export import HeatMapNormalization = Spotfire.Dxp.Application.Visuals.HeatMapNormalization;
+    export import HeatMapNormalizationMean = Spotfire.Dxp.Application.Visuals.HeatMapNormalizationMean;
+    export import HeatMapNormalizationPercentile = Spotfire.Dxp.Application.Visuals.HeatMapNormalizationPercentile;
+    export import HeatMapNormalizationScaleBetween0And1 = Spotfire.Dxp.Application.Visuals.HeatMapNormalizationScaleBetween0And1;
+    export import HeatMapNormalizationStandardDeviation = Spotfire.Dxp.Application.Visuals.HeatMapNormalizationStandardDeviation;
+    export import HeatMapNormalizationSubtractMean = Spotfire.Dxp.Application.Visuals.HeatMapNormalizationSubtractMean;
+    export import HeatMapNormalizationSubtractMedian = Spotfire.Dxp.Application.Visuals.HeatMapNormalizationSubtractMedian;
+    export import HeatMapNormalizationTrimmedMean = Spotfire.Dxp.Application.Visuals.HeatMapNormalizationTrimmedMean;
+    export import HeatMapNormalizationZScoreCalculation = Spotfire.Dxp.Application.Visuals.HeatMapNormalizationZScoreCalculation;
+    export import HorizontalAlignment = Spotfire.Dxp.Application.Visuals.HorizontalAlignment;
+    export import HorizontalLegend = Spotfire.Dxp.Application.Visuals.HorizontalLegend;
+    export import HorizontalLegendDock = Spotfire.Dxp.Application.Visuals.HorizontalLegendDock;
+    export import HtmlTextArea = Spotfire.Dxp.Application.Visuals.HtmlTextArea;
+    export import IndexedAxisRange = Spotfire.Dxp.Application.Visuals.IndexedAxisRange;
+    export import IndexedAxisTransformType = Spotfire.Dxp.Application.Visuals.IndexedAxisTransformType;
+    export import IndexedBool = Spotfire.Dxp.Application.Visuals.IndexedBool;
+    export import IndexedCombinationChartSeriesType = Spotfire.Dxp.Application.Visuals.IndexedCombinationChartSeriesType;
+    export import IndexedExpression = Spotfire.Dxp.Application.Visuals.IndexedExpression;
+    export import IndexedFormatter = Spotfire.Dxp.Application.Visuals.IndexedFormatter;
+    export import IndexedInt = Spotfire.Dxp.Application.Visuals.IndexedInt;
+    export import IndexedLabelOrientation = Spotfire.Dxp.Application.Visuals.IndexedLabelOrientation;
+    export import IndexedScaleDock = Spotfire.Dxp.Application.Visuals.IndexedScaleDock;
+    export import IndexedScaleLabelLayout = Spotfire.Dxp.Application.Visuals.IndexedScaleLabelLayout;
+    export import IndexedTotalsCalculationMode = Spotfire.Dxp.Application.Visuals.IndexedTotalsCalculationMode;
+    export import IndividualScalingMode = Spotfire.Dxp.Application.Visuals.IndividualScalingMode;
+    export import KpiChart = Spotfire.Dxp.Application.Visuals.KpiChart;
+    export import KpiCollection = Spotfire.Dxp.Application.Visuals.KpiCollection;
+    export import KpiComparativeAxis = Spotfire.Dxp.Application.Visuals.KpiComparativeAxis;
+    export import KpiContent = Spotfire.Dxp.Application.Visuals.KpiContent;
+    export import KpiSortColumn = Spotfire.Dxp.Application.Visuals.KpiSortColumn;
+    export import KpiSortMode = Spotfire.Dxp.Application.Visuals.KpiSortMode;
+    export import KpiVisualization = Spotfire.Dxp.Application.Visuals.KpiVisualization;
+    export import KpiVisualizationActionContext = Spotfire.Dxp.Application.Visuals.KpiVisualizationActionContext;
+    export import KpiXAxis = Spotfire.Dxp.Application.Visuals.KpiXAxis;
+    export import KpiYAxis = Spotfire.Dxp.Application.Visuals.KpiYAxis;
+    export import LabelColumn = Spotfire.Dxp.Application.Visuals.LabelColumn;
+    export import LabelInformationType = Spotfire.Dxp.Application.Visuals.LabelInformationType;
+    export import LabelOrientation = Spotfire.Dxp.Application.Visuals.LabelOrientation;
+    export import LabelPosition = Spotfire.Dxp.Application.Visuals.LabelPosition;
+    export import LabelVisibility = Spotfire.Dxp.Application.Visuals.LabelVisibility;
+    export import Legend = Spotfire.Dxp.Application.Visuals.Legend;
+    export import LegendAxisItem = Spotfire.Dxp.Application.Visuals.LegendAxisItem;
+    export import LegendColorItem = Spotfire.Dxp.Application.Visuals.LegendColorItem;
+    export import LegendCombinationChartSeriesItem = Spotfire.Dxp.Application.Visuals.LegendCombinationChartSeriesItem;
+    export import LegendDataTableItem = Spotfire.Dxp.Application.Visuals.LegendDataTableItem;
+    export import LegendDescriptionItem = Spotfire.Dxp.Application.Visuals.LegendDescriptionItem;
+    export import LegendDock = Spotfire.Dxp.Application.Visuals.LegendDock;
+    export import LegendErrorBarsItem = Spotfire.Dxp.Application.Visuals.LegendErrorBarsItem;
+    export import LegendFilteringsItem = Spotfire.Dxp.Application.Visuals.LegendFilteringsItem;
+    export import LegendFilterRuleItem = Spotfire.Dxp.Application.Visuals.LegendFilterRuleItem;
+    export import LegendFittingModelCollectionItem = Spotfire.Dxp.Application.Visuals.LegendFittingModelCollectionItem;
+    export import LegendGroupByItem = Spotfire.Dxp.Application.Visuals.LegendGroupByItem;
+    export import LegendItem = Spotfire.Dxp.Application.Visuals.LegendItem;
+    export import LegendItemStandIn = Spotfire.Dxp.Application.Visuals.LegendItemStandIn;
+    export import LegendLineConnectionItem = Spotfire.Dxp.Application.Visuals.LegendLineConnectionItem;
+    export import LegendMarkerRotationItem = Spotfire.Dxp.Application.Visuals.LegendMarkerRotationItem;
+    export import LegendMarkerShapeItem = Spotfire.Dxp.Application.Visuals.LegendMarkerShapeItem;
+    export import LegendMarkingItem = Spotfire.Dxp.Application.Visuals.LegendMarkingItem;
+    export import LegendSectorSizeItem = Spotfire.Dxp.Application.Visuals.LegendSectorSizeItem;
+    export import LegendShape3DItem = Spotfire.Dxp.Application.Visuals.LegendShape3DItem;
+    export import LegendSizeItem = Spotfire.Dxp.Application.Visuals.LegendSizeItem;
+    export import LegendTextItem = Spotfire.Dxp.Application.Visuals.LegendTextItem;
+    export import LegendTitleItem = Spotfire.Dxp.Application.Visuals.LegendTitleItem;
+    export import LegendTreemapHierarchyItem = Spotfire.Dxp.Application.Visuals.LegendTreemapHierarchyItem;
+    export import LegendTreemapSizeItem = Spotfire.Dxp.Application.Visuals.LegendTreemapSizeItem;
+    export import LegendTrellisItem = Spotfire.Dxp.Application.Visuals.LegendTrellisItem;
+    export import LineChart = Spotfire.Dxp.Application.Visuals.LineChart;
+    export import LineChartDetails = Spotfire.Dxp.Application.Visuals.LineChartDetails;
+    export import LineChartOrientation = Spotfire.Dxp.Application.Visuals.LineChartOrientation;
+    export import LineConnection = Spotfire.Dxp.Application.Visuals.LineConnection;
+    export import LineStyle = Spotfire.Dxp.Application.Visuals.LineStyle;
+    export import MarkerClass = Spotfire.Dxp.Application.Visuals.MarkerClass;
+    export import MarkerLabelLayout = Spotfire.Dxp.Application.Visuals.MarkerLabelLayout;
+    export import MarkerRotationAxis = Spotfire.Dxp.Application.Visuals.MarkerRotationAxis;
+    export import MarkerShape = Spotfire.Dxp.Application.Visuals.MarkerShape;
+    export import MarkerShapeDefinitions = Spotfire.Dxp.Application.Visuals.MarkerShapeDefinitions;
+    export import MarkerType = Spotfire.Dxp.Application.Visuals.MarkerType;
+    export import NamedDetailItem = Spotfire.Dxp.Application.Visuals.NamedDetailItem;
+    export import OrderByAxis = Spotfire.Dxp.Application.Visuals.OrderByAxis;
+    export import ParallelCoordinatePlot = Spotfire.Dxp.Application.Visuals.ParallelCoordinatePlot;
+    export import ParallelCoordinatePlotColumn = Spotfire.Dxp.Application.Visuals.ParallelCoordinatePlotColumn;
+    export import ParallelCoordinatePlotColumnCollection = Spotfire.Dxp.Application.Visuals.ParallelCoordinatePlotColumnCollection;
+    export import ParallelCoordinatePlotColumnScale = Spotfire.Dxp.Application.Visuals.ParallelCoordinatePlotColumnScale;
+    export import ParallelCoordinatePlotDetails = Spotfire.Dxp.Application.Visuals.ParallelCoordinatePlotDetails;
+    export import PieChart = Spotfire.Dxp.Application.Visuals.PieChart;
+    export import PieChartVisualAttributes = Spotfire.Dxp.Application.Visuals.PieChartVisualAttributes;
+    export import PieDetails = Spotfire.Dxp.Application.Visuals.PieDetails;
+    export import PieMarker = Spotfire.Dxp.Application.Visuals.PieMarker;
+    export import PositioningMethod = Spotfire.Dxp.Application.Visuals.PositioningMethod;
+    export import ProbitPlotDetails = Spotfire.Dxp.Application.Visuals.ProbitPlotDetails;
+    export import RangeRuleCondition = Spotfire.Dxp.Application.Visuals.RangeRuleCondition;
+    export import RuleCondition = Spotfire.Dxp.Application.Visuals.RuleCondition;
+    export import Scale = Spotfire.Dxp.Application.Visuals.Scale;
+    export import Scale3D = Spotfire.Dxp.Application.Visuals.Scale3D;
+    export import ScaleAxis = Spotfire.Dxp.Application.Visuals.ScaleAxis;
+    export import ScaleAxis3D = Spotfire.Dxp.Application.Visuals.ScaleAxis3D;
+    export import ScaleAxisBase = Spotfire.Dxp.Application.Visuals.ScaleAxisBase;
+    export import ScaleBase = Spotfire.Dxp.Application.Visuals.ScaleBase;
+    export import ScaleDock = Spotfire.Dxp.Application.Visuals.ScaleDock;
+    export import ScaleLabelLayout = Spotfire.Dxp.Application.Visuals.ScaleLabelLayout;
+    export import ScaleLabels = Spotfire.Dxp.Application.Visuals.ScaleLabels;
+    export import ScaleLabelsLevelSettings = Spotfire.Dxp.Application.Visuals.ScaleLabelsLevelSettings;
+    export import ScatterPlot = Spotfire.Dxp.Application.Visuals.ScatterPlot;
+    export import ScatterPlot3D = Spotfire.Dxp.Application.Visuals.ScatterPlot3D;
+    export import ScatterPlot3DDetails = Spotfire.Dxp.Application.Visuals.ScatterPlot3DDetails;
+    export import ScatterPlotDetails = Spotfire.Dxp.Application.Visuals.ScatterPlotDetails;
+    export import SectorSizeAxis = Spotfire.Dxp.Application.Visuals.SectorSizeAxis;
+    export import Shape3D = Spotfire.Dxp.Application.Visuals.Shape3D;
+    export import ShapeAxis = Spotfire.Dxp.Application.Visuals.ShapeAxis;
+    export import ShapeAxis3D = Spotfire.Dxp.Application.Visuals.ShapeAxis3D;
+    export import ShapeMap = Spotfire.Dxp.Application.Visuals.ShapeMap;
+    export import ShapeMap3D = Spotfire.Dxp.Application.Visuals.ShapeMap3D;
+    export import Shapes3D = Spotfire.Dxp.Application.Visuals.Shapes3D;
+    export import SizeAxis = Spotfire.Dxp.Application.Visuals.SizeAxis;
+    export import StackMode = Spotfire.Dxp.Application.Visuals.StackMode;
+    export import StringRuleCondition = Spotfire.Dxp.Application.Visuals.StringRuleCondition;
+    export import SummaryTable = Spotfire.Dxp.Application.Visuals.SummaryTable;
+    export import SummaryTableAggregationCollection = Spotfire.Dxp.Application.Visuals.SummaryTableAggregationCollection;
+    export import SummaryTableAggregationColumn = Spotfire.Dxp.Application.Visuals.SummaryTableAggregationColumn;
+    export import SummaryTableSortColumn = Spotfire.Dxp.Application.Visuals.SummaryTableSortColumn;
+    export import SummaryTableSortColumnCollection = Spotfire.Dxp.Application.Visuals.SummaryTableSortColumnCollection;
+    export import SummaryTableVisibleColumn = Spotfire.Dxp.Application.Visuals.SummaryTableVisibleColumn;
+    export import SummaryTableVisibleColumnCollection = Spotfire.Dxp.Application.Visuals.SummaryTableVisibleColumnCollection;
+    export import TableCell = Spotfire.Dxp.Application.Visuals.TableCell;
+    export import TableCellBorderStyle = Spotfire.Dxp.Application.Visuals.TableCellBorderStyle;
+    export import TableCellImageSizeProvider = Spotfire.Dxp.Application.Visuals.TableCellImageSizeProvider;
+    export import TableCellType = Spotfire.Dxp.Application.Visuals.TableCellType;
+    export import TableColumn = Spotfire.Dxp.Application.Visuals.TableColumn;
+    export import TableColumnCollection = Spotfire.Dxp.Application.Visuals.TableColumnCollection;
+    export import TableHeaderScrollBehavior = Spotfire.Dxp.Application.Visuals.TableHeaderScrollBehavior;
+    export import TableLayout = Spotfire.Dxp.Application.Visuals.TableLayout;
+    export import TablePlot = Spotfire.Dxp.Application.Visuals.TablePlot;
+    export import TablePlotBase = Spotfire.Dxp.Application.Visuals.TablePlotBase;
+    export import TablePlotColumnSortMode = Spotfire.Dxp.Application.Visuals.TablePlotColumnSortMode;
+    export import TableSortInfo = Spotfire.Dxp.Application.Visuals.TableSortInfo;
+    export import TableSortInfoCollection = Spotfire.Dxp.Application.Visuals.TableSortInfoCollection;
+    export import ThresholdRuleCondition = Spotfire.Dxp.Application.Visuals.ThresholdRuleCondition;
+    export import TopBottomRuleCondition = Spotfire.Dxp.Application.Visuals.TopBottomRuleCondition;
+    export import Treemap = Spotfire.Dxp.Application.Visuals.Treemap;
+    export import TreemapDetails = Spotfire.Dxp.Application.Visuals.TreemapDetails;
+    export import TreemapHierarchyAxis = Spotfire.Dxp.Application.Visuals.TreemapHierarchyAxis;
+    export import TreemapSizeAxis = Spotfire.Dxp.Application.Visuals.TreemapSizeAxis;
+    export import Trellis = Spotfire.Dxp.Application.Visuals.Trellis;
+    export import TrellisAxis = Spotfire.Dxp.Application.Visuals.TrellisAxis;
+    export import TrellisMode = Spotfire.Dxp.Application.Visuals.TrellisMode;
+    export import TrellisVisualization = Spotfire.Dxp.Application.Visuals.TrellisVisualization;
+    export import Tuple3D = Spotfire.Dxp.Application.Visuals.Tuple3D;
+    export import ViolinBandwidthColumn = Spotfire.Dxp.Application.Visuals.ViolinBandwidthColumn;
+    export import VisualContent = Spotfire.Dxp.Application.Visuals.VisualContent;
+    export import Visualization = Spotfire.Dxp.Application.Visuals.Visualization;
+    export import VisualizationData = Spotfire.Dxp.Application.Visuals.VisualizationData;
+    export import VisualizationFilteringCollection = Spotfire.Dxp.Application.Visuals.VisualizationFilteringCollection;
+    export import VisualizationRelations = Spotfire.Dxp.Application.Visuals.VisualizationRelations;
+    export import VisualizationSubset = Spotfire.Dxp.Application.Visuals.VisualizationSubset;
+    export import VisualizationSubsetCollection = Spotfire.Dxp.Application.Visuals.VisualizationSubsetCollection;
+    export import VisualTypeIdentifiers = Spotfire.Dxp.Application.Visuals.VisualTypeIdentifiers;
+    export import WaterfallChart = Spotfire.Dxp.Application.Visuals.WaterfallChart;
+    export import WaterfallChartDetails = Spotfire.Dxp.Application.Visuals.WaterfallChartDetails;
+    export import WaterfallChartOrientation = Spotfire.Dxp.Application.Visuals.WaterfallChartOrientation;
+    export import WaterfallOver = Spotfire.Dxp.Application.Visuals.WaterfallOver;
+    export import WhereClauseVisualizationSubset = Spotfire.Dxp.Application.Visuals.WhereClauseVisualizationSubset;
+}
+
+declare module "spotfire/dxp/application/visuals/components/continuousdatetime" {
+    export import AdaptiveTimeLabels = Spotfire.Dxp.Application.Visuals.Components.ContinuousDateTime.AdaptiveTimeLabels;
+}
+
+declare module "spotfire/dxp/application/visuals/conditionalcoloring" {
+    export import CategoricalColorRule = Spotfire.Dxp.Application.Visuals.ConditionalColoring.CategoricalColorRule;
+    export import ColorBreakpoint = Spotfire.Dxp.Application.Visuals.ConditionalColoring.ColorBreakpoint;
+    export import ColorBreakpointCollection = Spotfire.Dxp.Application.Visuals.ConditionalColoring.ColorBreakpointCollection;
+    export import ColorByOtherExpression = Spotfire.Dxp.Application.Visuals.ConditionalColoring.ColorByOtherExpression;
+    export import Coloring = Spotfire.Dxp.Application.Visuals.ConditionalColoring.Coloring;
+    export import ColoringCollection = Spotfire.Dxp.Application.Visuals.ConditionalColoring.ColoringCollection;
+    export import ColoringTemplateCollection = Spotfire.Dxp.Application.Visuals.ConditionalColoring.ColoringTemplateCollection;
+    export import ColorRule = Spotfire.Dxp.Application.Visuals.ConditionalColoring.ColorRule;
+    export import ConditionalColorRule = Spotfire.Dxp.Application.Visuals.ConditionalColoring.ConditionalColorRule;
+    export import ConditionValue = Spotfire.Dxp.Application.Visuals.ConditionalColoring.ConditionValue;
+    export import ConditionValueType = Spotfire.Dxp.Application.Visuals.ConditionalColoring.ConditionValueType;
+    export import ContinuousColorRule = Spotfire.Dxp.Application.Visuals.ConditionalColoring.ContinuousColorRule;
+    export import ExpressionColorRule = Spotfire.Dxp.Application.Visuals.ConditionalColoring.ExpressionColorRule;
+    export import IntervalMode = Spotfire.Dxp.Application.Visuals.ConditionalColoring.IntervalMode;
+    export import RangeColorRule = Spotfire.Dxp.Application.Visuals.ConditionalColoring.RangeColorRule;
+    export import RuleComparisonOperator = Spotfire.Dxp.Application.Visuals.ConditionalColoring.RuleComparisonOperator;
+    export import StringColorRule = Spotfire.Dxp.Application.Visuals.ConditionalColoring.StringColorRule;
+    export import StringComparisonOperator = Spotfire.Dxp.Application.Visuals.ConditionalColoring.StringComparisonOperator;
+    export import ThresholdColorRule = Spotfire.Dxp.Application.Visuals.ConditionalColoring.ThresholdColorRule;
+    export import TopBottomColorRule = Spotfire.Dxp.Application.Visuals.ConditionalColoring.TopBottomColorRule;
+}
+
+declare module "spotfire/dxp/application/visuals/distributions" {
+    export import ProbitPlot = Spotfire.Dxp.Application.Visuals.Distributions.ProbitPlot;
+}
+
+declare module "spotfire/dxp/application/visuals/fittingmodels" {
+    export import ArpsDeclineCurveFittingModel = Spotfire.Dxp.Application.Visuals.FittingModels.ArpsDeclineCurveFittingModel;
+    export import ArpsTimeUnit = Spotfire.Dxp.Application.Visuals.FittingModels.ArpsTimeUnit;
+    export import ColumnValuesLine = Spotfire.Dxp.Application.Visuals.FittingModels.ColumnValuesLine;
+    export import CurveFitParameter = Spotfire.Dxp.Application.Visuals.FittingModels.CurveFitParameter;
+    export import CurveFitParameterMode = Spotfire.Dxp.Application.Visuals.FittingModels.CurveFitParameterMode;
+    export import ExponentialFittingModel = Spotfire.Dxp.Application.Visuals.FittingModels.ExponentialFittingModel;
+    export import FittingModel = Spotfire.Dxp.Application.Visuals.FittingModels.FittingModel;
+    export import FittingModelCollection = Spotfire.Dxp.Application.Visuals.FittingModels.FittingModelCollection;
+    export import FittingModelConfigurator = Spotfire.Dxp.Application.Visuals.FittingModels.FittingModelConfigurator;
+    export import FittingModelData = Spotfire.Dxp.Application.Visuals.FittingModels.FittingModelData;
+    export import FittingModelLayer = Spotfire.Dxp.Application.Visuals.FittingModels.FittingModelLayer;
+    export import FittingModelOutput = Spotfire.Dxp.Application.Visuals.FittingModels.FittingModelOutput;
+    export import FittingModelTypeIdentifiers = Spotfire.Dxp.Application.Visuals.FittingModels.FittingModelTypeIdentifiers;
+    export import ForecastHoltWintersFittingModel = Spotfire.Dxp.Application.Visuals.FittingModels.ForecastHoltWintersFittingModel;
+    export import GaussianFittingModel = Spotfire.Dxp.Application.Visuals.FittingModels.GaussianFittingModel;
+    export import HoltWintersSeasonalModelType = Spotfire.Dxp.Application.Visuals.FittingModels.HoltWintersSeasonalModelType;
+    export import IndividualFittingModes = Spotfire.Dxp.Application.Visuals.FittingModels.IndividualFittingModes;
+    export import LogarithmicFittingModel = Spotfire.Dxp.Application.Visuals.FittingModels.LogarithmicFittingModel;
+    export import LogisticRegressionFittingModel = Spotfire.Dxp.Application.Visuals.FittingModels.LogisticRegressionFittingModel;
+    export import PolynomialFittingModel = Spotfire.Dxp.Application.Visuals.FittingModels.PolynomialFittingModel;
+    export import PowerFittingModel = Spotfire.Dxp.Application.Visuals.FittingModels.PowerFittingModel;
+    export import Q1Q3LineFittingModel = Spotfire.Dxp.Application.Visuals.FittingModels.Q1Q3LineFittingModel;
+    export import ReferenceCurve = Spotfire.Dxp.Application.Visuals.FittingModels.ReferenceCurve;
+    export import ReferenceCurveFittingModel = Spotfire.Dxp.Application.Visuals.FittingModels.ReferenceCurveFittingModel;
+    export import ReferenceDetailItem = Spotfire.Dxp.Application.Visuals.FittingModels.ReferenceDetailItem;
+    export import ReferenceDetailItemCollection = Spotfire.Dxp.Application.Visuals.FittingModels.ReferenceDetailItemCollection;
+    export import ReferenceLineFittingModel = Spotfire.Dxp.Application.Visuals.FittingModels.ReferenceLineFittingModel;
+    export import ReferencePoint = Spotfire.Dxp.Application.Visuals.FittingModels.ReferencePoint;
+    export import ResultValue = Spotfire.Dxp.Application.Visuals.FittingModels.ResultValue;
+    export import StraightLineFittingModel = Spotfire.Dxp.Application.Visuals.FittingModels.StraightLineFittingModel;
+}
+
+declare module "spotfire/dxp/application/visuals/layers" {
+    export import Layer = Spotfire.Dxp.Application.Visuals.Layers.Layer;
+    export import LayerCollection = Spotfire.Dxp.Application.Visuals.Layers.LayerCollection;
+    export import LayerGroup = Spotfire.Dxp.Application.Visuals.Layers.LayerGroup;
+    export import VisualizationLayer = Spotfire.Dxp.Application.Visuals.Layers.VisualizationLayer;
+}
+
+declare module "spotfire/dxp/application/visuals/maps" {
+    export import CopyrightInfo = Spotfire.Dxp.Application.Visuals.Maps.CopyrightInfo;
+    export import FeatureLayerVisualization = Spotfire.Dxp.Application.Visuals.Maps.FeatureLayerVisualization;
+    export import FeatureLayerVisualizationDetails = Spotfire.Dxp.Application.Visuals.Maps.FeatureLayerVisualizationDetails;
+    export import GeocodingTableReference = Spotfire.Dxp.Application.Visuals.Maps.GeocodingTableReference;
+    export import GeocodingTableReferenceCollection = Spotfire.Dxp.Application.Visuals.Maps.GeocodingTableReferenceCollection;
+    export import GeographicExtent = Spotfire.Dxp.Application.Visuals.Maps.GeographicExtent;
+    export import ImageLayer = Spotfire.Dxp.Application.Visuals.Maps.ImageLayer;
+    export import InteractionMode = Spotfire.Dxp.Application.Visuals.Maps.InteractionMode;
+    export import LayerHandlerState = Spotfire.Dxp.Application.Visuals.Maps.LayerHandlerState;
+    export import LayerVisualization = Spotfire.Dxp.Application.Visuals.Maps.LayerVisualization;
+    export import LegendLayerTitleItem = Spotfire.Dxp.Application.Visuals.Maps.LegendLayerTitleItem;
+    export import LegendWmsStyleItem = Spotfire.Dxp.Application.Visuals.Maps.LegendWmsStyleItem;
+    export import LineFeatureVisualAttributes = Spotfire.Dxp.Application.Visuals.Maps.LineFeatureVisualAttributes;
+    export import MapChart = Spotfire.Dxp.Application.Visuals.Maps.MapChart;
+    export import MapChartDataLayer = Spotfire.Dxp.Application.Visuals.Maps.MapChartDataLayer;
+    export import MapChartLayer = Spotfire.Dxp.Application.Visuals.Maps.MapChartLayer;
+    export import MapChartLayerCollection = Spotfire.Dxp.Application.Visuals.Maps.MapChartLayerCollection;
+    export import MapChartTransform = Spotfire.Dxp.Application.Visuals.Maps.MapChartTransform;
+    export import MarkerLayerVisualization = Spotfire.Dxp.Application.Visuals.Maps.MarkerLayerVisualization;
+    export import MarkerLayerVisualizationDetails = Spotfire.Dxp.Application.Visuals.Maps.MarkerLayerVisualizationDetails;
+    export import MarkingMode = Spotfire.Dxp.Application.Visuals.Maps.MarkingMode;
+    export import PointFeatureVisualAttributes = Spotfire.Dxp.Application.Visuals.Maps.PointFeatureVisualAttributes;
+    export import PolygonFeatureVisualAttributes = Spotfire.Dxp.Application.Visuals.Maps.PolygonFeatureVisualAttributes;
+    export import Projection = Spotfire.Dxp.Application.Visuals.Maps.Projection;
+    export import StandardTileLayer = Spotfire.Dxp.Application.Visuals.Maps.StandardTileLayer;
+    export import TileLayer = Spotfire.Dxp.Application.Visuals.Maps.TileLayer;
+    export import TmsLayer = Spotfire.Dxp.Application.Visuals.Maps.TmsLayer;
+    export import WmsLayer = Spotfire.Dxp.Application.Visuals.Maps.WmsLayer;
+    export import WmsSublayer = Spotfire.Dxp.Application.Visuals.Maps.WmsSublayer;
+    export import WmsSublayerCollection = Spotfire.Dxp.Application.Visuals.Maps.WmsSublayerCollection;
+    export import ZoomLevelRange = Spotfire.Dxp.Application.Visuals.Maps.ZoomLevelRange;
+}
+
+declare module "spotfire/dxp/application/visuals/miniatures" {
+    export import BulletGraphColorRange = Spotfire.Dxp.Application.Visuals.Miniatures.BulletGraphColorRange;
+    export import BulletGraphColorRangeCollection = Spotfire.Dxp.Application.Visuals.Miniatures.BulletGraphColorRangeCollection;
+    export import BulletGraphMiniatureVisualization = Spotfire.Dxp.Application.Visuals.Miniatures.BulletGraphMiniatureVisualization;
+    export import BulletGraphMiniatureVisualizationDetails = Spotfire.Dxp.Application.Visuals.Miniatures.BulletGraphMiniatureVisualizationDetails;
+    export import BulletGraphScaleAxis = Spotfire.Dxp.Application.Visuals.Miniatures.BulletGraphScaleAxis;
+    export import CalculatedValueAxis = Spotfire.Dxp.Application.Visuals.Miniatures.CalculatedValueAxis;
+    export import CalculatedValueMiniatureVisualization = Spotfire.Dxp.Application.Visuals.Miniatures.CalculatedValueMiniatureVisualization;
+    export import CalculatedValueMiniatureVisualizationDetails = Spotfire.Dxp.Application.Visuals.Miniatures.CalculatedValueMiniatureVisualizationDetails;
+    export import CalculatedValueRule = Spotfire.Dxp.Application.Visuals.Miniatures.CalculatedValueRule;
+    export import CalculatedValueRuleCollection = Spotfire.Dxp.Application.Visuals.Miniatures.CalculatedValueRuleCollection;
+    export import GraphicalTable = Spotfire.Dxp.Application.Visuals.Miniatures.GraphicalTable;
+    export import GraphicalTableColumn = Spotfire.Dxp.Application.Visuals.Miniatures.GraphicalTableColumn;
+    export import GraphicalTableColumnCollection = Spotfire.Dxp.Application.Visuals.Miniatures.GraphicalTableColumnCollection;
+    export import GraphicalTableColumnSortInfo = Spotfire.Dxp.Application.Visuals.Miniatures.GraphicalTableColumnSortInfo;
+    export import GraphicalTableColumnSortInfoCollection = Spotfire.Dxp.Application.Visuals.Miniatures.GraphicalTableColumnSortInfoCollection;
+    export import IconAxis = Spotfire.Dxp.Application.Visuals.Miniatures.IconAxis;
+    export import IconMiniatureVisualization = Spotfire.Dxp.Application.Visuals.Miniatures.IconMiniatureVisualization;
+    export import IconMiniatureVisualizationDetails = Spotfire.Dxp.Application.Visuals.Miniatures.IconMiniatureVisualizationDetails;
+    export import IconRule = Spotfire.Dxp.Application.Visuals.Miniatures.IconRule;
+    export import IconRuleCollection = Spotfire.Dxp.Application.Visuals.Miniatures.IconRuleCollection;
+    export import MiniatureVisualization = Spotfire.Dxp.Application.Visuals.Miniatures.MiniatureVisualization;
+    export import MiniatureVisualizationActionContext = Spotfire.Dxp.Application.Visuals.Miniatures.MiniatureVisualizationActionContext;
+    export import MiniatureVisualizationDetails = Spotfire.Dxp.Application.Visuals.Miniatures.MiniatureVisualizationDetails;
+    export import SparklineMiniatureVisualization = Spotfire.Dxp.Application.Visuals.Miniatures.SparklineMiniatureVisualization;
+    export import SparklineMiniatureVisualizationDetails = Spotfire.Dxp.Application.Visuals.Miniatures.SparklineMiniatureVisualizationDetails;
+    export import SparklineXAxis = Spotfire.Dxp.Application.Visuals.Miniatures.SparklineXAxis;
+    export import SparklineYAxis = Spotfire.Dxp.Application.Visuals.Miniatures.SparklineYAxis;
+    export import SparklineYAxisBase = Spotfire.Dxp.Application.Visuals.Miniatures.SparklineYAxisBase;
+}
+
+declare module "spotfire/dxp/application/visuals/referenceelements" {
+    export import Area = Spotfire.Dxp.Application.Visuals.ReferenceElements.Area;
+    export import Band = Spotfire.Dxp.Application.Visuals.ReferenceElements.Band;
+    export import BarSegmentHandling = Spotfire.Dxp.Application.Visuals.ReferenceElements.BarSegmentHandling;
+    export import Box = Spotfire.Dxp.Application.Visuals.ReferenceElements.Box;
+    export import CategoryAxis = Spotfire.Dxp.Application.Visuals.ReferenceElements.CategoryAxis;
+    export import ColumnNameMatch = Spotfire.Dxp.Application.Visuals.ReferenceElements.ColumnNameMatch;
+    export import DisplayNameGranularity = Spotfire.Dxp.Application.Visuals.ReferenceElements.DisplayNameGranularity;
+    export import Label = Spotfire.Dxp.Application.Visuals.ReferenceElements.Label;
+    export import LabelStyle = Spotfire.Dxp.Application.Visuals.ReferenceElements.LabelStyle;
+    export import LegendReferenceLayerItem = Spotfire.Dxp.Application.Visuals.ReferenceElements.LegendReferenceLayerItem;
+    export import LegendReferenceLayerTitleItem = Spotfire.Dxp.Application.Visuals.ReferenceElements.LegendReferenceLayerTitleItem;
+    export import Line = Spotfire.Dxp.Application.Visuals.ReferenceElements.Line;
+    export import LineConnection = Spotfire.Dxp.Application.Visuals.ReferenceElements.LineConnection;
+    export import Marker = Spotfire.Dxp.Application.Visuals.ReferenceElements.Marker;
+    export import ReferenceLayer = Spotfire.Dxp.Application.Visuals.ReferenceElements.ReferenceLayer;
+    export import ReferenceLayerColorAxis = Spotfire.Dxp.Application.Visuals.ReferenceElements.ReferenceLayerColorAxis;
+    export import ReferenceLayerData = Spotfire.Dxp.Application.Visuals.ReferenceElements.ReferenceLayerData;
+    export import ReferenceLayerDetails = Spotfire.Dxp.Application.Visuals.ReferenceElements.ReferenceLayerDetails;
+    export import ReferenceLayerElementByAxis = Spotfire.Dxp.Application.Visuals.ReferenceElements.ReferenceLayerElementByAxis;
+    export import ReferenceLayerXAxis = Spotfire.Dxp.Application.Visuals.ReferenceElements.ReferenceLayerXAxis;
+    export import ReferenceStatistic = Spotfire.Dxp.Application.Visuals.ReferenceElements.ReferenceStatistic;
+    export import ReferenceStatisticCollection = Spotfire.Dxp.Application.Visuals.ReferenceElements.ReferenceStatisticCollection;
+    export import ReferenceStatisticLayer = Spotfire.Dxp.Application.Visuals.ReferenceElements.ReferenceStatisticLayer;
+    export import ReferenceValueColumn = Spotfire.Dxp.Application.Visuals.ReferenceElements.ReferenceValueColumn;
+    export import ReferenceValueEvaluationModes = Spotfire.Dxp.Application.Visuals.ReferenceElements.ReferenceValueEvaluationModes;
+    export import RenderArea = Spotfire.Dxp.Application.Visuals.ReferenceElements.RenderArea;
+    export import StatisticStyle = Spotfire.Dxp.Application.Visuals.ReferenceElements.StatisticStyle;
+    export import ValueAxis = Spotfire.Dxp.Application.Visuals.ReferenceElements.ValueAxis;
+}
+
+declare module "spotfire/dxp/application/visuals/shapes" {
+    export import CustomShape = Spotfire.Dxp.Application.Visuals.Shapes.CustomShape;
+    export import CustomShapeCollection = Spotfire.Dxp.Application.Visuals.Shapes.CustomShapeCollection;
+    export import CustomShapeCollections = Spotfire.Dxp.Application.Visuals.Shapes.CustomShapeCollections;
+}
+
+declare module "spotfire/dxp/application/visuals/styles" {
+    export import ColorType = Spotfire.Dxp.Application.Visuals.Styles.ColorType;
+    export import Fill = Spotfire.Dxp.Application.Visuals.Styles.Fill;
+    export import MarkerStyle = Spotfire.Dxp.Application.Visuals.Styles.MarkerStyle;
+    export import Stroke = Spotfire.Dxp.Application.Visuals.Styles.Stroke;
+}
+
+declare module "spotfire/dxp/application/visuals/valuerenderers" {
+    export import GeometryRendererSettings = Spotfire.Dxp.Application.Visuals.ValueRenderers.GeometryRendererSettings;
+    export import ImageFromUrlRendererSettings = Spotfire.Dxp.Application.Visuals.ValueRenderers.ImageFromUrlRendererSettings;
+    export import LinkValueRendererSettings = Spotfire.Dxp.Application.Visuals.ValueRenderers.LinkValueRendererSettings;
+    export import ValueRendererArgs = Spotfire.Dxp.Application.Visuals.ValueRenderers.ValueRendererArgs;
+    export import ValueRendererResult = Spotfire.Dxp.Application.Visuals.ValueRenderers.ValueRendererResult;
+    export import ValueRendererSettings = Spotfire.Dxp.Application.Visuals.ValueRenderers.ValueRendererSettings;
+    export import ValueRendererTypeIdentifiers = Spotfire.Dxp.Application.Visuals.ValueRenderers.ValueRendererTypeIdentifiers;
+    export import VirtualValueRendererSettings = Spotfire.Dxp.Application.Visuals.ValueRenderers.VirtualValueRendererSettings;
+}
+
+declare module "spotfire/dxp/application/visuals/wafermap" {
+    export import BasemapElement = Spotfire.Dxp.Application.Visuals.WaferMap.BasemapElement;
+    export import BasemapLayer = Spotfire.Dxp.Application.Visuals.WaferMap.BasemapLayer;
+    export import ConfigurationByAxis = Spotfire.Dxp.Application.Visuals.WaferMap.ConfigurationByAxis;
+    export import ConfigurationSourceType = Spotfire.Dxp.Application.Visuals.WaferMap.ConfigurationSourceType;
+    export import DieLayerVisualization = Spotfire.Dxp.Application.Visuals.WaferMap.DieLayerVisualization;
+    export import DieLayerVisualizationDetails = Spotfire.Dxp.Application.Visuals.WaferMap.DieLayerVisualizationDetails;
+    export import DieXyAxis = Spotfire.Dxp.Application.Visuals.WaferMap.DieXyAxis;
+    export import LegendLayerTitleItem = Spotfire.Dxp.Application.Visuals.WaferMap.LegendLayerTitleItem;
+    export import WaferMap = Spotfire.Dxp.Application.Visuals.WaferMap.WaferMap;
+    export import WaferMapLayerCollection = Spotfire.Dxp.Application.Visuals.WaferMap.WaferMapLayerCollection;
+    export import WaferMapLayerVisualization = Spotfire.Dxp.Application.Visuals.WaferMap.WaferMapLayerVisualization;
+    export import WaferMapMarkerLayerVisualization = Spotfire.Dxp.Application.Visuals.WaferMap.WaferMapMarkerLayerVisualization;
+    export import WaferMapMarkerLayerVisualizationDetails = Spotfire.Dxp.Application.Visuals.WaferMap.WaferMapMarkerLayerVisualizationDetails;
+}
+
+declare module "spotfire/dxp/data" {
+    export import AddColumnsSettings = Spotfire.Dxp.Data.AddColumnsSettings;
+    export import AddRowsSettings = Spotfire.Dxp.Data.AddRowsSettings;
+    export import BinaryLargeObject = Spotfire.Dxp.Data.BinaryLargeObject;
+    export import CalculatedColumn = Spotfire.Dxp.Data.CalculatedColumn;
+    export import Calculation = Spotfire.Dxp.Data.Calculation;
+    export import CalculationExecutionPromptMode = Spotfire.Dxp.Data.CalculationExecutionPromptMode;
+    export import CalculationUpdateBehavior = Spotfire.Dxp.Data.CalculationUpdateBehavior;
+    export import ColumnRelation = Spotfire.Dxp.Data.ColumnRelation;
+    export import ColumnRelationCollection = Spotfire.Dxp.Data.ColumnRelationCollection;
+    export import ColumnsChangedResult = Spotfire.Dxp.Data.ColumnsChangedResult;
+    export import DataColumn = Spotfire.Dxp.Data.DataColumn;
+    export import DataColumnCollection = Spotfire.Dxp.Data.DataColumnCollection;
+    export import DataColumnProperties = Spotfire.Dxp.Data.DataColumnProperties;
+    export import DataColumnSignature = Spotfire.Dxp.Data.DataColumnSignature;
+    export import DataColumnType = Spotfire.Dxp.Data.DataColumnType;
+    export import DataFilteringSelection = Spotfire.Dxp.Data.DataFilteringSelection;
+    export import DataFilteringSelectionCollection = Spotfire.Dxp.Data.DataFilteringSelectionCollection;
+    export import DataFlow = Spotfire.Dxp.Data.DataFlow;
+    export import DataFlowBuilder = Spotfire.Dxp.Data.DataFlowBuilder;
+    export import DataHierarchy = Spotfire.Dxp.Data.DataHierarchy;
+    export import DataLevel = Spotfire.Dxp.Data.DataLevel;
+    export import DataLevelCollection = Spotfire.Dxp.Data.DataLevelCollection;
+    export import DataLoadReport = Spotfire.Dxp.Data.DataLoadReport;
+    export import DataManager = Spotfire.Dxp.Data.DataManager;
+    export import DataMarkingSelection = Spotfire.Dxp.Data.DataMarkingSelection;
+    export import DataMarkingSelectionCollection = Spotfire.Dxp.Data.DataMarkingSelectionCollection;
+    export import DataNode = Spotfire.Dxp.Data.DataNode;
+    export import DataNodeCollection = Spotfire.Dxp.Data.DataNodeCollection;
+    export import DataProperty = Spotfire.Dxp.Data.DataProperty;
+    export import DataPropertyAttributes = Spotfire.Dxp.Data.DataPropertyAttributes;
+    export import DataPropertyClass = Spotfire.Dxp.Data.DataPropertyClass;
+    export import DataPropertyRegistry = Spotfire.Dxp.Data.DataPropertyRegistry;
+    export import DataRelation = Spotfire.Dxp.Data.DataRelation;
+    export import DataRelationCollection = Spotfire.Dxp.Data.DataRelationCollection;
+    export import DataRow = Spotfire.Dxp.Data.DataRow;
+    export import DataRowCursor = Spotfire.Dxp.Data.DataRowCursor;
+    export import DataRowReader = Spotfire.Dxp.Data.DataRowReader;
+    export import DataRowReaderColumn = Spotfire.Dxp.Data.DataRowReaderColumn;
+    export import DataRowReaderColumnCollection = Spotfire.Dxp.Data.DataRowReaderColumnCollection;
+    export import DataSaveSettings = Spotfire.Dxp.Data.DataSaveSettings;
+    export import DataSelection = Spotfire.Dxp.Data.DataSelection;
+    export import DataSelectionCombinationMethod = Spotfire.Dxp.Data.DataSelectionCombinationMethod;
+    export import DataSelectionOperation = Spotfire.Dxp.Data.DataSelectionOperation;
+    export import DataSource = Spotfire.Dxp.Data.DataSource;
+    export import DataSourceConnection = Spotfire.Dxp.Data.DataSourceConnection;
+    export import DataSourcePromptMode = Spotfire.Dxp.Data.DataSourcePromptMode;
+    export import DataTable = Spotfire.Dxp.Data.DataTable;
+    export import DataTableCollection = Spotfire.Dxp.Data.DataTableCollection;
+    export import DataTableProperties = Spotfire.Dxp.Data.DataTableProperties;
+    export import DataTableSaveSettings = Spotfire.Dxp.Data.DataTableSaveSettings;
+    export import DataTransformation = Spotfire.Dxp.Data.DataTransformation;
+    export import DataTransformationConnection = Spotfire.Dxp.Data.DataTransformationConnection;
+    export import DataType = Spotfire.Dxp.Data.DataType;
+    export import DataValue = Spotfire.Dxp.Data.DataValue;
+    export import DataValueCollection = Spotfire.Dxp.Data.DataValueCollection;
+    export import DataValueCursor = Spotfire.Dxp.Data.DataValueCursor;
+    export import DataValueProperties = Spotfire.Dxp.Data.DataValueProperties;
+    export import DisplayValueSettings = Spotfire.Dxp.Data.DisplayValueSettings;
+    export import DisplayValueSortMode = Spotfire.Dxp.Data.DisplayValueSortMode;
+    export import DistinctDataValue = Spotfire.Dxp.Data.DistinctDataValue;
+    export import HierarchyColumn = Spotfire.Dxp.Data.HierarchyColumn;
+    export import HierarchyDefinition = Spotfire.Dxp.Data.HierarchyDefinition;
+    export import HierarchyNestingMode = Spotfire.Dxp.Data.HierarchyNestingMode;
+    export import HighlightSelection = Spotfire.Dxp.Data.HighlightSelection;
+    export import IDataColumn = Spotfire.Dxp.Data.IDataColumn;
+    export import IDataNodeProducer = Spotfire.Dxp.Data.IDataNodeProducer;
+    export import IndexSet = Spotfire.Dxp.Data.IndexSet;
+    export import JoinType = Spotfire.Dxp.Data.JoinType;
+    export import LimitingMarkingsEmptyBehavior = Spotfire.Dxp.Data.LimitingMarkingsEmptyBehavior;
+    export import NameString = Spotfire.Dxp.Data.NameString;
+    export import NodeToRowIndexMap = Spotfire.Dxp.Data.NodeToRowIndexMap;
+    export import PersistentDataView = Spotfire.Dxp.Data.PersistentDataView;
+    export import Range = Spotfire.Dxp.Data.Range;
+    export import RelatedRowsPropagation = Spotfire.Dxp.Data.RelatedRowsPropagation;
+    export import ResultProperties = Spotfire.Dxp.Data.ResultProperties;
+    export import RowSelection = Spotfire.Dxp.Data.RowSelection;
+    export import SortOrder = Spotfire.Dxp.Data.SortOrder;
+    export import SourceView = Spotfire.Dxp.Data.SourceView;
+    export import TagsColumn = Spotfire.Dxp.Data.TagsColumn;
+}
+
+declare module "spotfire/dxp/data/columns" {
+    export import ColumnBuilder = Spotfire.Dxp.Data.Columns.ColumnBuilder;
+}
+
+declare module "spotfire/dxp/data/computations" {
+    export import DataMethodCategory = Spotfire.Dxp.Data.Computations.DataMethodCategory;
+    export import IPublicMethod = Spotfire.Dxp.Data.Computations.IPublicMethod;
+    export import Sections = Spotfire.Dxp.Data.Computations.Sections;
+}
+
+declare module "spotfire/dxp/data/computations/clustering" {
+    export import HierarchicalClusteringSettings = Spotfire.Dxp.Data.Computations.Clustering.HierarchicalClusteringSettings;
+}
+
+declare module "spotfire/dxp/data/datafunctions" {
+    export import ActionDataViewDefinition = Spotfire.Dxp.Data.DataFunctions.ActionDataViewDefinition;
+    export import BuiltInDataFunction = Spotfire.Dxp.Data.DataFunctions.BuiltInDataFunction;
+    export import ColumnsOutput = Spotfire.Dxp.Data.DataFunctions.ColumnsOutput;
+    export import ColumnsOutputBuilder = Spotfire.Dxp.Data.DataFunctions.ColumnsOutputBuilder;
+    export import DataFunction = Spotfire.Dxp.Data.DataFunctions.DataFunction;
+    export import DataFunctionCategory = Spotfire.Dxp.Data.DataFunctions.DataFunctionCategory;
+    export import DataFunctionCollection = Spotfire.Dxp.Data.DataFunctions.DataFunctionCollection;
+    export import DataFunctionDefinition = Spotfire.Dxp.Data.DataFunctions.DataFunctionDefinition;
+    export import DataFunctionExecutorService = Spotfire.Dxp.Data.DataFunctions.DataFunctionExecutorService;
+    export import DataFunctionExpressionFunction = Spotfire.Dxp.Data.DataFunctions.DataFunctionExpressionFunction;
+    export import DataFunctionExpressionFunctionCollection = Spotfire.Dxp.Data.DataFunctions.DataFunctionExpressionFunctionCollection;
+    export import DataFunctionInput = Spotfire.Dxp.Data.DataFunctions.DataFunctionInput;
+    export import DataFunctionInputCollection = Spotfire.Dxp.Data.DataFunctions.DataFunctionInputCollection;
+    export import DataFunctionInvocation = Spotfire.Dxp.Data.DataFunctions.DataFunctionInvocation;
+    export import DataFunctionInvocationBuilder = Spotfire.Dxp.Data.DataFunctions.DataFunctionInvocationBuilder;
+    export import DataFunctionOutput = Spotfire.Dxp.Data.DataFunctions.DataFunctionOutput;
+    export import DataFunctionOutputBuilder = Spotfire.Dxp.Data.DataFunctions.DataFunctionOutputBuilder;
+    export import DataFunctionOutputCollection = Spotfire.Dxp.Data.DataFunctions.DataFunctionOutputCollection;
+    export import DataFunctionUpdateBehavior = Spotfire.Dxp.Data.DataFunctions.DataFunctionUpdateBehavior;
+    export import InputParameter = Spotfire.Dxp.Data.DataFunctions.InputParameter;
+    export import JoinOutput = Spotfire.Dxp.Data.DataFunctions.JoinOutput;
+    export import JoinOutputBuilder = Spotfire.Dxp.Data.DataFunctions.JoinOutputBuilder;
+    export import OutputParameter = Spotfire.Dxp.Data.DataFunctions.OutputParameter;
+    export import ParameterType = Spotfire.Dxp.Data.DataFunctions.ParameterType;
+    export import PropertyOutput = Spotfire.Dxp.Data.DataFunctions.PropertyOutput;
+    export import PropertyOutputBuilder = Spotfire.Dxp.Data.DataFunctions.PropertyOutputBuilder;
+    export import ReplaceDataOutput = Spotfire.Dxp.Data.DataFunctions.ReplaceDataOutput;
+    export import ReplaceDataOutputBuilder = Spotfire.Dxp.Data.DataFunctions.ReplaceDataOutputBuilder;
+    export import RowsOutput = Spotfire.Dxp.Data.DataFunctions.RowsOutput;
+    export import RowsOutputBuilder = Spotfire.Dxp.Data.DataFunctions.RowsOutputBuilder;
+    export import TableOutput = Spotfire.Dxp.Data.DataFunctions.TableOutput;
+    export import TableOutputBuilder = Spotfire.Dxp.Data.DataFunctions.TableOutputBuilder;
+}
+
+declare module "spotfire/dxp/data/dataoperations" {
+    export import AddColumnsOperation = Spotfire.Dxp.Data.DataOperations.AddColumnsOperation;
+    export import AddRowsOperation = Spotfire.Dxp.Data.DataOperations.AddRowsOperation;
+    export import CalculationOperation = Spotfire.Dxp.Data.DataOperations.CalculationOperation;
+    export import DataConnectionOperation = Spotfire.Dxp.Data.DataOperations.DataConnectionOperation;
+    export import DataFunctionOperation = Spotfire.Dxp.Data.DataOperations.DataFunctionOperation;
+    export import DataLoadingBehavior = Spotfire.Dxp.Data.DataOperations.DataLoadingBehavior;
+    export import DataOperation = Spotfire.Dxp.Data.DataOperations.DataOperation;
+    export import DataOperationSupportingTransformations = Spotfire.Dxp.Data.DataOperations.DataOperationSupportingTransformations;
+    export import DataSourceOperation = Spotfire.Dxp.Data.DataOperations.DataSourceOperation;
+    export import DataTableDataSourceOperation = Spotfire.Dxp.Data.DataOperations.DataTableDataSourceOperation;
+    export import DataTransformationsOperation = Spotfire.Dxp.Data.DataOperations.DataTransformationsOperation;
+    export import FreezeColumnOperation = Spotfire.Dxp.Data.DataOperations.FreezeColumnOperation;
+    export import InformationLinkOnDemandOperation = Spotfire.Dxp.Data.DataOperations.InformationLinkOnDemandOperation;
+    export import RemoveColumnsOperation = Spotfire.Dxp.Data.DataOperations.RemoveColumnsOperation;
+    export import RemoveRowsOperation = Spotfire.Dxp.Data.DataOperations.RemoveRowsOperation;
+}
+
+declare module "spotfire/dxp/data/exceptions" {
+    export import ExpressionParseException = Spotfire.Dxp.Data.Exceptions.ExpressionParseException;
+}
+
+declare module "spotfire/dxp/data/export" {
+    export import DataWriter = Spotfire.Dxp.Data.Export.DataWriter;
+    export import DataWriterTypeIdentifiers = Spotfire.Dxp.Data.Export.DataWriterTypeIdentifiers;
+}
+
+declare module "spotfire/dxp/data/expressions" {
+    export import ColumnExpression = Spotfire.Dxp.Data.Expressions.ColumnExpression;
+    export import ExpressionUtilities = Spotfire.Dxp.Data.Expressions.ExpressionUtilities;
+}
+
+declare module "spotfire/dxp/data/formats/stdf" {
+    export import StdfColumnMetadata = Spotfire.Dxp.Data.Formats.Stdf.StdfColumnMetadata;
+    export import StdfMetadataCollection = Spotfire.Dxp.Data.Formats.Stdf.StdfMetadataCollection;
+    export import StdfMetadataProperty = Spotfire.Dxp.Data.Formats.Stdf.StdfMetadataProperty;
+    export import StdfTableMetadata = Spotfire.Dxp.Data.Formats.Stdf.StdfTableMetadata;
+    export import StdfTableMetadataBuilder = Spotfire.Dxp.Data.Formats.Stdf.StdfTableMetadataBuilder;
+    export import StdfTableReader = Spotfire.Dxp.Data.Formats.Stdf.StdfTableReader;
+    export import StdfTableWriter = Spotfire.Dxp.Data.Formats.Stdf.StdfTableWriter;
+    export import StdfValueType = Spotfire.Dxp.Data.Formats.Stdf.StdfValueType;
+    export import StdfValueTypeId = Spotfire.Dxp.Data.Formats.Stdf.StdfValueTypeId;
+}
+
+declare module "spotfire/dxp/data/formatters" {
+    export import BooleanFormatter = Spotfire.Dxp.Data.Formatters.BooleanFormatter;
+    export import DataFormatterBase = Spotfire.Dxp.Data.Formatters.DataFormatterBase;
+    export import DateTimeFormatter = Spotfire.Dxp.Data.Formatters.DateTimeFormatter;
+    export import DecimalDigitsMode = Spotfire.Dxp.Data.Formatters.DecimalDigitsMode;
+    export import IDataFormatter = Spotfire.Dxp.Data.Formatters.IDataFormatter;
+    export import NumberFormatCategory = Spotfire.Dxp.Data.Formatters.NumberFormatCategory;
+    export import NumberFormatNegativePattern = Spotfire.Dxp.Data.Formatters.NumberFormatNegativePattern;
+    export import NumberFormatter = Spotfire.Dxp.Data.Formatters.NumberFormatter;
+    export import ShortFormattingSymbol = Spotfire.Dxp.Data.Formatters.ShortFormattingSymbol;
+    export import ShortFormattingSymbolScheme = Spotfire.Dxp.Data.Formatters.ShortFormattingSymbolScheme;
+    export import StringFormatter = Spotfire.Dxp.Data.Formatters.StringFormatter;
+    export import TimeSpanFormatter = Spotfire.Dxp.Data.Formatters.TimeSpanFormatter;
+}
+
+declare module "spotfire/dxp/data/import" {
+    export import DataTableDataSource = Spotfire.Dxp.Data.Import.DataTableDataSource;
+    export import DataTableDataSourceUpdateBehavior = Spotfire.Dxp.Data.Import.DataTableDataSourceUpdateBehavior;
+    export import FileDataSource = Spotfire.Dxp.Data.Import.FileDataSource;
+    export import ImportContext = Spotfire.Dxp.Data.Import.ImportContext;
+    export import InformationLinkDataSource = Spotfire.Dxp.Data.Import.InformationLinkDataSource;
+    export import InformationLinkDescriptor = Spotfire.Dxp.Data.Import.InformationLinkDescriptor;
+    export import InformationLinkDescriptorCollection = Spotfire.Dxp.Data.Import.InformationLinkDescriptorCollection;
+    export import InformationLinkParameter = Spotfire.Dxp.Data.Import.InformationLinkParameter;
+    export import InformationModelElementDescriptor = Spotfire.Dxp.Data.Import.InformationModelElementDescriptor;
+    export import SbdfFileDataSource = Spotfire.Dxp.Data.Import.SbdfFileDataSource;
+    export import SbdfLibraryDataSource = Spotfire.Dxp.Data.Import.SbdfLibraryDataSource;
+    export import StdfFileDataSource = Spotfire.Dxp.Data.Import.StdfFileDataSource;
+    export import TextDataReaderSettings = Spotfire.Dxp.Data.Import.TextDataReaderSettings;
+    export import TextFileDataSource = Spotfire.Dxp.Data.Import.TextFileDataSource;
+}
+
+declare module "spotfire/dxp/data/informationmodel" {
+    export import DataSourceItemPath = Spotfire.Dxp.Data.InformationModel.DataSourceItemPath;
+    export import ExternalDataType = Spotfire.Dxp.Data.InformationModel.ExternalDataType;
+    export import InformationModelManager = Spotfire.Dxp.Data.InformationModel.InformationModelManager;
+    export import NameConflictStrategy = Spotfire.Dxp.Data.InformationModel.NameConflictStrategy;
+}
+
+declare module "spotfire/dxp/data/transformations" {
+    export import AddCalculatedColumnTransformation = Spotfire.Dxp.Data.Transformations.AddCalculatedColumnTransformation;
+    export import ChangeDataTypeTransformation = Spotfire.Dxp.Data.Transformations.ChangeDataTypeTransformation;
+    export import ChangeNameTransformation = Spotfire.Dxp.Data.Transformations.ChangeNameTransformation;
+    export import ColumnAddition = Spotfire.Dxp.Data.Transformations.ColumnAddition;
+    export import ColumnAdditionCollection = Spotfire.Dxp.Data.Transformations.ColumnAdditionCollection;
+    export import ColumnAggregation = Spotfire.Dxp.Data.Transformations.ColumnAggregation;
+    export import ColumnRemoval = Spotfire.Dxp.Data.Transformations.ColumnRemoval;
+    export import ColumnRemovalCollection = Spotfire.Dxp.Data.Transformations.ColumnRemovalCollection;
+    export import ColumnReplacement = Spotfire.Dxp.Data.Transformations.ColumnReplacement;
+    export import ColumnReplacementCollection = Spotfire.Dxp.Data.Transformations.ColumnReplacementCollection;
+    export import ColumnSelection = Spotfire.Dxp.Data.Transformations.ColumnSelection;
+    export import DataFunctionTransformation = Spotfire.Dxp.Data.Transformations.DataFunctionTransformation;
+    export import DataTransformationTypeIdentifiers = Spotfire.Dxp.Data.Transformations.DataTransformationTypeIdentifiers;
+    export import ExcludeColumnsTransformation = Spotfire.Dxp.Data.Transformations.ExcludeColumnsTransformation;
+    export import ExpressionTransformation = Spotfire.Dxp.Data.Transformations.ExpressionTransformation;
+    export import ExpressionTransformationWrapper = Spotfire.Dxp.Data.Transformations.ExpressionTransformationWrapper;
+    export import FilterRowsTransformation = Spotfire.Dxp.Data.Transformations.FilterRowsTransformation;
+    export import PivotTransformation = Spotfire.Dxp.Data.Transformations.PivotTransformation;
+    export import ReplaceColumnTransformation = Spotfire.Dxp.Data.Transformations.ReplaceColumnTransformation;
+    export import ReplaceSpecificValueTransformation = Spotfire.Dxp.Data.Transformations.ReplaceSpecificValueTransformation;
+    export import ReplaceValuesBaseTransformation = Spotfire.Dxp.Data.Transformations.ReplaceValuesBaseTransformation;
+    export import ReplaceValuesTransformation = Spotfire.Dxp.Data.Transformations.ReplaceValuesTransformation;
+    export import UnpivotTransformation = Spotfire.Dxp.Data.Transformations.UnpivotTransformation;
+}
+
+declare module "spotfire/dxp/data/virtualcolumns" {
+    export import VirtualColumn = Spotfire.Dxp.Data.VirtualColumns.VirtualColumn;
+    export import VirtualColumnCollection = Spotfire.Dxp.Data.VirtualColumns.VirtualColumnCollection;
+    export import VirtualColumnProducer = Spotfire.Dxp.Data.VirtualColumns.VirtualColumnProducer;
+    export import VirtualColumnProducerCollection = Spotfire.Dxp.Data.VirtualColumns.VirtualColumnProducerCollection;
+}
+
+declare module "spotfire/dxp/framework/ai" {
+    export import ActionAiTool = Spotfire.Dxp.Framework.Ai.ActionAiTool;
+    export import AiChatHistory = Spotfire.Dxp.Framework.Ai.AiChatHistory;
+    export import AiModel = Spotfire.Dxp.Framework.Ai.AiModel;
+    export import AiModelException = Spotfire.Dxp.Framework.Ai.AiModelException;
+    export import AiService = Spotfire.Dxp.Framework.Ai.AiService;
+    export import AiTool = Spotfire.Dxp.Framework.Ai.AiTool;
+    export import CompletionSettings = Spotfire.Dxp.Framework.Ai.CompletionSettings;
+}
+
+declare module "spotfire/dxp/framework/ai/mcp" {
+    export import McpEndpoint = Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint;
+    export import McpService = Spotfire.Dxp.Framework.Ai.Mcp.McpService;
+}
+
+declare module "spotfire/dxp/framework/applicationmodel" {
+    export import ConnectivityService = Spotfire.Dxp.Framework.ApplicationModel.ConnectivityService;
+    export import DocumentOperation = Spotfire.Dxp.Framework.ApplicationModel.DocumentOperation;
+    export import NotificationService = Spotfire.Dxp.Framework.ApplicationModel.NotificationService;
+    export import ParameterManager = Spotfire.Dxp.Framework.ApplicationModel.ParameterManager;
+}
+
+declare module "spotfire/dxp/framework/documentmodel" {
+    export import DocumentNode = Spotfire.Dxp.Framework.DocumentModel.DocumentNode;
+    export import DocumentNodeList = Spotfire.Dxp.Framework.DocumentModel.DocumentNodeList;
+    export import DocumentNodeListBase = Spotfire.Dxp.Framework.DocumentModel.DocumentNodeListBase;
+    export import DocumentView = Spotfire.Dxp.Framework.DocumentModel.DocumentView;
+    export import INodeContext = Spotfire.Dxp.Framework.DocumentModel.INodeContext;
+    export import ITransactions = Spotfire.Dxp.Framework.DocumentModel.ITransactions;
+    export import TypeIdentifier = Spotfire.Dxp.Framework.DocumentModel.TypeIdentifier;
+}
+
+declare module "spotfire/dxp/framework/library" {
+    export import LibraryException = Spotfire.Dxp.Framework.Library.LibraryException;
+    export import LibraryExceptionFaultCode = Spotfire.Dxp.Framework.Library.LibraryExceptionFaultCode;
+    export import LibraryItem = Spotfire.Dxp.Framework.Library.LibraryItem;
+    export import LibraryItemCollection = Spotfire.Dxp.Framework.Library.LibraryItemCollection;
+    export import LibraryItemMetadataSettings = Spotfire.Dxp.Framework.Library.LibraryItemMetadataSettings;
+    export import LibraryItemProperty = Spotfire.Dxp.Framework.Library.LibraryItemProperty;
+    export import LibraryItemPropertyCollection = Spotfire.Dxp.Framework.Library.LibraryItemPropertyCollection;
+    export import LibraryItemRetrievalOption = Spotfire.Dxp.Framework.Library.LibraryItemRetrievalOption;
+    export import LibraryItemSignature = Spotfire.Dxp.Framework.Library.LibraryItemSignature;
+    export import LibraryItemType = Spotfire.Dxp.Framework.Library.LibraryItemType;
+    export import LibraryLinks = Spotfire.Dxp.Framework.Library.LibraryLinks;
+    export import LibraryLinksOption = Spotfire.Dxp.Framework.Library.LibraryLinksOption;
+    export import LibraryManager = Spotfire.Dxp.Framework.Library.LibraryManager;
+}
+
+declare module "spotfire/dxp/framework/license" {
+    export import License = Spotfire.Dxp.Framework.License.License;
+    export import LicensedFunction = Spotfire.Dxp.Framework.License.LicensedFunction;
+    export import LicenseManager = Spotfire.Dxp.Framework.License.LicenseManager;
+}
+
+declare module "spotfire/dxp/framework/preferences" {
+    export import PreferenceBase = Spotfire.Dxp.Framework.Preferences.PreferenceBase;
+    export import PreferenceManager = Spotfire.Dxp.Framework.Preferences.PreferenceManager;
+    export import PreferenceProperty = Spotfire.Dxp.Framework.Preferences.PreferenceProperty;
+    export import PreferencePropertyBase = Spotfire.Dxp.Framework.Preferences.PreferencePropertyBase;
+    export import PreferenceUsage = Spotfire.Dxp.Framework.Preferences.PreferenceUsage;
+}
+
+declare module "spotfire/dxp/framework/services" {
+    export import Extensions = Spotfire.Dxp.Framework.Services.Extensions;
+}
+
+declare module "spotfire/dxp/framework/styles" {
+    export import Align = Spotfire.Dxp.Framework.Styles.Align;
+    export import BorderRadius = Spotfire.Dxp.Framework.Styles.BorderRadius;
+    export import BorderStyle = Spotfire.Dxp.Framework.Styles.BorderStyle;
+    export import ColorInfo = Spotfire.Dxp.Framework.Styles.ColorInfo;
+    export import FontMetadata = Spotfire.Dxp.Framework.Styles.FontMetadata;
+    export import FontStyle = Spotfire.Dxp.Framework.Styles.FontStyle;
+    export import FontStyleFlags = Spotfire.Dxp.Framework.Styles.FontStyleFlags;
+    export import FontUnit = Spotfire.Dxp.Framework.Styles.FontUnit;
+    export import FontWeight = Spotfire.Dxp.Framework.Styles.FontWeight;
+    export import StyleProperties = Spotfire.Dxp.Framework.Styles.StyleProperties;
+    export import TextAlign = Spotfire.Dxp.Framework.Styles.TextAlign;
+    export import TextDirection = Spotfire.Dxp.Framework.Styles.TextDirection;
+    export import VerticalAlign = Spotfire.Dxp.Framework.Styles.VerticalAlign;
+    export import VerticalTextAlign = Spotfire.Dxp.Framework.Styles.VerticalTextAlign;
+}
+
+declare module "system" {
+    export import Action = System.Action;
+    export import Boolean = System.Boolean;
+    export import Byte = System.Byte;
+    export import Char = System.Char;
+    export import Comparison = System.Comparison;
+    export import DateTime = System.DateTime;
+    export import DateTimeKind = System.DateTimeKind;
+    export import DayOfWeek = System.DayOfWeek;
+    export import Decimal = System.Decimal;
+    export import Double = System.Double;
+    export import Enum = System.Enum;
+    export import Exception = System.Exception;
+    export import Guid = System.Guid;
+    export import Int16 = System.Int16;
+    export import Int32 = System.Int32;
+    export import Int64 = System.Int64;
+    export import IServiceProvider = System.IServiceProvider;
+    export import Object = System.Object;
+    export import Predicate = System.Predicate;
+    export import Single = System.Single;
+    export import String = System.String;
+    export import TimeSpan = System.TimeSpan;
+    export import Type = System.Type;
+    export import UInt16 = System.UInt16;
+    export import UInt32 = System.UInt32;
+    export import UInt64 = System.UInt64;
+    export import Uri = System.Uri;
+    export import Version = System.Version;
+}
+
+declare module "system/collections" {
+    export import DictionaryEntry = System.Collections.DictionaryEntry;
+    export import ICollection = System.Collections.ICollection;
+    export import IComparer = System.Collections.IComparer;
+    export import IDictionary = System.Collections.IDictionary;
+    export import IEnumerable = System.Collections.IEnumerable;
+    export import IEnumerator = System.Collections.IEnumerator;
+    export import IList = System.Collections.IList;
+}
+
+declare module "system/collections/generic" {
+    export import Dictionary = System.Collections.Generic.Dictionary;
+    export import ICollection = System.Collections.Generic.ICollection;
+    export import IComparer = System.Collections.Generic.IComparer;
+    export import IDictionary = System.Collections.Generic.IDictionary;
+    export import IEnumerable = System.Collections.Generic.IEnumerable;
+    export import IEnumerator = System.Collections.Generic.IEnumerator;
+    export import IList = System.Collections.Generic.IList;
+    export import IReadOnlyCollection = System.Collections.Generic.IReadOnlyCollection;
+    export import IReadOnlyList = System.Collections.Generic.IReadOnlyList;
+    export import KeyValuePair = System.Collections.Generic.KeyValuePair;
+    export import List = System.Collections.Generic.List;
+}
+
+declare module "system/collections/objectmodel" {
+    export import Collection = System.Collections.ObjectModel.Collection;
+    export import ReadOnlyCollection = System.Collections.ObjectModel.ReadOnlyCollection;
+}
+
+declare module "system/drawing" {
+    export import Color = System.Drawing.Color;
+    export import Point = System.Drawing.Point;
+    export import PointF = System.Drawing.PointF;
+    export import Rectangle = System.Drawing.Rectangle;
+    export import Size = System.Drawing.Size;
+    export import SizeF = System.Drawing.SizeF;
+}
+
+declare module "system/globalization" {
+    export import DateTimeStyles = System.Globalization.DateTimeStyles;
+    export import NumberStyles = System.Globalization.NumberStyles;
+}
+
+declare module "system/io" {
+    export import BinaryReader = System.IO.BinaryReader;
+    export import BinaryWriter = System.IO.BinaryWriter;
+    export import MemoryStream = System.IO.MemoryStream;
+    export import SeekOrigin = System.IO.SeekOrigin;
+    export import Stream = System.IO.Stream;
+    export import StreamReader = System.IO.StreamReader;
+    export import StreamWriter = System.IO.StreamWriter;
+    export import TextReader = System.IO.TextReader;
+    export import TextWriter = System.IO.TextWriter;
+}
+
+declare module "system/net" {
+    export import HttpStatusCode = System.Net.HttpStatusCode;
+}
+
+declare module "system/text" {
+    export import Encoding = System.Text.Encoding;
 }
 
 declare abstract class System {
