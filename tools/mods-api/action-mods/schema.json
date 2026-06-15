@@ -52,6 +52,11 @@
           "title": "Specifies the name of the file containing the svg icon.",
           "default": "script-icon.svg",
           "pattern": "^.*\\.svg$"
+        },
+        "entryPoint": {
+          "not": {},
+          "title": "'entryPoint' is no longer supported",
+          "description": "The 'entryPoint' property was removed in API version 2.6. Scripts and agents now declare their entry point by calling 'RegisterEntryPoint' in the script instead. Remove this property."
         }
       }
     }
