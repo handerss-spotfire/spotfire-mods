@@ -133,10 +133,35 @@ describe("migrate.test.ts", () => {
         expect(registerWarnings).toHaveLength(0);
     });
 
-    test("warns when the generated params interface name changes", async () => {
+    test("rewrites the params interface reference in the conventional source", async () => {
         await setupProject(project, ModType.Action);
 
-        // Make the script id and entry point normalize to different names.
+        // id and entry point normalize to different interface names, with a
+        // conventionally-named source file referencing the old name.
+        const manifest = await readManifest(manifestPath);
+        manifest.scripts![0].id = "foo-bar";
+        manifest.scripts![0].entryPoint = "bazQux";
+        await writeFile(manifestPath, JSON.stringify(manifest), "utf-8");
+
+        const sourceFile = path.join(scriptsDir, "foo-bar.ts");
+        await writeFile(
+            sourceFile,
+            "export function bazQux({ document }: BazQuxParameters) {}\nRegisterEntryPoint(bazQux);\n",
+            "utf-8"
+        );
+
+        await runMigrate("2.6");
+
+        const updated = await readFile(sourceFile, "utf-8");
+        expect(updated).toContain("FooBarParameters");
+        expect(updated).not.toContain("BazQuxParameters");
+    });
+
+    test("warns when the interface name changes but no conventional source exists", async () => {
+        await setupProject(project, ModType.Action);
+
+        // id and entry point normalize to different names; the source file does
+        // not follow the '<id>.ts' convention, so it cannot be auto-updated.
         const manifest = await readManifest(manifestPath);
         manifest.scripts![0].id = "weird-name";
         manifest.scripts![0].entryPoint = "differentThing";

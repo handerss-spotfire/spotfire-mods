@@ -22,7 +22,8 @@ interface MigrateOptions {
     esbuildConfig: string;
 }
 
-const scriptFileRegex = /\.(ts|tsx|js|jsx)$/;
+const scriptFileExtensions = ["ts", "tsx", "js", "jsx"];
+const scriptFileRegex = new RegExp(`\\.(${scriptFileExtensions.join("|")})$`);
 
 /**
  * Migrates a mod project to a new Mods API version. This updates the manifest
@@ -61,7 +62,7 @@ export async function migrate(
         throw new Error(`Cannot find manifest at '${manifestPath}'.`);
     }
 
-    await migrateManifest(manifestPath, apiVersion, quiet);
+    const renames = await migrateManifest(manifestPath, apiVersion, quiet);
 
     const packagePath = path.resolve(_packagePath);
     if (!existsSync(packagePath)) {
@@ -79,6 +80,7 @@ export async function migrate(
     );
 
     const scriptsDir = path.resolve(_scripts);
+    await applyInterfaceRenames(scriptsDir, renames, quiet);
     if (!existsSync(scriptsDir)) {
         stdout(
             `Warning: Could not find scripts folder at '${scriptsDir}', skipping RegisterEntryPoint check.`
@@ -91,20 +93,32 @@ export async function migrate(
 }
 
 /**
+ * A parameters interface whose generated name changes as a result of the
+ * migration (from the entry-point-based name to the script-id-based name).
+ */
+interface InterfaceRename {
+    scriptId: string;
+    oldName: string;
+    newName: string;
+}
+
+/**
  * Updates the manifest apiVersion and applies breaking changes for the target
  * version. From apiVersion 2.6 the 'entryPoint' field is removed from scripts
- * (entry points are registered via RegisterEntryPoint instead).
+ * (entry points are registered via RegisterEntryPoint instead). Returns the set
+ * of parameters interfaces whose generated name changed as a result.
  */
 async function migrateManifest(
     manifestPath: string,
     apiVersion: ApiVersion,
     quiet: QuietOtions
-) {
+): Promise<InterfaceRename[]> {
     const stdout = mkStdout(quiet);
     const manifest = await readManifest(manifestPath);
     const previousVersion = manifest.apiVersion;
     manifest.apiVersion = apiVersion.toManifest();
 
+    const renames: InterfaceRename[] = [];
     let removedEntryPoints = 0;
     if (apiVersion.supportsFeature("Esm") && manifest.scripts) {
         for (const script of manifest.scripts) {
@@ -113,15 +127,13 @@ async function migrateManifest(
             }
 
             // From apiVersion 2.6 the generated parameters interface is derived
-            // from the script id instead of the entry point. Warn when that
-            // changes the generated name so the user can update their source.
+            // from the script id instead of the entry point. Record when that
+            // changes the generated name so the source can be updated.
             if (script.id) {
                 const oldName = toTypeName(script.entryPoint) + "Parameters";
                 const newName = toTypeName(script.id) + "Parameters";
                 if (oldName !== newName) {
-                    stdout(
-                        `Warning: The generated parameters interface for script '${script.id}' changes from '${oldName}' to '${newName}' (it is now derived from the script id). Update the type annotation in the script source accordingly.`
-                    );
+                    renames.push({ scriptId: script.id, oldName, newName });
                 }
             }
 
@@ -141,6 +153,81 @@ async function migrateManifest(
             `Removed the 'entryPoint' field from ${removedEntryPoints} script(s); entry points are now registered solely via RegisterEntryPoint.`
         );
     }
+
+    return renames;
+}
+
+/**
+ * Applies the parameters interface renames to the conventional script source
+ * files ('<scriptsDir>/<id>.{ts,tsx,js,jsx}'). When the old interface name is
+ * found in the file it is replaced in place (the happy path); otherwise a
+ * warning asks the developer to update the reference manually.
+ */
+async function applyInterfaceRenames(
+    scriptsDir: string,
+    renames: InterfaceRename[],
+    quiet: QuietOtions
+) {
+    const stdout = mkStdout(quiet);
+
+    const warnManual = (rename: InterfaceRename, reason?: string) => {
+        const suffix = reason ? ` (${reason})` : "";
+        stdout(
+            `Warning: The generated parameters interface for script '${rename.scriptId}' changes from '${rename.oldName}' to '${rename.newName}' (it is now derived from the script id). Update the type annotation in the script source accordingly${suffix}.`
+        );
+    };
+
+    for (const rename of renames) {
+        const sourceFile = findScriptSource(scriptsDir, rename.scriptId);
+        if (!sourceFile) {
+            warnManual(rename);
+            continue;
+        }
+
+        let content: string;
+        try {
+            content = await readFile(sourceFile, "utf-8");
+        } catch (e) {
+            warnManual(rename, `could not read '${sourceFile}': ${e}`);
+            continue;
+        }
+
+        // toTypeName yields an alphanumeric identifier, so a word-boundary match
+        // is safe and only replaces whole-identifier occurrences.
+        const pattern = new RegExp(`\\b${rename.oldName}\\b`, "g");
+        if (!pattern.test(content)) {
+            warnManual(rename);
+            continue;
+        }
+
+        try {
+            await writeFile(
+                sourceFile,
+                content.replace(pattern, rename.newName),
+                "utf-8"
+            );
+            stdout(
+                `Renamed the parameters interface reference '${rename.oldName}' to '${rename.newName}' in '${sourceFile}'.`
+            );
+        } catch (e) {
+            warnManual(rename, `could not write '${sourceFile}': ${e}`);
+        }
+    }
+}
+
+/**
+ * Finds the conventional source file for a script id, i.e.
+ * '<scriptsDir>/<id>.{ts,tsx,js,jsx}'. Returns null if none exists.
+ */
+function findScriptSource(scriptsDir: string, scriptId: string) {
+    for (const extension of scriptFileExtensions) {
+        const candidate = path.join(scriptsDir, `${scriptId}.${extension}`);
+        if (existsSync(candidate)) {
+            return candidate;
+        }
+    }
+
+    return null;
 }
 
 /**
