@@ -100,6 +100,26 @@ interface InterfaceRename {
     scriptId: string;
     oldName: string;
     newName: string;
+    /** Candidate source file basenames, most likely first. */
+    sourceBaseNames: string[];
+}
+
+/**
+ * The candidate source file basenames for a script, most likely first. The
+ * build output ('file', e.g. 'build/my-script.js') is authoritative since
+ * esbuild maps 'src/scripts/<name>.ts' to 'build/<name>.js'; the id is a
+ * fallback (it matches for scripts created via add-script).
+ */
+function sourceBaseNamesFor(script: { id?: string; file?: string }) {
+    const baseNames: string[] = [];
+    if (script.file) {
+        baseNames.push(path.basename(script.file, path.extname(script.file)));
+    }
+    if (script.id) {
+        baseNames.push(script.id);
+    }
+
+    return [...new Set(baseNames)];
 }
 
 /**
@@ -133,7 +153,12 @@ async function migrateManifest(
                 const oldName = toTypeName(script.entryPoint) + "Parameters";
                 const newName = toTypeName(script.id) + "Parameters";
                 if (oldName !== newName) {
-                    renames.push({ scriptId: script.id, oldName, newName });
+                    renames.push({
+                        scriptId: script.id,
+                        oldName,
+                        newName,
+                        sourceBaseNames: sourceBaseNamesFor(script),
+                    });
                 }
             }
 
@@ -159,9 +184,9 @@ async function migrateManifest(
 
 /**
  * Applies the parameters interface renames to the conventional script source
- * files ('<scriptsDir>/<id>.{ts,tsx,js,jsx}'). When the old interface name is
- * found in the file it is replaced in place (the happy path); otherwise a
- * warning asks the developer to update the reference manually.
+ * files ('<scriptsDir>/<basename>.{ts,tsx,js,jsx}'). When the old interface
+ * name is found in the file it is replaced in place (the happy path); otherwise
+ * a warning asks the developer to update the reference manually.
  */
 async function applyInterfaceRenames(
     scriptsDir: string,
@@ -178,7 +203,7 @@ async function applyInterfaceRenames(
     };
 
     for (const rename of renames) {
-        const sourceFile = findScriptSource(scriptsDir, rename.scriptId);
+        const sourceFile = findScriptSource(scriptsDir, rename.sourceBaseNames);
         if (!sourceFile) {
             warnManual(rename);
             continue;
@@ -216,14 +241,17 @@ async function applyInterfaceRenames(
 }
 
 /**
- * Finds the conventional source file for a script id, i.e.
- * '<scriptsDir>/<id>.{ts,tsx,js,jsx}'. Returns null if none exists.
+ * Finds the conventional source file for a script, trying each candidate
+ * basename ('<scriptsDir>/<basename>.{ts,tsx,js,jsx}'). Returns null if none
+ * exists.
  */
-function findScriptSource(scriptsDir: string, scriptId: string) {
-    for (const extension of scriptFileExtensions) {
-        const candidate = path.join(scriptsDir, `${scriptId}.${extension}`);
-        if (existsSync(candidate)) {
-            return candidate;
+function findScriptSource(scriptsDir: string, baseNames: string[]) {
+    for (const baseName of baseNames) {
+        for (const extension of scriptFileExtensions) {
+            const candidate = path.join(scriptsDir, `${baseName}.${extension}`);
+            if (existsSync(candidate)) {
+                return candidate;
+            }
         }
     }
 

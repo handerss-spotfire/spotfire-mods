@@ -1,6 +1,6 @@
 {
     "name": "@spotfire/mods-sdk",
-    "version": "1.2.0-esm.2",
+    "version": "1.2.0-esm.3",
     "description": "Developer SDK for Spotfire® Mods",
     "repository": {
         "type": "git",

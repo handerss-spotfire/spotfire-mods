@@ -133,38 +133,41 @@ describe("migrate.test.ts", () => {
         expect(registerWarnings).toHaveLength(0);
     });
 
-    test("rewrites the params interface reference in the conventional source", async () => {
+    test("rewrites the params interface reference in the source by build-file basename", async () => {
         await setupProject(project, ModType.Action);
 
-        // id and entry point normalize to different interface names, with a
-        // conventionally-named source file referencing the old name.
+        // Reproduce the legacy starter layout where the script id differs from
+        // the source/build-file basename: id 'script-id' but file
+        // 'build/my-script.js' with source 'my-script.ts'.
         const manifest = await readManifest(manifestPath);
-        manifest.scripts![0].id = "foo-bar";
-        manifest.scripts![0].entryPoint = "bazQux";
+        manifest.scripts![0].id = "script-id";
+        manifest.scripts![0].entryPoint = "myScript";
+        manifest.scripts![0].file = "build/my-script.js";
         await writeFile(manifestPath, JSON.stringify(manifest), "utf-8");
 
-        const sourceFile = path.join(scriptsDir, "foo-bar.ts");
+        const sourceFile = path.join(scriptsDir, "my-script.ts");
         await writeFile(
             sourceFile,
-            "export function bazQux({ document }: BazQuxParameters) {}\nRegisterEntryPoint(bazQux);\n",
+            "export function myScript({ document }: MyScriptParameters) {}\nRegisterEntryPoint(myScript);\n",
             "utf-8"
         );
 
         await runMigrate("2.6");
 
         const updated = await readFile(sourceFile, "utf-8");
-        expect(updated).toContain("FooBarParameters");
-        expect(updated).not.toContain("BazQuxParameters");
+        expect(updated).toContain("ScriptIdParameters");
+        expect(updated).not.toContain("MyScriptParameters");
     });
 
-    test("warns when the interface name changes but no conventional source exists", async () => {
+    test("warns when the interface name changes but no source file can be found", async () => {
         await setupProject(project, ModType.Action);
 
-        // id and entry point normalize to different names; the source file does
-        // not follow the '<id>.ts' convention, so it cannot be auto-updated.
+        // id/entry point normalize to different names and neither the build-file
+        // basename nor the id resolve to a source file, so it cannot be fixed.
         const manifest = await readManifest(manifestPath);
         manifest.scripts![0].id = "weird-name";
         manifest.scripts![0].entryPoint = "differentThing";
+        manifest.scripts![0].file = "build/no-such-source.js";
         await writeFile(manifestPath, JSON.stringify(manifest), "utf-8");
 
         const infoSpy = jest.spyOn(console, "info").mockImplementation(() => {});
