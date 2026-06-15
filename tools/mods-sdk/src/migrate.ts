@@ -1,3 +1,4 @@
+import colors from "colors/safe.js";
 import { existsSync } from "fs";
 import { readdir, readFile, writeFile } from "fs/promises";
 import path from "path";
@@ -90,6 +91,13 @@ export async function migrate(
     }
 
     stdout(`Migration to apiVersion ${apiVersion.toManifest()} finished.`);
+    stdout(
+        colors.bold(
+            "\n⚠️ Please run the following commands to update your dependencies and rebuild:"
+        )
+    );
+    stdout(colors.bold(colors.yellow("  npm install")));
+    stdout(colors.bold(colors.yellow("  npm run build")));
 }
 
 /**

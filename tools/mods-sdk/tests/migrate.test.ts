@@ -34,6 +34,17 @@ describe("migrate.test.ts", () => {
         expect(manifest.apiVersion).toEqual("2.6");
     });
 
+    test("prints the install and build commands when finished", async () => {
+        await setupProject(project, ModType.Action);
+
+        const infoSpy = jest.spyOn(console, "info").mockImplementation(() => {});
+        await runMigrate("2.6", false);
+
+        const messages = infoSpy.mock.calls.map((call) => String(call[0]));
+        expect(messages.some((m) => m.includes("npm install"))).toBe(true);
+        expect(messages.some((m) => m.includes("npm run build"))).toBe(true);
+    });
+
     test("removes entryPoint from scripts when migrating to 2.6", async () => {
         await setupProject(project, ModType.Action);
 
