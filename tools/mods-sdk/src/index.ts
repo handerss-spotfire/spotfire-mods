@@ -6,6 +6,7 @@ import { build } from "./build.js";
 import { ModType, getVersion, parseApiVersion } from "./utils.js";
 import { addScript } from "./add-script.js";
 import { addParameter } from "./add-parameter.js";
+import { migrate } from "./migrate.js";
 
 declare module "commander" {
     interface Command {
@@ -64,7 +65,7 @@ Command.prototype.quiet = function () {
         .option("--watch", "start a file watcher", false)
         .option("--debug", "build artifacts unminifed with sourcemaps", false)
         .option(
-            "--esbuild-config",
+            "--esbuild-config <path>",
             "path to a file which default exports an esbuild config",
             "esbuild.config.js"
         )
@@ -105,6 +106,37 @@ Command.prototype.quiet = function () {
         .option("--optional", "if the parameter is optional", false)
         .quiet()
         .action(exec(addParameter));
+
+    program
+        .command("migrate")
+        .argument(
+            "<api-version>",
+            "the Mods API version to migrate to",
+            (arg) => assertValidVersion(arg)
+        )
+        .description("Migrate a mod project to a new Mods API version")
+        .option(
+            "--manifest-path <path>",
+            "path to the mod-manifest.json file",
+            "mod-manifest.json"
+        )
+        .option(
+            "--package-path <path>",
+            "path to the package.json file",
+            "package.json"
+        )
+        .option(
+            "--scripts <path>",
+            "path to the folder containing all scripts",
+            "src/scripts"
+        )
+        .option(
+            "--esbuild-config <path>",
+            "path to a file which default exports an esbuild config",
+            "esbuild.config.js"
+        )
+        .quiet()
+        .action(exec(migrate));
 
     await program.parseAsync();
 

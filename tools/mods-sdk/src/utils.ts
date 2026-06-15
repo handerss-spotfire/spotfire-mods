@@ -125,6 +125,14 @@ export class ApiVersion {
         }
     }
 
+    isNewerThan(other: ApiVersion) {
+        if (this.major !== other.major) {
+            return this.major > other.major;
+        }
+
+        return this.minor > other.minor;
+    }
+
     supportsFeature(feature: Feature) {
         const required = features[feature];
 
@@ -151,8 +159,29 @@ export const features = {
     OptionalParameter: { major: 2, minor: 1 },
     EnumParameter: { major: 2, minor: 1 },
     DataViews: { major: 2, minor: 1 },
+    Esm: { major: 2, minor: 6 },
 };
 type Feature = keyof typeof features;
+
+/**
+ * The latest apiVersion this SDK has knowledge of, derived from the highest
+ * version among the known features.
+ */
+export function maxKnownApiVersion(): ApiVersion {
+    let major = 0;
+    let minor = 0;
+    for (const version of Object.values(features)) {
+        if (
+            version.major > major ||
+            (version.major === major && version.minor > minor)
+        ) {
+            major = version.major;
+            minor = version.minor;
+        }
+    }
+
+    return new ApiVersion(major, minor);
+}
 
 export function formatVersion({
     major,

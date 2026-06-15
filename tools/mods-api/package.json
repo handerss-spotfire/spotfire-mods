@@ -12,5 +12,8 @@
         "action-mods/*.json",
         "visualization-mods/*.d.ts",
         "visualization-mods/*.json"
-    ]
+    ],
+    "peerDependencies": {
+        "@spotfire/mods-sdk": ">=1.2.0-esm.0"
+    }
 }
