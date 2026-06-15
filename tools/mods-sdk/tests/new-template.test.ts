@@ -42,6 +42,27 @@ describe("new-template", () => {
         expect(existsSync(path.join(projectFolder, ".gitignore"))).toBeTruthy();
     });
 
+    test("action mod 2.0 keeps the entryPoint in the manifest", async () => {
+        const projectFolder = "tests/testprojects/action-mod-2.0";
+        await setupProject(projectFolder, ModType.Action, "2.0");
+
+        const manifest = path.join(projectFolder, "mod-manifest.json");
+        const manifestJson = JSON.parse(readFileSync(manifest, "utf-8"));
+        expect(manifestJson["scripts"][0]["entryPoint"]).toEqual("myScript");
+    });
+
+    test("action mod >= 2.6 has no entryPoint in the manifest", async () => {
+        const projectFolder = "tests/testprojects/action-mod-2.6";
+        await setupProject(projectFolder, ModType.Action, "2.6");
+
+        const manifest = path.join(projectFolder, "mod-manifest.json");
+        const manifestJson = JSON.parse(readFileSync(manifest, "utf-8"));
+        expect(manifestJson["apiVersion"]).toEqual("2.6");
+        for (const script of manifestJson["scripts"] ?? []) {
+            expect(script["entryPoint"]).toBeUndefined();
+        }
+    });
+
     describe("can create project with different api version", () => {
         test("action mod", async () => {
             const projectFolder = "tests/testprojects/action-mod-2.1";
