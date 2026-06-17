@@ -2,7 +2,7 @@
 title: "Snippets"
 linkTitle: "Snippets"
 date: 2025-09-26
-weight: 3
+weight: 4
 description: >
     Snippets showing what is possible to do with the API.
 ---
@@ -16,6 +16,13 @@ Some snippets use APIs which require your mod to declare additional capabilities
 
 ## Snippets
 $INSERT_SNIPPETS_HERE$
+
+## Agent snippets
+
+These snippets show what an [insight agent](/spotfire-mods/docs/action-mods/insight-agent-tutorial/) can do during the insight phase, such as running data transformations and data functions in the background.
+Each snippet shows the command to add the agent, its entry in the `agents` array of the mod manifest, and its source code.
+Add an agent to your mod with `npx @spotfire/mods-sdk add-agent <id> --name "<name>" --type <visual|marking>`.
+$INSERT_AGENTS_HERE$
 
 [DataColumn]: /spotfire-mods/docs/action-mods/using-the-api/parameter-types/#datacolumn
 [DataViewDefinition]: /spotfire-mods/docs/action-mods/using-the-api/parameter-types/#dataviewdefinition
