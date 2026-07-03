@@ -11,7 +11,7 @@
         "build": "tsc",
         "watch": "tsc --watch",
         "bin": "node ./dist/index.js",
-        "prepack": "npm run build",
+        "prepack": "npm test && npm run build",
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
         "format": "prettier -w src/**/*.ts tests/**/*.ts"
     },
