@@ -1,7 +1,7 @@
 import { schema, schemaStr } from "../utils/schema";
 
 const { List } = System.Collections.Generic;
-const { DataTable, DataColumn } = Spotfire.Dxp.Data;
+const { DataTable } = Spotfire.Dxp.Data;
 const { ActionModScriptArgumentLiteral, ActionModScriptArgumentNode } = Spotfire.Dxp.Application.Mods;
 const { AiChatHistory, AiTool, CompletionSettings } = Spotfire.Dxp.Framework.Ai;
 const { ActionModInsight } = Spotfire.Dxp.Application.Insights;
@@ -16,7 +16,7 @@ export function markingAgent({ context, resources, utils }: MarkingContext) {
     history.AddSystemMessage("You are a Spotfire AI Agent helping with understanding the user's data and domain.");
 
     let ragBuilder = ""
-    const markingTable = context.AnalyzedColumn.Context.GetAncestor(DataTable);
+    const markingTable = context.AnalyzedColumn.Context.GetAncestor(DataTable)!;
     if (markingTable != null) {
         ragBuilder += `The user has marked data in the table ${markingTable.Name}. The available columns are:\n`
         for (const column of markingTable.Columns) {
