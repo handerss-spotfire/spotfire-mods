@@ -6153,6 +6153,17 @@ declare namespace Spotfire.Dxp {
                  */
                 get ImportContext(): Data.Import.ImportContext;
                 /**
+                 * Gets the MCP (Model Context Protocol) service. {@link Spotfire.Dxp.Framework.Ai.Mcp.McpService.GetMcps} returns the
+                 * MCP servers (endpoints) configured for the current session; call
+                 * {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint.GetTools} on the ones you want to obtain their tools to pass into a
+                 * chat completion call.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Extended capability 'AI'
+                 */
+                get McpService(): Framework.Ai.Mcp.McpService;
+                /**
                  * Gets the user interaction capabilities. This can be used to send messages, prompts, or other interactions back to the user during insight agent execution.
                  * 
                  * @since 2.5
@@ -6343,6 +6354,17 @@ declare namespace Spotfire.Dxp {
                  * @group Default capability
                  */
                 get ImportContext(): Data.Import.ImportContext;
+                /**
+                 * Gets the MCP (Model Context Protocol) service. {@link Spotfire.Dxp.Framework.Ai.Mcp.McpService.GetMcps} returns the
+                 * MCP servers (endpoints) configured for the current session; call
+                 * {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint.GetTools} on the ones you want to obtain their tools to pass into a
+                 * chat completion call.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                get McpService(): Framework.Ai.Mcp.McpService;
                 /**
                  * Gets the user interaction capabilities. This can be used to report progress,
                  * display messages, or prompt the user during insight agent execution.
@@ -52152,6 +52174,129 @@ declare namespace Spotfire.Dxp {
                     private __type_2736338137: null;
                 }
             }
+            
+            namespace Mcp {
+                /**
+                 * A single MCP (Model Context Protocol) server made available to an AI agent for the current session,
+                 * returned by {@link Spotfire.Dxp.Framework.Ai.Mcp.McpService.GetMcps}. It exposes the server's identifying metadata
+                 * ({@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint.Name}, {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint.Description}, {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint.ServerUrl}, {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint.Id}) so an agent
+                 * can filter the configured servers, and a {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint.GetTools} method that returns this server's tools
+                 * as {@link Spotfire.Dxp.Framework.Ai.AiTool} instances to pass into a chat completion call.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                class McpEndpoint extends Object {
+                    /**
+                     * Gets a value indicating whether the last {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint.GetTools} call returned no tools because this server
+                     * requires the user to sign in first. Only meaningful after {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint.GetTools} has run; it distinguishes
+                     * a server that needs authorization from one that genuinely exposes no tools.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Extended capability 'AI'
+                     */
+                    get AuthorizationRequired(): JsType<System.Boolean>;
+                    /**
+                     * Gets the optional human-readable description of this MCP server, or null when the server has none.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Extended capability 'AI'
+                     */
+                    get Description(): JsType<System.String>;
+                    /**
+                     * Gets the server-assigned identifier of this MCP server, or {@link System.Guid.Empty} when it has none.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Extended capability 'AI'
+                     */
+                    get Id(): JsType<System.Guid>;
+                    /**
+                     * Gets the human-readable display name of this MCP server.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Extended capability 'AI'
+                     */
+                    get Name(): JsType<System.String>;
+                    /**
+                     * Gets the URL of the MCP server this endpoint represents, or null when it is not known.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Extended capability 'AI'
+                     */
+                    get ServerUrl(): JsType<System.Uri>;
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                     */
+                    constructor();
+                    /**
+                     * Returns this MCP server's tools as {@link Spotfire.Dxp.Framework.Ai.AiTool} instances to pass into a chat completion
+                     * call, or an empty list if its tools cannot be retrieved.
+                     * @remark This call may block, so it is intended to run on a background thread, never the application thread.
+                     * A cancellation requested through the current progress surfaces as an
+                     * {@link System.OperationCanceledException}.
+                     * @returns The tools provided by this MCP server, or an empty list when none are available.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Extended capability 'AI'
+                     */
+                    GetTools(): System.Collections.Generic.IReadOnlyList<AiTool>;
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                     */
+                    _interfaces: {
+                    };
+                    private __type_1542079169: null;
+                }
+                
+                /**
+                 * The MCP (Model Context Protocol) entry point for an AI agent. It resolves the MCP servers configured
+                 *  for the current session and exposes them as {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint} instances that provide their
+                 *  tools as {@link Spotfire.Dxp.Framework.Ai.AiTool} instances to pass into a chat completion call.
+                 * 
+                 *  Call {@link Spotfire.Dxp.Framework.Ai.Mcp.McpService.GetMcps} to list the configured MCP servers, then filter them and call
+                 *  {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint.GetTools} on the ones you want. Returns no servers when none are configured.
+                 * 
+                 * @since 2.6
+                 * 
+                 * @group Default capability
+                 */
+                class McpService extends Object {
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, constructor exists for type safety only and will throw at runtime.
+                     */
+                    constructor();
+                    /**
+                     * Lists the MCP servers (endpoints) configured for the current session as {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint}
+                     * instances, so an agent can reflect over and filter them before calling {@link Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint.GetTools}
+                     * on the ones it wants to obtain their tools to pass into a chat completion call. Returns an empty
+                     * sequence when no MCP servers are configured.
+                     * @remark This call may block, so it is intended to run on a background thread, never the application thread.
+                     * @returns The MCP endpoints, or an empty sequence when none are available.
+                     * 
+                     * @since 2.6
+                     * 
+                     * @group Extended capability 'AI'
+                     */
+                    GetMcps(): System.Collections.Generic.IEnumerable<McpEndpoint>;
+                    /**
+                     * @ignore
+                     * @deprecated Do not use, exists for type safety only and will be undefined at runtime.
+                     */
+                    _interfaces: {
+                    };
+                    private __type_1839567799: null;
+                }
+            }
         }
         
         namespace ApplicationModel {
@@ -59274,6 +59419,11 @@ declare module "spotfire/dxp/framework/ai" {
     export import AiService = Spotfire.Dxp.Framework.Ai.AiService;
     export import AiTool = Spotfire.Dxp.Framework.Ai.AiTool;
     export import CompletionSettings = Spotfire.Dxp.Framework.Ai.CompletionSettings;
+}
+
+declare module "spotfire/dxp/framework/ai/mcp" {
+    export import McpEndpoint = Spotfire.Dxp.Framework.Ai.Mcp.McpEndpoint;
+    export import McpService = Spotfire.Dxp.Framework.Ai.Mcp.McpService;
 }
 
 declare module "spotfire/dxp/framework/applicationmodel" {
