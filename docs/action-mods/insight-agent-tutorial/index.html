@@ -15,7 +15,7 @@
 	<meta itemprop="description" content="Build an insight agent that uses an AI model to suggest calculated columns for a visualization&#39;s data table.">
 	<meta itemprop="datePublished" content="2026-07-01T00:00:00+00:00">
 	<meta itemprop="dateModified" content="2026-07-01T00:00:00+00:00">
-	<meta itemprop="wordCount" content="1968">
+	<meta itemprop="wordCount" content="1993">
 
 
 
@@ -736,7 +736,7 @@
 	
 	
 	
-	<p class="-text-secondary pt-3 h6" >Reading time: 8 minutes and 56 seconds.</p>
+	<p class="-text-secondary pt-3 h6" >Reading time: 9 minutes and 45 seconds.</p>
 	<h1>Create an insight agent</h1>
 	<div class="lead">Build an insight agent that uses an AI model to suggest calculated columns for a visualization&rsquo;s data table.</div>
 	
@@ -754,10 +754,12 @@ When it is done it reports a result – a title, a summary, and any insights it 
 <li><strong>Action phase</strong> – runs on the application thread against the live document when the user applies an insight.
 This is an ordinary action mod script, so it can modify the document.</li>
 </ul>
-<p>There are two kinds of agents, declared by the <code>&quot;type&quot;</code> field in the manifest&rsquo;s <code>&quot;agents&quot;</code> array:</p>
+<p>There are three kinds of agents, declared by the <code>&quot;type&quot;</code> field in the manifest&rsquo;s <code>&quot;agents&quot;</code> array:</p>
 <ul>
 <li>A <code>&quot;marking&quot;</code> agent is triggered after the user has marked data, and receives the marked rows.</li>
 <li>A <code>&quot;visual&quot;</code> agent can be triggered from any visualization, and doesn&rsquo;t require any marked data.</li>
+<li>A <code>&quot;document&quot;</code> agent analyzes the analysis as a whole, and doesn&rsquo;t require a visualization at all. It requires
+action mods API version 2.6 or later.</li>
 </ul>
 <p>We will build a visual agent.</p>
 <h3 id="1-set-up-the-project">1. Set up the project</h3>

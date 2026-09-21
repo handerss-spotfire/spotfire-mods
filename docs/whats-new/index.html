@@ -15,7 +15,7 @@
 	<meta itemprop="description" content="This page describes some of the latest additions to the mods API and SDK.">
 	<meta itemprop="datePublished" content="2026-07-01T00:00:00+00:00">
 	<meta itemprop="dateModified" content="2026-07-01T00:00:00+00:00">
-	<meta itemprop="wordCount" content="5306">
+	<meta itemprop="wordCount" content="5590">
 
 
 
@@ -665,33 +665,38 @@
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#mods-api-25">Mods API 2.5</a>
+    <li><a href="#mods-api-26">Mods API 2.6</a>
       <ul>
         <li><a href="#action-mods">Action mods</a></li>
+      </ul>
+    </li>
+    <li><a href="#mods-api-25">Mods API 2.5</a>
+      <ul>
+        <li><a href="#action-mods-1">Action mods</a></li>
         <li><a href="#document-model-additions">Document-model additions</a></li>
       </ul>
     </li>
     <li><a href="#mods-api-24">Mods API 2.4</a>
       <ul>
         <li><a href="#visualization-mods">Visualization mods</a></li>
-        <li><a href="#action-mods-1">Action mods</a></li>
+        <li><a href="#action-mods-2">Action mods</a></li>
       </ul>
     </li>
     <li><a href="#mods-api-23">Mods API 2.3</a>
       <ul>
         <li><a href="#visualization-mods-1">Visualization mods</a></li>
-        <li><a href="#action-mods-2">Action mods</a></li>
+        <li><a href="#action-mods-3">Action mods</a></li>
       </ul>
     </li>
     <li><a href="#mods-api-22">Mods API 2.2</a>
       <ul>
-        <li><a href="#action-mods-3">Action mods</a></li>
+        <li><a href="#action-mods-4">Action mods</a></li>
         <li><a href="#visualization-mods-2">Visualization mods</a></li>
       </ul>
     </li>
     <li><a href="#mods-api-21">Mods API 2.1</a>
       <ul>
-        <li><a href="#action-mods-4">Action mods</a></li>
+        <li><a href="#action-mods-5">Action mods</a></li>
         <li><a href="#visualization-mods-3">Visualization mods</a></li>
       </ul>
     </li>
@@ -734,7 +739,7 @@
 	
 	
 	
-	<p class="-text-secondary pt-3 h6" >Reading time: 24 minutes and 45 seconds.</p>
+	<p class="-text-secondary pt-3 h6" >Reading time: 25 minutes and 45 seconds.</p>
 	<h1>What&#39;s new?</h1>
 	<div class="lead">This page describes some of the latest additions to the mods API and SDK.</div>
 	
@@ -745,6 +750,23 @@
 <li><a href="https://www.npmjs.com/package/@spotfire/mods-dev-server">@spotfire/mods-dev-server</a></li>
 </ul>
 <p>If you have started from an SDK template, simply run <code>npm update</code> to get the latest compatible versions.</p>
+<h2 id="mods-api-26">Mods API 2.6</h2>
+<p>Version 2.6 of the mods API introduces <strong>actionable notifications</strong> for action mods, that is notifications with buttons which run scripts in the mod, and <strong>action triggers</strong>, which put those scripts on a visualization as a context menu item or a button.
+Using features introduced in the 2.6 API requires Spotfire version 15.1 or later.
+To upgrade an existing mod, follow these steps:</p>
+<ol>
+<li>Update the <code>&quot;apiVersion&quot;</code> field in the mod manifest to <code>&quot;2.6&quot;</code>.</li>
+<li>Update the version of <code>&quot;@spotfire/mods-api&quot;</code> in the <code>package.json</code> file to <code>~2.6.0</code>.</li>
+<li>Run <code>npm update</code>.</li>
+</ol>
+<h3 id="action-mods">Action mods</h3>
+<h4 id="actionable-notifications-and-action-triggers">Actionable notifications and action triggers</h4>
+<p>An action mod can now run its own scripts in response to a user action, either from a button on a notification or from a trigger on a visualization.
+Both are set up with an <a href="/spotfire-mods/api-docs/action-mods/classes/Spotfire.Dxp.Application.Mods.ActionModScriptInvocation.html">ActionModScriptInvocation</a>, the same type insight agents use, created with <code>utils.CreateScriptInvocation(&quot;script-id&quot;, { ... })</code>, so the script arguments are bound when the action is set up rather than when the user activates it.</p>
+<ul>
+<li><strong>Actionable notifications.</strong> Create a <a href="/spotfire-mods/api-docs/action-mods/classes/Spotfire.Dxp.Application.Mods.ModNotificationAction.html">ModNotificationAction</a> with <a href="/spotfire-mods/api-docs/action-mods/classes/Spotfire.Dxp.Application.Mods.ModNotificationAction.html#create">ModNotificationAction.Create</a> and pass it to <a href="/spotfire-mods/api-docs/action-mods/classes/Spotfire.Dxp.Framework.ApplicationModel.NotificationService.html#addinformationnotificationwithactions">AddInformationNotificationWithActions</a>, <a href="/spotfire-mods/api-docs/action-mods/classes/Spotfire.Dxp.Framework.ApplicationModel.NotificationService.html#addwarningnotificationwithactions">AddWarningNotificationWithActions</a> or <a href="/spotfire-mods/api-docs/action-mods/classes/Spotfire.Dxp.Framework.ApplicationModel.NotificationService.html#adderrornotificationwithactions">AddErrorNotificationWithActions</a>. Spotfire renders one button per action, both on the card in the notification fly-out and in the notification dialog. See the snippet <a href="/spotfire-mods/docs/action-mods/snippets/#show-a-notification-with-actions">Show a notification with actions</a>.</li>
+<li><strong>Action triggers.</strong> <a href="/spotfire-mods/api-docs/action-mods/classes/Spotfire.Dxp.Application.Visual.html#actiontriggers">Visual.ActionTriggers</a> reaches the triggers of a visualization. <a href="/spotfire-mods/api-docs/action-mods/classes/Spotfire.Dxp.Application.Actions.ActionTriggerCollection.html#add">Add</a> and <a href="/spotfire-mods/api-docs/action-mods/classes/Spotfire.Dxp.Application.Actions.ActionTriggerCollection.html#insert">Insert</a> take an <a href="/spotfire-mods/api-docs/action-mods/classes/Spotfire.Dxp.Application.Actions.ActionTriggerAccessPointDisplay.html">ActionTriggerAccessPointDisplay</a> deciding whether the trigger is shown as a context menu item, a floating button or a title bar button, and <a href="/spotfire-mods/api-docs/action-mods/classes/Spotfire.Dxp.Application.Actions.ActionTriggerCollection.html#remove">Remove</a> takes one away. Enumerating the collection reports the <a href="/spotfire-mods/api-docs/action-mods/classes/Spotfire.Dxp.Application.Actions.ActionTrigger.html#accesspoint">AccessPoint</a>, <a href="/spotfire-mods/api-docs/action-mods/classes/Spotfire.Dxp.Application.Actions.ActionTrigger.html#actionmodscript">ActionModScript</a>, <a href="/spotfire-mods/api-docs/action-mods/classes/Spotfire.Dxp.Application.Actions.ActionTrigger.html#displayname">DisplayName</a> and <a href="/spotfire-mods/api-docs/action-mods/classes/Spotfire.Dxp.Application.Actions.ActionTrigger.html#hasaction">HasAction</a> of each <a href="/spotfire-mods/api-docs/action-mods/classes/Spotfire.Dxp.Application.Actions.ActionTrigger.html">ActionTrigger</a>, so a script can find the triggers it added on an earlier run instead of adding them twice. See the snippet <a href="/spotfire-mods/docs/action-mods/snippets/#configure-action-triggers-on-a-visualization">Configure action triggers on a visualization</a>.</li>
+</ul>
 <h2 id="mods-api-25">Mods API 2.5</h2>
 <p>Version 2.5 of the mods API is centered on action mods and introduces <strong>insight agents</strong> — AI-powered scripts that analyze a visualization or a marked column, reason about the data with a large language model, and report back ranked, actionable recommendations to the user.
 Using features introduced in the 2.5 API requires Spotfire version 15.0 or later.
@@ -755,7 +777,7 @@ To upgrade an existing mod, follow these steps:</p>
 <li>Update <code>&quot;@spotfire/mods-sdk&quot;</code> to the latest version. Insight agents require a newer SDK; older versions cannot generate the agent types, so the build will fail.</li>
 <li>Run <code>npm update</code>.</li>
 </ol>
-<h3 id="action-mods">Action mods</h3>
+<h3 id="action-mods-1">Action mods</h3>
 <h4 id="insight-agents">Insight agents</h4>
 <p>An insight agent is a new kind of action mod entry point that Spotfire can run on the user&rsquo;s behalf to discover insights in an analysis.
 Agents are declared in a new <code>&quot;agents&quot;</code> section of the mod manifest, where each agent has a <code>&quot;type&quot;</code> that is either <code>&quot;visual&quot;</code> or <code>&quot;marking&quot;</code>:</p>
@@ -961,7 +983,7 @@ The axis can be read via the layer&rsquo;s regular data readable, similar to any
 <h4 id="reading-data-from-dual-mode-axis">Reading data from dual mode axis</h4>
 <p>Reading row data for a dual mod axis in API versions prior to 2.4 is somewhat cumbersome. Before using either of the methods <a href="/spotfire-mods/api-docs/visualization-mods/interfaces/DataViewRow.html#categorical">DataViewRow.categorical</a> or <a href="/spotfire-mods/api-docs/visualization-mods/interfaces/DataViewRow.html#continuous">DataViewRow.continuous</a>, you first need to check the current axis mode to know which of the two methods to use, or the method will throw an error.</p>
 <p>With API version 2.4, there are two new sibling methods: <a href="/spotfire-mods/api-docs/visualization-mods/interfaces/DataViewRow.html#tryCategorical">DataViewRow.tryCategorical</a> or <a href="/spotfire-mods/api-docs/visualization-mods/interfaces/DataViewRow.html#tryContinuous">DataViewRow.tryContinuous</a>. These methods will return null for a dual mode axis that currently has an empty expression or does not match the current mode. They will however still throw an error if the <code>&quot;axisName&quot;</code> does not match a dual mode axis.</p>
-<h3 id="action-mods-1">Action mods</h3>
+<h3 id="action-mods-2">Action mods</h3>
 <p>There are no new additions to the action mods framework.
 However, Spotfire 14.8 introduces new features that are supported in the API.
 These include:</p>
@@ -1054,7 +1076,7 @@ The render function for the network graph can look something like this:</p>
 A limitation is that axes cannot be shared between data view definitions.
 This means that it is up to you as the mod developer to perform any necessary matching, and to keep axes consistent between data view definitions.
 For instance, to support trellising, you need to add a &ldquo;Trellis by&rdquo; axis to both &ldquo;Nodes&rdquo; and &ldquo;Edges&rdquo;, and report errors if the axes are out of sync or become inconsistent.</p>
-<h3 id="action-mods-2">Action mods</h3>
+<h3 id="action-mods-3">Action mods</h3>
 <p>No new additions to the action mods framework have been added.
 However, Spotfire 14.7 introduces many new features which are supported in the API.
 These include:</p>
@@ -1072,7 +1094,7 @@ To upgrade an existing mod, follow these steps:</p>
 <li>Update the version of <code>&quot;@spotfire/mods-api&quot;</code> in the <code>package.json</code> file to <code>~2.2.0</code>.</li>
 <li>Run <code>npm update</code>.</li>
 </ol>
-<h3 id="action-mods-3">Action mods</h3>
+<h3 id="action-mods-4">Action mods</h3>
 <p>No new additions to the action mods framework has been added however, Spotfire 14.6 introduces many new features which are supported in the API.
 One such new feature is &ldquo;reference elements&rdquo;, which allows you to add reference layers to certain visualizations and show trend lines.
 As an example on how to use the new APIs for this feature, see the snippet <a href="/spotfire-mods/docs/action-mods/snippets/#add-a-reference-layer-showing-trend-lines">&ldquo;Add a reference layer showing trend lines&rdquo;</a>.</p>
@@ -1093,7 +1115,7 @@ To upgrade your mod, follow these steps:</p>
 <li>Update the version of <code>@spotfire/mods-api</code> in the <code>package.json</code> file to <code>~2.1.0</code>.</li>
 <li>Run <code>npm update</code>.</li>
 </ol>
-<h3 id="action-mods-4">Action mods</h3>
+<h3 id="action-mods-5">Action mods</h3>
 <p>Version 2.1 of the API contains a lot of improvements and new features for action mods.</p>
 <h4 id="new-parameter-types">New parameter types</h4>
 <p>This API introduces two new types with two variants each: <a href="/spotfire-mods/docs/whats-new/#datacolumn">DataColumn</a> (array: true/false) and <a href="/spotfire-mods/docs/whats-new/#dataviewdefinition">DataViewDefinition</a> (singleColumn: true/false).
